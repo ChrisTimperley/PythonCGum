@@ -26,22 +26,6 @@ class Statement(Node):
 class ExprStatement(Node):
     pass
 
-# 300100 - If
-class IfElse(Statement):
-    @staticmethod
-    def from_json(jsn):
-        condition = Node.from_json(jsn['children'][0])
-
-
-        IfElse(jsn['location'], jsn['size'])
-
-    def __init__(self, pos, size, condition, then, els):
-        self.condition = condition
-        self.then = then
-        self.els = els
-    def to_json(self):
-        pass
-
 ##
 # EXPRESSIONS
 ##
@@ -70,10 +54,59 @@ class Unary(Expression):
 class Return(Statement):
     pass
 
+class IfElse(Statement):
+    CODE = 300100
+    LABEL = "If"
+
+    @staticmethod
+    def from_json(jsn):
+        assert jsn['type'] == IfElse.CODE 
+
+        # Build the condition
+        condition = Node.from_json(jsn['children'][1])
+
+        # Build the "then" branch. This doesn't always result in a block.
+        # TODO: Ensure a block is added?
+        then = Node.from_json(jsn['children'][2])
+
+        # Build the "else" branch, if there is one.
+        if len(jsn['children']) == 4:
+            els = Node.from_json(jsn['children'][3])
+        else:
+            els = None
+
+        return IfElse(jsn['pos'], condition, then, els)
+
+    def __init__(self, pos, condition, then, els):
+        super().__init__(pos)
+        self.condition = condition
+        self.then = then
+        self.els = els
+
+
+
+# TODO:
+# - Separate declarations
+class Block(Node):
+    CODE = 330000
+    LABEL = "Compound"
+
+    @staticmethod
+    def from_json(jsn):
+        assert jsn['type'] == Block.CODE
+
+        statements = jsn['children']
+        return Block(jsn['pos'], statements)
+
+    def __init__(self, pos, statements):
+        super().__init__(pos)
+        self.statements = statements
+
 class FunctionParameter(Node):
     CODE = 220100
     LABEL = "ParameterType"
 
+    @staticmethod
     def from_json(jsn):
         assert jsn['type'] == FunctionParameter.CODE
         return FunctionParameter(jsn['pos'], jsn['children'][0]['label'])
@@ -86,6 +119,7 @@ class FunctionDefinition(Node):
     CODE = 380000
     LABEL = "Definition"
 
+    @staticmethod
     def from_json(jsn):
         assert jsn['type'] == FunctionDefinition.CODE
 
@@ -101,7 +135,7 @@ class FunctionDefinition(Node):
 
         # Build the statements
         statements = Block.from_json(jsn['children'][2])
-        statements = statements.contents()
+        statements = statements.statements
 
         return FunctionDefinition(jsn['pos'], name, parameters, statements)
 
@@ -118,6 +152,7 @@ class Program(Node):
     CODE = 460000
     LABEL = "Program"
 
+    @staticmethod
     def from_json(jsn):
         # These aren't statements - declarations, directives, definitions
         statements = [Node.from_json(s) for s in jsn['children']]
