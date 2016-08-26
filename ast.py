@@ -70,6 +70,34 @@ class Unary(Expression):
 class Return(Statement):
     pass
 
+class FunctionDefinition(Node):
+    CODE = 380000
+    LABEL = "Definition"
+
+    def from_json(jsn):
+        assert jsn['type'] == FunctionDefinition.CODE
+
+        # Fetch the name
+        name = jsn['children'][1]['label']
+        
+        # Build the parameters
+        parameters = jsn['children'][0]
+        assert parameters['typeLabel'] == 'ParamList',\
+            "expected first child of Definition to be ParamList"
+        parameters = parameters['children']
+        parameters = [FunctionParameter.from_json(c) for c in parameters]
+
+        # Build the statements
+        statements = Block.from_json(jsn['children'][2])
+        statements = statements.contents()
+
+        return FunctionDefinition(name, parameters, statements)
+
+    def __init__(self, name, parameters, statements):
+        self.name = name
+        self.parameters = parameters
+        self.statements = statements
+
 ##
 # PROGRAM
 ##
@@ -78,6 +106,7 @@ class Program(Node):
     LABEL = "Program"
 
     def from_json(jsn):
+        # These aren't statements - declarations, directives, definitions
         statements = [Node.from_json(s) for s in jsn['children']]
         return Program(jsn['pos'], jsn['length'], statements)
 
