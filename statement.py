@@ -7,9 +7,15 @@ class Statement(Node):
 class ExprStatement(Node):
     pass
 
-# 280003 - Return
+# Never seems to return the result of an expression?
 class Return(Statement):
-    pass
+    CODE = 280003
+    LABEL = "Return"
+
+    @staticmethod
+    def from_json(jsn):
+        assert jsn['type'] == Return.CODE
+        return Return(jsn['pos'])
 
 class IfElse(Statement):
     CODE = 300100
@@ -36,12 +42,10 @@ class IfElse(Statement):
 
     def __init__(self, pos, condition, then, els):
         super().__init__(pos)
-        self.condition = condition
-        self.then = then
-        self.els = els
+        self.__condition = condition
+        self.__then = then
+        self.__els = els
 
-# TODO:
-# - Separate declarations
 class Block(basic.Node):
     CODE = 330000
     LABEL = "Compound"
