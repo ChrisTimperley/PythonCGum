@@ -3,6 +3,7 @@
 # Ignores CppTop for now; easy enough to add in later.
 #
 import json
+import expression
 
 class Node(object):
     @staticmethod
@@ -24,44 +25,6 @@ class Statement(Node):
     pass
 
 class ExprStatement(Node):
-    pass
-
-##
-# EXPRESSIONS
-##
-class Expression(Node):
-    pass
-
-class Constant(Expression):
-    def __init__(self, pos, value):
-        super().__init__(pos)
-        self.value = value
-    def to_s(self):
-        return str(self.value)
-
-# 242000 - ParenExpr
-class Parentheses(Expression):
-    pass
-
-class Binary(Expression):
-    CODE = 241100
-    LABEL = "Binary"
-
-    @staticmethod
-    def from_json(jsn):
-        assert jsn['type'] == Binary.CODE
-        left = Node.from_json(jsn['children'][0]) 
-        op = jsn['children'][1]['label']
-        right = Node.from_json(jsn['children'][2])
-        return Binary(jsn['pos'], left, op, right)
-
-    def __init__(self, pos, left, op, right):
-        super().__init__(pos)
-        self.left = left
-        self.op = op
-        self.right = right
-
-class Unary(Expression):
     pass
 
 # 280003 - Return
