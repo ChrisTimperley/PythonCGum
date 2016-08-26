@@ -60,6 +60,24 @@ class Cast(Expression):
     def to_s(self):
         return "(UNKNOWN_TYPE) %s" % self.__expr.to_s()
 
+class Ternary(Expression):
+    CODE = 240500
+    LABEL = "CondExpr"
+
+    @staticmethod
+    def from_json(jsn):
+        assert jsn['type'] == Ternary.CODE
+        return Ternary(jsn['pos'],\
+                       Node.from_json(jsn['children'][0]),\
+                       Node.from_json(jsn['children'][1]),\
+                       Node.from_json(jsn['children'][2]))
+
+    def __init__(self, pos, cond, then, els):
+        super().__init__(pos)
+        self.__cond = cond
+        self.__then = then
+        self.__els = els
+
 class FunctionCall(Expression):
     CODE = 240400
     LABEL = "FunCall"
