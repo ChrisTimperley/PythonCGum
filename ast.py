@@ -50,8 +50,10 @@ class Binary(Expression):
     @staticmethod
     def from_json(jsn):
         assert jsn['type'] == Binary.CODE
-
-        
+        left = Node.from_json(jsn['children'][0]) 
+        op = jsn['children'][1]['label']
+        right = Node.from_json(jsn['children'][2])
+        return Binary(jsn['pos'], left, op, right)
 
     def __init__(self, pos, left, op, right):
         super().__init__(pos)
