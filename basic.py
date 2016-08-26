@@ -110,4 +110,15 @@ class Some(Node):
 
 # Equally, I have no idea what the Left node is for?
 class Left(Node):
-    pass
+    CODE = "20100"
+    LABEL = "Left"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Left.CODE)
+        assert len(jsn['children']) == 1
+        return Left(jsn['pos'], Node.from_json(jsn['children'][0]))
+
+    def __init__(self, pos, left):
+        super().__init__(pos)
+        self.__left = left

@@ -22,15 +22,15 @@ class FunctionParameter(Node):
     def to_s(self):
         return self.__name.to_s()
 
-class FunctionParameterList(Node):
+class FunctionParameters(Node):
     CODE = "200000"
     LABEL = "ParamList"
 
     @staticmethod
     def from_json(jsn):
-        Node.check_code(jsn['type'], FunctionParameterList.CODE)
+        Node.check_code(jsn['type'], FunctionParameters.CODE)
         params = [FunctionParameter.from_json(c) for c in jsn['children']]
-        return FunctionParameterList(jsn['pos'], params)
+        return FunctionParameters(jsn['pos'], params)
 
     def __init__(self, pos, params):
         super().__init__(pos)
@@ -49,7 +49,7 @@ class FunctionDefinition(Node):
         children = [Node.from_json(c) for c in jsn['children']]
 
         # Find any optional storage information for this function
-        if isinstance(children[0], Storage):
+        if isinstance(children[0], statement.Storage):
             storage = children.pop(0)
         else:
             storage = None
@@ -62,9 +62,9 @@ class FunctionDefinition(Node):
         # Do some sanity checking
         assert isinstance(params, FunctionParameters)
         assert isinstance(name, GenericString)
-        assert isinstance(block, Block)
+        assert isinstance(block, statement.Block)
 
-        return FunctionDefinition(jsn['pos'], name, params, block)
+        return FunctionDefinition(jsn['pos'], name, params, block, storage)
 
     def __init__(self, pos, name, parameters, block, storage):
         super().__init__(pos)
