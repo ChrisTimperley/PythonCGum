@@ -21,35 +21,40 @@ class FunctionParameter(Node):
     def to_s(self):
         return self.__name.to_s()
 
-class FunctionDefinition(basic.Node):
+class FunctionParameterList(Node):
+    CODE = 200000
+    LABEL = "ParamList"
+
+    @staticmethod
+    def from_json(jsn):
+        assert jsn['type'] = FunctionParameterList.CODE
+        params = [FunctionParameter.from_json(c) for c in jsn['children']]
+        return FunctionParameterList(jsn['pos'], params)
+
+    def __init__(self, pos, params):
+        super().__init__(pos)
+        self.__params = params
+
+    def parameters(self):
+        return [p.name() for p in self.__params]
+
+class FunctionDefinition(Node):
     CODE = 380000
     LABEL = "Definition"
 
     @staticmethod
     def from_json(jsn):
         assert jsn['type'] == FunctionDefinition.CODE
+        return FunctionDefinition(jsn['pos'],\
+                                  GenericString.from_json(jsn['children'][1]),\
+                                  FunctionParameterList.from_json(jsn['children'][0]),\
+                                  Block.from_json(jsn['children'][2]))
 
-        # Fetch the name
-        name = jsn['children'][1]['label']
-        
-        # Build the parameters
-        parameters = jsn['children'][0]
-        assert parameters['typeLabel'] == 'ParamList',\
-            "expected first child of Definition to be ParamList"
-        parameters = parameters['children']
-        parameters = [FunctionParameter.from_json(c) for c in parameters]
-
-        # Build the statements
-        statements = Block.from_json(jsn['children'][2])
-        statements = statements.statements
-
-        return FunctionDefinition(jsn['pos'], name, parameters, statements)
-
-    def __init__(self, pos, name, parameters, statements):
+    def __init__(self, pos, name, parameters, block):
         super().__init__(pos)
-        self.name = name
-        self.parameters = parameters
-        self.statements = statements
+        self.__name = name
+        self.__parameters = parameters
+        self.__block = block
 
 # Represents the root AST node for a program
 class Program(Node):
