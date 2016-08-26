@@ -87,6 +87,21 @@ class GenericString(Node):
     def to_s(self):
         return self.__contents
 
+# :-(
+class NotParsedCorrectly(Node):
+    CODE = "450700"
+    LABEL = "NotParsedCorrectly"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], NotParsedCorrectly.CODE)
+        return NotParsedCorrectly(jsn['pos'],\
+                                  [Node.from_json(c) for c in jsn['children']])
+
+    def __init__(self, pos, children):
+        super().__init__(pos)
+        self.__children = children
+
 # I really have no idea what the point of this node is?
 # From observation, it only ever seems to contain one item, followed by a ;
 class Some(Node):
