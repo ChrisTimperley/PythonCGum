@@ -4,6 +4,36 @@ import expression
 class Statement(Node):
     pass
 
+class DeclarationList(Node):
+    CODE = "350100"
+    LABEL = "DeclList"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], DeclarationList.CODE)
+        return DeclarationList(jsn['pos'],\
+                               [Node.from_json(c) for c in jsn['children']])
+
+    def __init__(self, pos, declarations):
+        super().__init__(pos)
+        self.__declarations = declarations
+
+# A declaration isn't quite a statement, but this is the best place for it,
+# for now.
+class Declaration(Node):
+    CODE = "450100"
+    LABEL = "Declaration"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Declaration.CODE)
+        return Declaration(jsn['pos'],\
+                           DeclarationList.from_json(jsn['children'][0]))
+
+    def __init__(self, pos, declared):
+        super().__init__(pos)
+        self.__declared = declared
+
 class ExprStatement(Node):
     pass
 
