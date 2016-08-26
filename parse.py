@@ -1,4 +1,6 @@
 #!/usr/bin/env python3
+import os.path
+import json
 import basic
 import expression
 import statement
@@ -9,11 +11,14 @@ import program
 # AST types to their representative Python classes, using the type ID.
 __CODE_CLASS_LOOKUP = {}
 
+# Debugging flag
+__DEBUGGING = True
+
 # Constructs the AST class look-up table. Used by `lookup_table` to build the
 # look-up table upon its first request.
 def __build_lookup_table(typ):
     if hasattr(typ, 'CODE'):
-        print("Registering AST type into lookup table [%d]: %s" % (typ.CODE, typ.__name__))
+        print("Registering AST type [%d]: %s" % (typ.CODE, typ.__name__))
         __CODE_CLASS_LOOKUP[typ.CODE] = typ
     for sub_typ in typ.__subclasses__():
         __build_lookup_table(sub_typ)
@@ -26,9 +31,26 @@ def lookup_table():
         __build_lookup_table(basic.Node)
     return __CODE_CLASS_LOOKUP
 
-# Parses a JSON CGum AST into an equivalent, Python-based C AST
+# Parses a JSON CGum AST into an equivalent, Python representation
 def from_json(jsn):
-    pass
+    assert 'type' in jsn, "expected 'type' property in AST node"
+    typid = int(jsn['type'])
+
+    typ = lookup_table()[typid]
+    assert not typ is None, \
+        ("no Python representation of AST node with type %d found" % typid)
+    print("Converting AST node of (Python) type: %s" % typ.__name__)
+
+# Parses a JSON CGum AST, stored in a file at a specified location, into an
+# equivalent, Python representation
+def from_file(fn):
+    print("Attempting to read CGum AST from a JSON file: %s" % fn)
+    assert os.path.isfile(fn), "file not found"
+    with open(fn, 'r') as f:
+        from_json(json.load(f)['root'])
+    print("Finished converting CGum AST from JSON into Python")
 
 if __name__ == "__main__":
-    print(lookup_table())
+
+    # Let's try and build an example AST
+    from_file("example.cgum.json")
