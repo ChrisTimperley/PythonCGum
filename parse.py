@@ -18,7 +18,7 @@ __DEBUGGING = True
 # look-up table upon its first request.
 def __build_lookup_table(typ):
     if hasattr(typ, 'CODE'):
-        print("Registering AST type [%d]: %s" % (typ.CODE, typ.__name__))
+        print("Registering AST type [%s]: %s" % (typ.CODE, typ.__name__))
         __CODE_CLASS_LOOKUP[typ.CODE] = typ
     for sub_typ in typ.__subclasses__():
         __build_lookup_table(sub_typ)
@@ -35,11 +35,12 @@ def lookup_table():
 def from_json(jsn):
     assert 'type' in jsn, "expected 'type' property in AST node"
     typid = int(jsn['type'])
-
-    typ = lookup_table()[typid]
-    assert not typ is None, \
-        ("no Python representation of AST node with type %d found" % typid)
+    try:
+        typ = lookup_table()[typid]
+    except KeyError as e:
+        raise Exception("no Python representation of AST node with type %d found" % typid)
     print("Converting AST node of (Python) type: %s" % typ.__name__)
+    return typ.from_json(jsn)
 
 # Parses a JSON CGum AST, stored in a file at a specified location, into an
 # equivalent, Python representation

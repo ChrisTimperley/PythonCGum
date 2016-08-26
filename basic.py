@@ -8,6 +8,14 @@ class Node(object):
     def from_json(jsn):
         return parse.from_json(jsn)
 
+    # Compares the code of a JSON AST object against the code expected by the
+    # Python class it has been passed to. Nice for debugging. Converts the
+    # actual code into an integer for the check
+    @staticmethod
+    def check_code(actual, expected):
+        assert actual == expected,\
+            ("actual (%s) and expected (%s) AST type codes didn't match." % (actual, expected))
+
     def __init__(self, pos):
         self.pos = pos
     def to_s(self):
@@ -16,7 +24,7 @@ class Node(object):
         raise NotImplementedError('No `to_json` method exists for this object')
 
 class GenericList(Node):
-    CODE = 470000
+    CODE = "470000"
     LABEL = "GenericList"
 
     @staticmethod
@@ -33,7 +41,7 @@ class GenericList(Node):
         return self.__contents
 
 class GenericString(Node):
-    CODE = 480000
+    CODE = "480000"
     LABEL = "GenericString"
 
     @staticmethod

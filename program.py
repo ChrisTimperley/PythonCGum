@@ -3,12 +3,12 @@ import statement
 import preprocessor
 
 class FunctionParameter(Node):
-    CODE = 220100
+    CODE = "220100"
     LABEL = "ParameterType"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == FunctionParameter.CODE
+        Node.check_code(jsn['type'], FunctionParameter.CODE)
         return FunctionParameter(jsn['pos'],\
                                  Node.from_json(jsn['children'][0]))
 
@@ -23,12 +23,12 @@ class FunctionParameter(Node):
         return self.__name.to_s()
 
 class FunctionParameterList(Node):
-    CODE = 200000
+    CODE = "200000"
     LABEL = "ParamList"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == FunctionParameterList.CODE
+        Node.check_code(jsn['type'], FunctionParameterList.CODE)
         params = [FunctionParameter.from_json(c) for c in jsn['children']]
         return FunctionParameterList(jsn['pos'], params)
 
@@ -40,12 +40,12 @@ class FunctionParameterList(Node):
         return [p.name() for p in self.__params]
 
 class FunctionDefinition(Node):
-    CODE = 380000
+    CODE = "380000"
     LABEL = "Definition"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == FunctionDefinition.CODE
+        Node.check_code(jsn['type'], FunctionDefinition.CODE)
         return FunctionDefinition(jsn['pos'],\
                                   GenericString.from_json(jsn['children'][1]),\
                                   FunctionParameterList.from_json(jsn['children'][0]),\
@@ -58,10 +58,18 @@ class FunctionDefinition(Node):
         self.__block = block
 
 # Represents the root AST node for a program
+# For now we just get all the "components" of a program and worry about what
+# kind of components they might be later.
 class Program(Node):
-    CODE = 460000
+    CODE = "460000"
     LABEL = "Program"
 
     @staticmethod
     def from_json(jsn):
-        pass
+        Node.check_code(jsn['type'], Program.CODE)
+        return Program(jsn['pos'],\
+                       [Node.from_json(c) for c in jsn['children']])
+
+    def __init__(self, pos, components):
+        super().__init__(pos)
+        self.__components = components

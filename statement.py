@@ -9,25 +9,24 @@ class ExprStatement(Node):
 
 # Never seems to return the result of an expression?
 class Return(Statement):
-    CODE = 280003
+    CODE = "280003"
     LABEL = "Return"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == Return.CODE
+        Node.check_code(jsn['type'], Return.CODE)
         return Return(jsn['pos'])
 
     def to_s(self):
         return "return;"
 
 class IfElse(Statement):
-    CODE = 300100
+    CODE = "300100"
     LABEL = "If"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == IfElse.CODE 
-
+        Node.check_code(jsn['type'], IfElse.CODE)
         condition = Node.from_json(jsn['children'][1])
         then = Node.from_json(jsn['children'][2])
 
@@ -46,12 +45,12 @@ class IfElse(Statement):
         self.__els = els
 
 class Block(Node):
-    CODE = 330000
+    CODE = "330000"
     LABEL = "Compound"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == Block.CODE
+        Node.check_code(jsn['type'], Block.CODE)
         return Block(jsn['pos'],\
                      [Node.from_json(c) for c in jsn['children']])
 

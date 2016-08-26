@@ -5,12 +5,12 @@ class Expression(Node):
     pass
 
 class Identity(Expression):
-    CODE = 240100
+    CODE = "240100"
     LABEL = "Ident"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == Identity.CODE
+        Node.check_code(jsn['type'], Identity.CODE)
         of = GenericString.from_json(jsn['children'][0])
         return Identity(jsn['pos'], of)
 
@@ -25,12 +25,12 @@ class Identity(Expression):
         return self.__of.read()
 
 class Constant(Expression):
-    CODE = 240200
+    CODE = "240200"
     LABEL = "Constant"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == Constant.CODE
+        Node.check_code(jsn['type'], Constant.CODE)
         return Constant(jsn['pos'], jsn['label'])
 
     def __init__(self, pos, value):
@@ -44,12 +44,12 @@ class Constant(Expression):
         return str(self.__value)
 
 class Cast(Expression):
-    CODE = 241700
+    CODE = "241700"
     LABEL = "Cast"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == Cast.CODE
+        Node.check_code(jsn['type'], Cast.CODE)
         expr = Node.from_json(jsn['children'][0])
         return Cast(jsn['pos'], expr)
 
@@ -67,12 +67,12 @@ class Assignment(Expression):
 #    CODE = 
 
 class Ternary(Expression):
-    CODE = 240500
+    CODE = "240500"
     LABEL = "CondExpr"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == Ternary.CODE
+        Node.check_code(jsn['type'], Ternary.CODE)
         return Ternary(jsn['pos'],\
                        Node.from_json(jsn['children'][0]),\
                        Node.from_json(jsn['children'][1]),\
@@ -85,12 +85,12 @@ class Ternary(Expression):
         self.__els = els
 
 class FunctionCall(Expression):
-    CODE = 240400
+    CODE = "240400"
     LABEL = "FunCall"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == FunctionCall.CODE
+        Node.check_code(jsn['type'], FunctionCall.CODE)
         function = Identity.from_json(jsn['children'][0])
         arguments = GenericList.from_json(jsn['children'][1])
         return FunctionCall(jsn['pos'], function, arguments)
@@ -109,12 +109,12 @@ class FunctionCall(Expression):
         pass
 
 class Parentheses(Expression):
-    CODE = 242000
+    CODE = "242000"
     LABEL = "ParenExpr"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == Parentheses.CODE
+        Node.check_code(jsn['type'], Parentheses.CODE)
         expr = Node.from_json(jsn['children'][0])
         return Parentheses(jsn['pos'], expr)
 
@@ -129,12 +129,12 @@ class Parentheses(Expression):
         return "(%s)" % self.__expr.to_s()
 
 class Unary(Expression):
-    CODE = 241000
+    CODE = "241000"
     LABEL = "Unary"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == Unary.CODE
+        Node.check_code(jsn['type'], Unary.CODE)
         operand = Node.from_json(jsn['children'][0])
         operator = GenericString.from_json(jsn['children'][1])
         return Unary(jsn['pos'], operand, operator)
@@ -145,12 +145,12 @@ class Unary(Expression):
         self.__operator = operator
 
 class Binary(Expression):
-    CODE = 241100
+    CODE = "241100"
     LABEL = "Binary"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == Binary.CODE
+        Node.check_code(jsn['type'], Binary.CODE)
         left = Node.from_json(jsn['children'][0]) 
         op = GenericString.from_json(jsn['children'][1])
         right = Node.from_json(jsn['children'][2])
@@ -166,12 +166,12 @@ class Binary(Expression):
         return self.__op.label()
 
 class ReturnExpr(Expression):
-    CODE = 280200
+    CODE = "280200"
     LABEL = "ReturnExpr"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == ReturnExpr.CODE
+        Node.check_code(jsn['type'], ReturnExpr.CODE)
         return ReturnExpr(jsn['pos'],\
                           Node.from_json(jsn['children'][0]))
 
