@@ -1,5 +1,6 @@
 from basic import *
 
+# Base class used by all AST nodes deemed to represent a C expression
 class Expression(Node):
     pass
 
@@ -48,9 +49,16 @@ class Cast(Expression):
 
     @staticmethod
     def from_json(jsn):
-        pass
+        assert jsn['type'] == Cast.CODE
+        expr = Node.from_json(jsn['children'][0])
+        return Cast(jsn['pos'], expr)
 
-    def __init__(self):
+    def __init__(self, pos, expr):
+        super().__init__(pos)
+        self.__expr = expr
+
+    def to_s(self):
+        return "(UNKNOWN_TYPE) %s" % self.__expr.to_s()
 
 class FunctionCall(Expression):
     CODE = 240400
