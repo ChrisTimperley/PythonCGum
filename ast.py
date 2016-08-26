@@ -3,28 +3,16 @@
 # Ignores CppTop for now; easy enough to add in later.
 #
 import json
+from basic import *
 import expression
-
-class Node(object):
-    @staticmethod
-    def from_json(jsn):
-        # Need to build a map of codes -> classes, cache as private static var
-        raise NotImplementedError('Not implemented, yet!')
-
-    def __init__(self, pos):
-        self.pos = pos
-    def to_s(self):
-        raise NotImplementedError('No `to_s` method exists for this object')
-    def to_json(self):
-        raise NotImplementedError('No `to_json` method exists for this object')
 
 ##
 # STATEMENTS
 ##
-class Statement(Node):
+class Statement(basic.Node):
     pass
 
-class ExprStatement(Node):
+class ExprStatement(basic.Node):
     pass
 
 # 280003 - Return
@@ -60,11 +48,9 @@ class IfElse(Statement):
         self.then = then
         self.els = els
 
-
-
 # TODO:
 # - Separate declarations
-class Block(Node):
+class Block(basic.Node):
     CODE = 330000
     LABEL = "Compound"
 
@@ -79,7 +65,7 @@ class Block(Node):
         super().__init__(pos)
         self.statements = statements
 
-class FunctionParameter(Node):
+class FunctionParameter(basic.Node):
     CODE = 220100
     LABEL = "ParameterType"
 
@@ -92,7 +78,7 @@ class FunctionParameter(Node):
         super().__init__(pos)
         self.name = name
 
-class FunctionDefinition(Node):
+class FunctionDefinition(basic.Node):
     CODE = 380000
     LABEL = "Definition"
 
@@ -125,7 +111,7 @@ class FunctionDefinition(Node):
 ##
 # PROGRAM
 ##
-class Program(Node):
+class Program(basic.Node):
     CODE = 460000
     LABEL = "Program"
 
