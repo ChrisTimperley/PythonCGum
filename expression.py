@@ -63,7 +63,8 @@ class Cast(Expression):
 # Does not specify the variable that is being assigned to. A little bit
 # annoying. Is InitExpr not assignment?
 class Assignment(Expression):
-    CODE = 
+    pass
+#    CODE = 
 
 class Ternary(Expression):
     CODE = 240500

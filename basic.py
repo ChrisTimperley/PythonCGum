@@ -55,3 +55,4 @@ class Some(Node):
 
 # Equally, I have no idea what the Left node is for?
 class Left(Node):
+    pass

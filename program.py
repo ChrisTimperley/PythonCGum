@@ -28,7 +28,7 @@ class FunctionParameterList(Node):
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] = FunctionParameterList.CODE
+        assert jsn['type'] == FunctionParameterList.CODE
         params = [FunctionParameter.from_json(c) for c in jsn['children']]
         return FunctionParameterList(jsn['pos'], params)
 
