@@ -20,6 +20,9 @@ class Identity(Expression):
     def of(self):
         return self.__of.read()
 
+    def to_s(self):
+        return self.__of.read()
+
 class Constant(Expression):
     CODE = 240200
     LABEL = "Constant"
@@ -39,6 +42,16 @@ class Constant(Expression):
     def to_s(self):
         return str(self.__value)
 
+class Cast(Expression):
+    CODE = 241700
+    LABEL = "Cast"
+
+    @staticmethod
+    def from_json(jsn):
+        pass
+
+    def __init__(self):
+
 class FunctionCall(Expression):
     CODE = 240400
     LABEL = "FunCall"
@@ -55,6 +68,10 @@ class FunctionCall(Expression):
         self.__function = function
         self.__arguments = arguments
 
+    # Returns the name of the function the call was made to
+    def function(self):
+        return self.__function.to_s()
+
     # Returns the AST nodes containing the arguments to this function
     def arguments(self):
         pass
@@ -62,6 +79,22 @@ class FunctionCall(Expression):
 class Parentheses(Expression):
     CODE = 242000
     LABEL = "ParenExpr"
+
+    @staticmethod
+    def from_json(jsn):
+        assert jsn['type'] == Parentheses.CODE
+        expr = Node.from_json(jsn['children'][0])
+        return Parentheses(jsn['pos'], expr)
+
+    def __init__(self, pos, expr):
+        super().__init__(pos)
+        self.__expr = expr
+
+    def expr(self):
+        return self.__expr
+
+    def to_s(self):
+        return "(%s)" % self.__expr.to_s()
 
 class Unary(Expression):
     CODE = 241000
