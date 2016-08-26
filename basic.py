@@ -32,7 +32,8 @@ class Node(object):
         try:
             typ = lookup_table()[typid]
         except KeyError as e:
-            raise Exception("no Python representation of AST node with type %s found" % typid)
+            raise Exception(("no Python representation of AST node with type %s found." +\
+                             "Has CGum type label: %s.") % (typid, jsn['typeLabel']))
         print("Converting AST node of (Python) type: %s" % typ.__name__)
         return typ.from_json(jsn)
 

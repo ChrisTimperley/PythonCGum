@@ -4,6 +4,44 @@ import expression
 class Statement(Node):
     pass
 
+class TypeQualifier(Node):
+    CODE = "50000"
+    LABEL = "TypeQualifier"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], TypeQualifier.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 1 and isinstance(children[0], GenericString)
+        return TypeQualifier(jsn['pos'], children[0])
+
+    def __init__(self, pos, qualifier):
+        super().__init__(pos)
+        self.__qualifier = qualifier
+
+# Provides a full type definition
+class FullType(Node):
+    CODE = "40000"
+    LABEL = "FullType"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], FullType.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+
+        qualifier = children[0]
+        base_type = children[1]
+
+        assert isinstance(qualifier, TypeQualifier)
+        assert isinstance(base_type, BaseType)
+
+        return FullType(jsn['pos'], qualifier, base_type)
+
+    def __init__(self, pos, qualifier, base_type):
+        super().__init__(pos)
+        self.__qualifier = qualifier
+        self.__base_type = base_type
+
 class Storage(Node):
     CODE = "340000"
     LABEL = "Storage"
