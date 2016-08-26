@@ -60,6 +60,11 @@ class Cast(Expression):
     def to_s(self):
         return "(UNKNOWN_TYPE) %s" % self.__expr.to_s()
 
+# Does not specify the variable that is being assigned to. A little bit
+# annoying. Is InitExpr not assignment?
+class Assignment(Expression):
+    CODE = 
+
 class Ternary(Expression):
     CODE = 240500
     LABEL = "CondExpr"
@@ -158,3 +163,20 @@ class Binary(Expression):
 
     def op(self):
         return self.__op.label()
+
+class Return(Expression):
+    CODE = 280200
+    LABEL = "ReturnExpr"
+
+    @staticmethod
+    def from_json(jsn):
+        assert jsn['type'] == Return.CODE
+        return Return(jsn['pos'],\
+                      Node.from_json(jsn['children'][0]))
+
+    def __init__(self, pos, expr):
+        super().__init__(pos)
+        self.__expr = expr
+
+    def to_s(self):
+        return "return %s" % self.__expr.to_s()
