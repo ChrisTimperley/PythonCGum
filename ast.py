@@ -10,7 +10,7 @@ class Node(object):
         # Need to build a map of codes -> classes, cache as private static var
         raise NotImplementedError('Not implemented, yet!')
 
-    def __init__(self, pos, size):
+    def __init__(self, pos):
         self.pos = pos
     def to_s(self):
         raise NotImplementedError('No `to_s` method exists for this object')
@@ -70,6 +70,18 @@ class Unary(Expression):
 class Return(Statement):
     pass
 
+class FunctionParameter(Node):
+    CODE = 220100
+    LABEL = "ParameterType"
+
+    def from_json(jsn):
+        assert jsn['type'] == FunctionParameter.CODE
+        return FunctionParameter(jsn['pos'], jsn['children'][0]['label'])
+
+    def __init__(self, pos, name):
+        super().__init__(pos)
+        self.name = name
+
 class FunctionDefinition(Node):
     CODE = 380000
     LABEL = "Definition"
@@ -91,9 +103,10 @@ class FunctionDefinition(Node):
         statements = Block.from_json(jsn['children'][2])
         statements = statements.contents()
 
-        return FunctionDefinition(name, parameters, statements)
+        return FunctionDefinition(jsn['pos'], name, parameters, statements)
 
-    def __init__(self, name, parameters, statements):
+    def __init__(self, pos, name, parameters, statements):
+        super().__init__(pos)
         self.name = name
         self.parameters = parameters
         self.statements = statements
