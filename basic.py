@@ -1,9 +1,12 @@
 # The base class used by all AST nodes
 class Node(object):
+
+    # Syntatic sugar for "from_json" method in "parse" module, relies on the
+    # parse module having been loaded, of course. We could get round this, but
+    # the system is fairly neat and more than good enough.
     @staticmethod
     def from_json(jsn):
-        # Need to build a map of codes -> classes, cache as private static var
-        raise NotImplementedError('Not implemented, yet!')
+        return parse.from_json(jsn)
 
     def __init__(self, pos):
         self.pos = pos
