@@ -164,15 +164,15 @@ class Binary(Expression):
     def op(self):
         return self.__op.label()
 
-class Return(Expression):
+class ReturnExpr(Expression):
     CODE = 280200
     LABEL = "ReturnExpr"
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == Return.CODE
-        return Return(jsn['pos'],\
-                      Node.from_json(jsn['children'][0]))
+        assert jsn['type'] == ReturnExpr.CODE
+        return ReturnExpr(jsn['pos'],\
+                          Node.from_json(jsn['children'][0]))
 
     def __init__(self, pos, expr):
         super().__init__(pos)
