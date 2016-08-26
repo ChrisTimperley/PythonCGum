@@ -1,5 +1,6 @@
 from basic import *
 import statement
+import preprocessor
 
 class FunctionParameter(Node):
     CODE = 220100
@@ -55,15 +56,6 @@ class FunctionDefinition(Node):
         self.__name = name
         self.__parameters = parameters
         self.__block = block
-
-# Represents a C preprocessor statement
-class PreprocessorStatement(Node):
-    CODE = 450300
-    LABEL = "CppTop"
-
-    @staticmethod
-    def from_json(jsn):
-        pass
 
 # Represents the root AST node for a program
 class Program(Node):
