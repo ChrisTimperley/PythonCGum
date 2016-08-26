@@ -65,6 +65,19 @@ class Parentheses(Expression):
 
 class Unary(Expression):
     CODE = 241000
+    LABEL = "Unary"
+
+    @staticmethod
+    def from_json(jsn):
+        assert jsn['type'] == Unary.CODE
+        operand = Node.from_json(jsn['children'][0])
+        operator = GenericString.from_json(jsn['children'][1])
+        return Unary(jsn['pos'], operand, operator)
+
+    def __init__(self, pos, operand, operator):
+        super().__init__(pos)
+        self.__operand = operand
+        self.__operator = operator
 
 class Binary(Expression):
     CODE = 241100
