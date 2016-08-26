@@ -4,6 +4,22 @@ import expression
 class Statement(Node):
     pass
 
+# TODO: Exactly what is this implementing?
+class BaseType(Node):
+    CODE = "60100"
+    LABEL = "BaseType"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], BaseType.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 1
+        return BaseType(jsn['pos'], children[0])
+
+    def __init__(self, pos, base):
+        super().__init__(pos)
+        self.__base = base
+
 class TypeQualifier(Node):
     CODE = "50000"
     LABEL = "TypeQualifier"
