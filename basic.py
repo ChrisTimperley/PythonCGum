@@ -25,3 +25,16 @@ class GenericList(Node):
     def __init__(self, pos, contents):
         super().__init__(pos)
         self.contents = contents
+
+class GenericString(Node):
+    CODE = 480000
+    LABEL = "GenericString"
+
+    @staticmethod
+    def from_json(jsn):
+        assert jsn['type'] == GenericString.CODE
+        return GenericString(jsn['pos'], jsn['label'])
+
+    def __init__(self, pos, contents):
+        super().__init__(pos)
+        self.__contents = contents
