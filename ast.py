@@ -43,9 +43,21 @@ class Constant(Expression):
 class Parentheses(Expression):
     pass
 
-# 241100 - Binary
 class Binary(Expression):
-    pass
+    CODE = 241100
+    LABEL = "Binary"
+
+    @staticmethod
+    def from_json(jsn):
+        assert jsn['type'] == Binary.CODE
+
+        
+
+    def __init__(self, pos, left, op, right):
+        super().__init__(pos)
+        self.left = left
+        self.op = op
+        self.right = right
 
 class Unary(Expression):
     pass
