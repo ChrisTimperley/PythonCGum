@@ -17,6 +17,9 @@ class Return(Statement):
         assert jsn['type'] == Return.CODE
         return Return(jsn['pos'])
 
+    def to_s(self):
+        return "return;"
+
 class IfElse(Statement):
     CODE = 300100
     LABEL = "If"
@@ -55,48 +58,3 @@ class Block(Node):
     def __init__(self, pos, contents):
         super().__init__(pos)
         self.__contents = contents
-
-class FunctionParameter(Node):
-    CODE = 220100
-    LABEL = "ParameterType"
-
-    @staticmethod
-    def from_json(jsn):
-        assert jsn['type'] == FunctionParameter.CODE
-        return FunctionParameter(jsn['pos'], jsn['children'][0]['label'])
-
-    def __init__(self, pos, name):
-        super().__init__(pos)
-        self.name = name
-
-class FunctionDefinition(basic.Node):
-    CODE = 380000
-    LABEL = "Definition"
-
-    @staticmethod
-    def from_json(jsn):
-        assert jsn['type'] == FunctionDefinition.CODE
-
-        # Fetch the name
-        name = jsn['children'][1]['label']
-        
-        # Build the parameters
-        parameters = jsn['children'][0]
-        assert parameters['typeLabel'] == 'ParamList',\
-            "expected first child of Definition to be ParamList"
-        parameters = parameters['children']
-        parameters = [FunctionParameter.from_json(c) for c in parameters]
-
-        # Build the statements
-        statements = Block.from_json(jsn['children'][2])
-        statements = statements.statements
-
-        return FunctionDefinition(jsn['pos'], name, parameters, statements)
-
-    def __init__(self, pos, name, parameters, statements):
-        super().__init__(pos)
-        self.name = name
-        self.parameters = parameters
-        self.statements = statements
-
-
