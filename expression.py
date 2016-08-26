@@ -10,12 +10,15 @@ class Identity(Expression):
     @staticmethod
     def from_json(jsn):
         assert jsn['type'] == Identity.CODE
-        of = jsn['children'][0]['label']
+        of = GenericString.from_json(jsn['children'][0])
         return Identity(jsn['pos'], of)
 
     def __init__(self, pos, of):
         super().__init__(pos)
-        self.of = of
+        self.__of = of
+
+    def of(self):
+        return self.__of.read()
 
 class Constant(Expression):
     CODE = 240200
@@ -28,10 +31,13 @@ class Constant(Expression):
 
     def __init__(self, pos, value):
         super().__init__(pos)
-        self.value = value
+        self.__value = value
+
+    def value(self):
+        return self.__value
 
     def to_s(self):
-        return str(self.value)
+        return str(self.__value)
 
 class FunctionCall(Expression):
     CODE = 240400
@@ -40,17 +46,25 @@ class FunctionCall(Expression):
     @staticmethod
     def from_json(jsn):
         assert jsn['type'] == FunctionCall.CODE
-
-        # Is it actually possible to call something other than through a direct
-        # call to its name? I don't think so. Let's simplify. This does need to
-        # be a node to be picked up by the Diff, though.
         function = Identity.from_json(jsn['children'][0])
-
         arguments = GenericList.from_json(jsn['children'][1])
+        return FunctionCall(jsn['pos'], function, arguments)
 
-# 242000 - ParenExpr
+    def __init__(self, pos, function, arguments):
+        super().__init__(pos)
+        self.__function = function
+        self.__arguments = arguments
+
+    # Returns the AST nodes containing the arguments to this function
+    def arguments(self):
+        pass
+
 class Parentheses(Expression):
-    pass
+    CODE = 242000
+    LABEL = "ParenExpr"
+
+class Unary(Expression):
+    CODE = 241000
 
 class Binary(Expression):
     CODE = 241100
@@ -60,15 +74,15 @@ class Binary(Expression):
     def from_json(jsn):
         assert jsn['type'] == Binary.CODE
         left = Node.from_json(jsn['children'][0]) 
-        op = jsn['children'][1]['label']
+        op = GenericString.from_json(jsn['children'][1])
         right = Node.from_json(jsn['children'][2])
         return Binary(jsn['pos'], left, op, right)
 
     def __init__(self, pos, left, op, right):
         super().__init__(pos)
-        self.left = left
-        self.op = op
-        self.right = right
+        self.__left = left
+        self.__op = op
+        self.__right = right
 
-class Unary(Expression):
-    pass
+    def op(self):
+        return self.__op.label()

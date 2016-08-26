@@ -9,10 +9,10 @@ import expression
 ##
 # STATEMENTS
 ##
-class Statement(basic.Node):
+class Statement(Node):
     pass
 
-class ExprStatement(basic.Node):
+class ExprStatement(Node):
     pass
 
 # 280003 - Return

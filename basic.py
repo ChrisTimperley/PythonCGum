@@ -24,7 +24,10 @@ class GenericList(Node):
 
     def __init__(self, pos, contents):
         super().__init__(pos)
-        self.contents = contents
+        self.__contents = contents
+
+    def contents(self):
+        return self.__contents
 
 class GenericString(Node):
     CODE = 480000
@@ -44,3 +47,11 @@ class GenericString(Node):
 
     def to_s(self):
         return self.__contents
+
+# I really have no idea what the point of this node is?
+# From observation, it only ever seems to contain one item, followed by a ;
+class Some(Node):
+    pass
+
+# Equally, I have no idea what the Left node is for?
+class Left(Node):
