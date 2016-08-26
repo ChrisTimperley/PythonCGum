@@ -38,3 +38,9 @@ class GenericString(Node):
     def __init__(self, pos, contents):
         super().__init__(pos)
         self.__contents = contents
+
+    def read(self):
+        return self.__contents
+
+    def to_s(self):
+        return self.__contents
