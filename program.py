@@ -8,11 +8,18 @@ class FunctionParameter(Node):
     @staticmethod
     def from_json(jsn):
         assert jsn['type'] == FunctionParameter.CODE
-        return FunctionParameter(jsn['pos'], jsn['children'][0]['label'])
+        return FunctionParameter(jsn['pos'],\
+                                 Node.from_json(jsn['children'][0]))
 
     def __init__(self, pos, name):
         super().__init__(pos)
-        self.name = name
+        self.__name = name
+
+    def name(self):
+        return self.__name.read()
+
+    def to_s(self):
+        return self.__name.to_s()
 
 class FunctionDefinition(basic.Node):
     CODE = 380000
