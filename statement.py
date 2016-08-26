@@ -4,6 +4,20 @@ import expression
 class Statement(Node):
     pass
 
+class Storage(Node):
+    CODE = "340000"
+    LABEL = "Storage"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Storage.CODE)
+        return Storage(jsn['pos'],\
+                       GenericString.from_json(jsn['children'][0]))
+
+    def __init__(self, pos, label):
+        super().__init__(pos)
+        self.__label = label
+
 class DeclarationList(Node):
     CODE = "350100"
     LABEL = "DeclList"
