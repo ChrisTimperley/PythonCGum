@@ -74,6 +74,7 @@ class GenericString(Node):
 
     @staticmethod
     def from_json(jsn):
+        Node.check_code(jsn['type'], GenericString.CODE)
         assert jsn['type'] == GenericString.CODE
         return GenericString(jsn['pos'], jsn['label'])
 

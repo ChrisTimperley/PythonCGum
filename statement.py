@@ -48,6 +48,28 @@ class Declaration(Node):
         super().__init__(pos)
         self.__declared = declared
 
+# Generic definition class
+class Definition(Node):
+    CODE = "450200"
+    LABEL = "Definition"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Definition.CODE)
+        return Definition(jsn['pos'],\
+                          Node.from_json(jsn['children'][0]))
+
+    def __init__(self, pos, defined):
+        super().__init__(pos)
+        self.__defined = defined
+
+    def defined(self):
+        return self.__defined
+
+    def to_s(self):
+        return self__defined.to_s()
+
+
 class ExprStatement(Node):
     pass
 
