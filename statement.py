@@ -25,11 +25,7 @@ class IfElse(Statement):
     def from_json(jsn):
         assert jsn['type'] == IfElse.CODE 
 
-        # Build the condition
         condition = Node.from_json(jsn['children'][1])
-
-        # Build the "then" branch. This doesn't always result in a block.
-        # TODO: Ensure a block is added?
         then = Node.from_json(jsn['children'][2])
 
         # Build the "else" branch, if there is one.
@@ -46,22 +42,21 @@ class IfElse(Statement):
         self.__then = then
         self.__els = els
 
-class Block(basic.Node):
+class Block(Node):
     CODE = 330000
     LABEL = "Compound"
 
     @staticmethod
     def from_json(jsn):
         assert jsn['type'] == Block.CODE
+        return Block(jsn['pos'],\
+                     [Node.from_json(c) for c in jsn['children']])
 
-        statements = jsn['children']
-        return Block(jsn['pos'], statements)
-
-    def __init__(self, pos, statements):
+    def __init__(self, pos, contents):
         super().__init__(pos)
-        self.statements = statements
+        self.__contents = contents
 
-class FunctionParameter(basic.Node):
+class FunctionParameter(Node):
     CODE = 220100
     LABEL = "ParameterType"
 
