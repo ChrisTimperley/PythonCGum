@@ -1,3 +1,24 @@
+# This look-up table, initialised upon the first call to `from_json`, maps CGum
+# AST types to their representative Python classes, using the type ID.
+__CODE_CLASS_LOOKUP = {}
+
+# Constructs the AST class look-up table. Used by `lookup_table` to build the
+# look-up table upon its first request.
+def __build_lookup_table(typ):
+    if hasattr(typ, 'CODE'):
+        print("Registering AST type [%s]: %s" % (typ.CODE, typ.__name__))
+        __CODE_CLASS_LOOKUP[typ.CODE] = typ
+    for sub_typ in typ.__subclasses__():
+        __build_lookup_table(sub_typ)
+
+# Used to return the type ID to Python class look-up table.
+# Responsible for overseeing the construction of the look-up table on its first
+# invocation.
+def lookup_table():
+    if not __CODE_CLASS_LOOKUP:
+        __build_lookup_table(Node)
+    return __CODE_CLASS_LOOKUP
+
 # The base class used by all AST nodes
 class Node(object):
 
@@ -6,7 +27,14 @@ class Node(object):
     # the system is fairly neat and more than good enough.
     @staticmethod
     def from_json(jsn):
-        return parse.from_json(jsn)
+        assert 'type' in jsn, "expected 'type' property in AST node"
+        typid = jsn['type']
+        try:
+            typ = lookup_table()[typid]
+        except KeyError as e:
+            raise Exception("no Python representation of AST node with type %s found" % typid)
+        print("Converting AST node of (Python) type: %s" % typ.__name__)
+        return typ.from_json(jsn)
 
     # Compares the code of a JSON AST object against the code expected by the
     # Python class it has been passed to. Nice for debugging. Converts the
