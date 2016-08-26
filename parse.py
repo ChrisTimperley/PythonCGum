@@ -34,7 +34,7 @@ def lookup_table():
 # Parses a JSON CGum AST into an equivalent, Python representation
 def from_json(jsn):
     assert 'type' in jsn, "expected 'type' property in AST node"
-    typid = int(jsn['type'])
+    typid = jsn['type']
     try:
         typ = lookup_table()[typid]
     except KeyError as e:
