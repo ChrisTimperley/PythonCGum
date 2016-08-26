@@ -5,7 +5,12 @@
 import json
 
 class Node(object):
-    def __init__(self, pos):
+    @staticmethod
+    def from_json(jsn):
+        # Need to build a map of codes -> classes, cache as private static var
+        raise NotImplementedError('Not implemented, yet!')
+
+    def __init__(self, pos, size):
         self.pos = pos
     def to_s(self):
         raise NotImplementedError('No `to_s` method exists for this object')
@@ -25,8 +30,12 @@ class ExprStatement(Node):
 class IfElse(Statement):
     @staticmethod
     def from_json(jsn):
-       pass 
-    def __init__(self, condition, then, els):
+        condition = Node.from_json(jsn['children'][0])
+
+
+        IfElse(jsn['location'], jsn['size'])
+
+    def __init__(self, pos, size, condition, then, els):
         self.condition = condition
         self.then = then
         self.els = els
@@ -50,6 +59,7 @@ class Constant(Expression):
 class Parentheses(Expression):
     pass
 
+# 241100 - Binary
 class Binary(Expression):
     pass
 
@@ -63,7 +73,16 @@ class Return(Statement):
 ##
 # PROGRAM
 ##
-
-# 460000 - Program
 class Program(Node):
-    pass
+    CODE = 460000
+    LABEL = "Program"
+
+    def from_json(jsn):
+        statements = [Node.from_json(s) for s in jsn['children']]
+        return Program(jsn['pos'], jsn['length'], statements)
+
+    def __init__(self, pos, value, statements):
+        super().__init__(pos, value)
+        self.statements = statements
+
+# Register the corresponding CGum type codes for each Node type
