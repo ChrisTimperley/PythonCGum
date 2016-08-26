@@ -12,9 +12,16 @@ class Node(object):
     def to_json(self):
         raise NotImplementedError('No `to_json` method exists for this object')
 
+##
+# STATEMENTS
+##
 class Statement(Node):
     pass
 
+class ExprStatement(Node):
+    pass
+
+# 300100 - If
 class IfElse(Statement):
     @staticmethod
     def from_json(jsn):
@@ -26,15 +33,37 @@ class IfElse(Statement):
     def to_json(self):
         pass
 
-class Constant(Node):
+##
+# EXPRESSIONS
+##
+class Expression(Node):
+    pass
+
+class Constant(Expression):
     def __init__(self, pos, value):
         super().__init__(pos)
         self.value = value
     def to_s(self):
         return str(self.value)
 
+# 242000 - ParenExpr
+class Parentheses(Expression):
+    pass
+
+class Binary(Expression):
+    pass
+
+class Unary(Expression):
+    pass
+
+# 280003 - Return
 class Return(Statement):
     pass
 
+##
+# PROGRAM
+##
+
+# 460000 - Program
 class Program(Node):
     pass
