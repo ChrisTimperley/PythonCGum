@@ -56,6 +56,15 @@ class FunctionDefinition(Node):
         self.__parameters = parameters
         self.__block = block
 
+# Represents a C preprocessor statement
+class PreprocessorStatement(Node):
+    CODE = 450300
+    LABEL = "CppTop"
+
+    @staticmethod
+    def from_json(jsn):
+        pass
+
 # Represents the root AST node for a program
 class Program(Node):
     CODE = 460000
