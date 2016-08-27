@@ -17,7 +17,7 @@ class FunctionParameter(Node):
             tmp.pop(0) if (tmp and isinstance(tmp[0], types.FullType)) else None
         self.__name = tmp.pop(0) if tmp else None
 
-        assert self.__typ is None or isinstance(typ, types.FullType)
+        assert self.__typ is None or isinstance(self.__typ, types.FullType)
         assert self.__name is None or isinstance(self.__name, GenericString)
         super().__init__(pos, length, label, children)
 
@@ -56,7 +56,7 @@ class FunctionDefinition(Node):
             tmp.pop(0) if isinstance(tmp[0], types.Storage) else None
         self.__parameters = tmp.pop(0)
         self.__dots = \
-            tmp.pop(0) if isinstance(tmp[0], types.DotParameter) else None
+            tmp.pop(0) if isinstance(tmp[0], types.DotsParameter) else None
         self.__name = tmp.pop(0)
         self.__block = tmp.pop(0)
 
