@@ -56,6 +56,15 @@ class Definition(Node):
     def to_s(self):
         return self__defined.to_s()
 
+class Break(Node):
+    CODE = "280002"
+    LABEL = "Break"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Break.CODE)
+        assert not jsn['children']
+        return Break(jsn['pos'])
 
 class ExprStatement(Node):
     CODE = "260300"

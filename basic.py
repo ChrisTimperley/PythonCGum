@@ -109,9 +109,19 @@ class NotParsedCorrectly(Node):
         super().__init__(pos)
         self.__children = children
 
-# I really have no idea what the point of this node is?
+# I really have no idea what the point of this node is? Seems to contain nodes
+# whose presence is otherwise optional. In the case those nodes are missing, a
+# None can be found instead.
 # From observation, it only ever seems to contain one item, followed by a ;
 class Some(Node):
+    CODE = "290100"
+    LABEL = "Some"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Some.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+
     pass
 
 # Strangely, None can have children

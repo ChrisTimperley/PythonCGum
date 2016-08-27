@@ -34,6 +34,24 @@ class Assignment(Expression):
         self.__lhs = lhs
         self.__rhs = rhs
 
+# This seems to just represent Postfix expressions? This has nothing to do with
+# Infix expression?
+class Infix(Expression):
+    CODE = "240900"
+    LABEL = "Infix"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Infix.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 2
+        return Infix(jsn['pos'], children[0], children[1])
+
+    def __init__(self, pos, operand, operator):
+        super().__init__(pos)
+        self.__operand = operand
+        self.__operator = operator
+
 class Postfix(Expression):
     CODE = "240800"
     LABEL = "Postfix"
@@ -201,6 +219,29 @@ class Parentheses(Expression):
 
     def to_s(self):
         return "(%s)" % self.__expr.to_s()
+
+# I really have no idea what the point of this node is? Seems to contain nodes
+# whose presence is otherwise optional. In the case those nodes are missing, a
+# None can be found instead.
+# From observation, it only ever seems to contain one item, followed by a ;
+class Some(Node):
+    CODE = "290100"
+    LABEL = "Some"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Some.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        print(children)
+        assert len(children) == 2
+        assert isinstance(children[1], GenericString)
+        assert children[1].to_s() == ";"
+        return Some(jsn['pos'], children[0], children[1])
+
+    def __init__(self, pos, expr, semicolon):
+        super().__init__(pos)
+        self.__expr = expr
+        self.__semicolon = semicolon
 
 class Unary(Expression):
     CODE = "241000"
