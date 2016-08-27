@@ -4,15 +4,18 @@ from basic import *
 class Expression(Node):
     pass
 
-# Not sure what this is?
-class DotsParameter(Node):
-    CODE = "210000"
-    LABEL = "DotsParameter"
+# Not entirely sure what this is meant to be?
+# It has no children, so either it ignores the type whose size it measures, or
+# it does something entirely different.
+class SizeOfType(Expression):
+    CODE = "241600"
+    LABEL = "SizeOfType"
 
     @staticmethod
     def from_json(jsn):
-        Node.check_code(jsn['type'], DotsParameter.CODE)
-        return DotsParameter(jsn['pos'])
+        Node.check_code(jsn['type'], SizeOfType.CODE)
+        assert not jsn['children']
+        return SizeOfType(jsn['pos'])
 
 class Assignment(Expression):
     CODE = "240700"

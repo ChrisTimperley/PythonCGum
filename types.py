@@ -20,7 +20,6 @@ class Pointer(Node):
         assert len(children) <= 1
         typ = children[0] if children else None
         assert (typ is None) or isinstance(typ, FullType)
-        print("building Pointer")
         return Pointer(jsn['pos'], typ)
 
     def __init__(self, pos, typ):
