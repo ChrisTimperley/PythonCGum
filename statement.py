@@ -89,17 +89,19 @@ class For(Statement):
     def from_json(jsn):
         Node.check_code(jsn['type'], For.CODE)
         children = [Node.from_json(c) for c in jsn['children']]
-        assert len(children) == 3
+        assert len(children) == 4
         assert isinstance(children[0], ExprStatement)
         assert isinstance(children[1], ExprStatement)
         assert isinstance(children[2], ExprStatement)
-        return For(jsn['pos'], children[0], children[1], children[2])
+        assert isinstance(children[3], Block)
+        return For(jsn['pos'], children[0], children[1], children[2], children[3])
 
-    def __init__(self, pos, initialisation, condition, after):
+    def __init__(self, pos, initialisation, condition, after, block):
         super().__init__(pos)
         self.__initialisation = initialisation
         self.__condition = condition
         self.__after = after
+        self.__block = block
 
 # Never seems to return the result of an expression?
 class Return(Statement):
