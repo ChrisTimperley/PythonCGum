@@ -332,6 +332,7 @@ class Binary(Expression):
     def op(self):
         return self.__op.label()
 
+# TODO: Returns the result of an expression; should be a statement?
 class ReturnExpr(Expression):
     CODE = "280200"
     LABEL = "ReturnExpr"

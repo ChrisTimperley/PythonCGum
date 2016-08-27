@@ -56,7 +56,39 @@ class Definition(Node):
     def to_s(self):
         return self__defined.to_s()
 
-class Switch(Node):
+# Used to specify the default switch case
+class Default(Statement):
+    CODE = "270400"
+    LABEL = "Default"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Default.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 1
+        return Default(jsn['pos'], children[0])
+
+    def __init__(self, pos, stmt):
+        super().__init__(pos)
+        self.__stmt = stmt
+
+class Case(Statement):
+    CODE = "270200"
+    LABEL = "Case"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Case.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 2
+        return Case(jsn['pos'], children[0], children[1])
+
+    def __init__(self, pos, expr, stmt):
+        super().__init__(pos)
+        self.__expr = expr
+        self.__stmt = stmt
+
+class Switch(Statement):
     CODE = "300200"
     LABEL = "Switch"
 
