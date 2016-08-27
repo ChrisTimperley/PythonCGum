@@ -1,6 +1,7 @@
 from basic import *
 import statement
 import preprocessor
+import types
 
 class FunctionParameter(Node):
     CODE = "220100"
@@ -55,7 +56,7 @@ class FunctionDefinition(Node):
         children = [Node.from_json(c) for c in jsn['children']]
 
         # Find any optional storage information for this function
-        if isinstance(children[0], statement.Storage):
+        if isinstance(children[0], types.Storage):
             storage = children.pop(0)
         else:
             storage = None
