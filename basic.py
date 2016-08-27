@@ -61,6 +61,12 @@ class Node(object):
     def to_json(self):
         raise NotImplementedError('No `to_json` method exists for this object')
 
+class Token(Node):
+    def __init__(self, pos, length, label, children):
+        assert not children
+        assert not label
+        super().__init__(pos, length, label, children)
+
 class GenericList(Node):
     CODE = "470000"
     LABEL = "GenericList"

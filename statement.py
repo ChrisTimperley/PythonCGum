@@ -1,6 +1,7 @@
 from basic import *
 import expression
 
+# Mix-in implemented by all statement types
 class Statement(Node):
     pass
 
@@ -8,15 +9,12 @@ class DeclarationList(Node):
     CODE = "350100"
     LABEL = "DeclList"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], DeclarationList.CODE)
-        return DeclarationList(jsn['pos'],\
-                               [Node.from_json(c) for c in jsn['children']])
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        super().__init__(pos, length, label, children)
 
-    def __init__(self, pos, declarations):
-        super().__init__(pos)
-        self.__declarations = declarations
+    def declarations(self):
+        return self.__children
 
 # A declaration isn't quite a statement, but this is the best place for it,
 # for now.
@@ -24,208 +22,161 @@ class Declaration(Node):
     CODE = "450100"
     LABEL = "Declaration"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Declaration.CODE)
-        return Declaration(jsn['pos'],\
-                           DeclarationList.from_json(jsn['children'][0]))
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 1
+        assert isinstance(children[0], DeclarationList)
+        super().__init__(pos, length, label, children)
 
-    def __init__(self, pos, declared):
-        super().__init__(pos)
-        self.__declared = declared
+    def declarations(self):
+        return self.__children[0]
 
 # Generic definition class
 class Definition(Node):
     CODE = "450200"
     LABEL = "Definition"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Definition.CODE)
-        return Definition(jsn['pos'],\
-                          Node.from_json(jsn['children'][0]))
-
-    def __init__(self, pos, defined):
-        super().__init__(pos)
-        self.__defined = defined
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 1
+        super().__init__(pos, length, label, children)
 
     def defined(self):
-        return self.__defined
-
+        return self.__children[0]
 
     def to_s(self):
-        return self__defined.to_s()
+        return self.defined().to_s()
 
-class Continue(Statement):
+class Continue(Token, Statement):
     CODE = "280001"
     LABEL = "Continue"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Continue.CODE)
-        assert not jsn['children']
-        return Continue(jsn['pos'])
+    def to_s(self):
+        return "continue"
 
 # Used to specify the default switch case
 class Default(Statement):
     CODE = "270400"
     LABEL = "Default"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Default.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) == 1
-        return Default(jsn['pos'], children[0])
-
-    def __init__(self, pos, stmt):
-        super().__init__(pos)
-        self.__stmt = stmt
+        super().__init__(pos, length, label, children)
 
 class Case(Statement):
     CODE = "270200"
     LABEL = "Case"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Case.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
         assert len(children) == 2
-        return Case(jsn['pos'], children[0], children[1])
+        super().__init__(pos, length, label, children)
 
-    def __init__(self, pos, expr, stmt):
-        super().__init__(pos)
-        self.__expr = expr
-        self.__stmt = stmt
+    def expr(self):
+        return self.__children[0]
+    def stmt(self):
+        return self.__children[1]
 
 class Switch(Statement):
     CODE = "300200"
     LABEL = "Switch"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Switch.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) == 2
         assert isinstance(children[1], Block)
-        return Switch(jsn['pos'], children[0], children[1])
+        super().__init__(pos, length, label, children)
 
-    def __init__(self, pos, expr, block):
-        super().__init__(pos)
-        self.__expr = expr
-        self.__block = block
+    def expr(self):
+        return self.__children[0]
+    def block(self):
+        return self.__children[1]
 
-class Break(Node):
+class Break(Token, Statement):
     CODE = "280002"
     LABEL = "Break"
-
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Break.CODE)
-        assert not jsn['children']
-        return Break(jsn['pos'])
+    def to_s(self):
+        return "break"
 
 class ExprStatement(Node):
     CODE = "260300"
     LABEL = "ExprStatement"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], ExprStatement.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) == 1
-        return ExprStatement(jsn['pos'], children[0])
+        super().__init__(pos, length, label, children)
 
-    def __init__(self, pos, expr):
-        super().__init__(pos)
-        self.__expr = expr
+    def expr(self):
+        return self.__children[0]
 
 class While(Statement):
     CODE = "310100"
     LABEL = "While"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], While.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) == 2
-        return While(jsn['pos'], children[0], children[1])
+        super().__init__(pos, length, label, children)
 
-    def __init__(self, pos, condition, do):
-        super().__init__(pos)
-        self.__condition = condition
-        self.__do = do
+    def condition(self):
+        return self.__children[0]
+    def do(self):
+        return self.__children[1]
 
 class For(Statement):
     CODE = "310300"
     LABEL = "For"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], For.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) == 4
         assert isinstance(children[0], ExprStatement)
         assert isinstance(children[1], ExprStatement)
         assert isinstance(children[2], ExprStatement)
         assert isinstance(children[3], Block)
-        return For(jsn['pos'], children[0], children[1], children[2], children[3])
+        super().__init__(pos, length, label, children)
 
-    def __init__(self, pos, initialisation, condition, after, block):
-        super().__init__(pos)
-        self.__initialisation = initialisation
-        self.__condition = condition
-        self.__after = after
-        self.__block = block
+    def initialisation(self):
+        return self.__children[0]
+    def condition(self):
+        return self.__children[1]
+    def after(self):
+        return self.__children[2]
+    def block(self):
+        return self.__children[3]
 
 # Never seems to return the result of an expression?
-class Return(Statement):
+class Return(Token, Statement):
     CODE = "280003"
     LABEL = "Return"
-
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Return.CODE)
-        assert not jsn['children']
-        return Return(jsn['pos'])
-
     def to_s(self):
-        return "return;"
+        return "return"
+
+# Todo: move to tokens package?
+class IfToken(Token):
+    CODE = "490100"
+    LABEL = "IfToken"
 
 class IfElse(Statement):
     CODE = "300100"
     LABEL = "If"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], IfElse.CODE)
-        condition = Node.from_json(jsn['children'][1])
-        then = Node.from_json(jsn['children'][2])
+    def __init__(self, pos, length, label, children):
+        assert len(children) >= 3 and len(children) <= 4
+        assert isinstance(children[0], IfToken)
+        super().__init__(pos, length, label, children)
 
-        # Build the "else" branch, if there is one.
-        if len(jsn['children']) == 4:
-            els = Node.from_json(jsn['children'][3])
-        else:
-            els = None
-
-        return IfElse(jsn['pos'], condition, then, els)
-
-    def __init__(self, pos, condition, then, els):
-        super().__init__(pos)
-        self.__condition = condition
-        self.__then = then
-        self.__els = els
+    def condition(self):
+        return self.__children[1]
+    def then(self):
+        return self.__children[2]
+    def els(self):
+        return self.__children[3] if len(children) == 4 else None
 
 class Block(Node):
     CODE = "330000"
     LABEL = "Compound"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Block.CODE)
-        return Block(jsn['pos'],\
-                     [Node.from_json(c) for c in jsn['children']])
-
-    def __init__(self, pos, contents):
-        super().__init__(pos)
-        self.__contents = contents
+    def contents(self):
+        return self.__children
