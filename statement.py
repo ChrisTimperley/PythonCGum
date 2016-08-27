@@ -56,6 +56,16 @@ class Definition(Node):
     def to_s(self):
         return self__defined.to_s()
 
+class Continue(Statement):
+    CODE = "280001"
+    LABEL = "Continue"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Continue.CODE)
+        assert not jsn['children']
+        return Continue(jsn['pos'])
+
 # Used to specify the default switch case
 class Default(Statement):
     CODE = "270400"
