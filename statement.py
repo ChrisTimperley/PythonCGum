@@ -56,6 +56,23 @@ class Definition(Node):
     def to_s(self):
         return self__defined.to_s()
 
+class Switch(Node):
+    CODE = "300200"
+    LABEL = "Switch"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Switch.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 2
+        assert isinstance(children[1], Block)
+        return Switch(jsn['pos'], children[0], children[1])
+
+    def __init__(self, pos, expr, block):
+        super().__init__(pos)
+        self.__expr = expr
+        self.__block = block
+
 class Break(Node):
     CODE = "280002"
     LABEL = "Break"
