@@ -132,12 +132,26 @@ class FullType(Node):
     def from_json(jsn):
         Node.check_code(jsn['type'], FullType.CODE)
         children = [Node.from_json(c) for c in jsn['children']]
-        assert isinstance(children[0], TypeQualifier)
-        return FullType(jsn['pos'], children[0], children[1])
+        assert len(children) <= 3
+        
+        qualifier = children.pop(0)
+        if isinstance(children[0], TypeName):
+            name = children.pop(0)
+        else:
+            name = None
 
-    def __init__(self, pos, qualifier, base_type):
+        # Optional - may be Pointer or BaseType
+        base_type = children.pop(0) if children else None
+
+        assert isinstance(qualifier, TypeQualifier)
+        assert name is None or isinstance(name, TypeName)
+        assert base_type is None or isinstance(base_type, BaseType) or isinstance(base_type, Pointer)
+        return FullType(jsn['pos'], qualifier, name, base_type)
+
+    def __init__(self, pos, qualifier, name, base_type):
         super().__init__(pos)
         self.__qualifier = qualifier
+        self.__name = name
         self.__base_type = base_type
 
 class Storage(Node):

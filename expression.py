@@ -183,9 +183,10 @@ class FunctionCall(Expression):
     @staticmethod
     def from_json(jsn):
         Node.check_code(jsn['type'], FunctionCall.CODE)
-        function = Identity.from_json(jsn['children'][0])
-        arguments = GenericList.from_json(jsn['children'][1])
-        return FunctionCall(jsn['pos'], function, arguments)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 2
+        assert isinstance(children[1], GenericList)
+        return FunctionCall(jsn['pos'], children[0], children[1])
 
     def __init__(self, pos, function, arguments):
         super().__init__(pos)

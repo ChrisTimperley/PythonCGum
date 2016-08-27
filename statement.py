@@ -81,6 +81,23 @@ class ExprStatement(Node):
         super().__init__(pos)
         self.__expr = expr
 
+class While(Statement):
+    CODE = "310100"
+    LABEL = "While"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], While.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 2
+        assert isinstance(children[1], Block)
+        return While(jsn['pos'], children[0], children[1])
+
+    def __init__(self, pos, condition, block):
+        super().__init__(pos)
+        self.__condition = condition
+        self.__block = block
+
 class For(Statement):
     CODE = "310300"
     LABEL = "For"
