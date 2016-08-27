@@ -7,51 +7,38 @@ class FunctionParameter(Node):
     CODE = "220100"
     LABEL = "ParameterType"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], FunctionParameter.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) <= 2
-        if children and isinstance(children[0], types.FullType):
-            typ = children.pop(0)
-        else:
-            typ = None
-        name = children[0] if children else None
 
-        assert typ is None or isinstance(typ, types.FullType)
-        assert name is None or isinstance(name, GenericString)
-        return FunctionParameter(jsn['pos'], typ, name)
+        # Find the optional type and name of this parameter
+        tmp = children.copy()
+        self.__typ = \
+            tmp.pop(0) if (tmp and isinstance(tmp[0], types.FullType)) else None
+        self.__name = tmp.pop(0) if tmp else None
 
-    def __init__(self, pos, typ, name):
-        super().__init__(pos)
-        self.__typ = typ
-        self.__name = name
+        assert self.__typ is None or isinstance(typ, types.FullType)
+        assert self.__name is None or isinstance(name, GenericString)
+        super().__init__(pos, length, label, children)
 
-    def incomplete(self):
-        return self.__name is None
-
+    def is_incomplete(self):
+        return self.name() is None
+    def typ(self):
+        return self.__typ.to_s() if self.__typ else None
     def name(self):
-        return self.__name.read()
-
-    def to_s(self):
-        return self.__name.to_s()
+        return self.__name.to_s() if self.__name else None
 
 class FunctionParameters(Node):
     CODE = "200000"
     LABEL = "ParamList"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], FunctionParameters.CODE)
-        params = [FunctionParameter.from_json(c) for c in jsn['children']]
-        return FunctionParameters(jsn['pos'], params)
-
-    def __init__(self, pos, params):
-        super().__init__(pos)
-        self.__params = params
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert all([isinstance(c, FunctionParameter) for c in children])
+        super().__init__(pos, length, label, children)
 
     def parameters(self):
-        return [p.name() for p in self.__params]
+        return self.__children
 
 class FunctionDefinition(Node):
     CODE = "380000"
@@ -59,54 +46,47 @@ class FunctionDefinition(Node):
 
     @staticmethod
     def from_json(jsn):
-        Node.check_code(jsn['type'], FunctionDefinition.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
-        assert len(children) <= 5
+                return FunctionDefinition(jsn['pos'], name, params, block, storage, dots)
 
-        # Find any optional storage information for this function
-        if isinstance(children[0], types.Storage):
-            storage = children.pop(0)
-        else:
-            storage = None
+    def __init__(self, pos, length, label, children):
+        assert len(children) >= 3 and len(children) <= 5
 
-        # Get the parameter names
-        params = children[0]
+        tmp = children.copy()
+        self.__storage = \
+            tmp.pop(0) if isinstance(tmp[0], types.Storage) else None
+        self.__parameters = tmp.pop(0)
+        self.__dots = \
+            tmp.pop(0) if isinstance(tmp[0], types.DotParameter) else None
+        self.__name = tmp.pop(0)
+        self.__block = tmp.pop(0)
 
-        # Find any optional dots parameter
-        if isinstance(children[1], types.DotsParameter):
-            dots = children.pop(1)
-        else:
-            dots = None
+        assert isinstance(self.__parameters, FunctionParameters)
+        assert self.__dots is None or \
+            isinstance(self.__dots, types.DotsParameter)
+        assert self.__storage is None or \
+            isinstance(self.__storage, types.Storage)
+        assert isinstance(self.__name, GenericString)
+        assert isinstance(self.__block, statement.Block)
+        super().__init__(pos, length, label, children)
 
-        name = children[1]
-        block = children[2]
+    def name(self):
+        return self.__name
+    def parameters(self):
+        return self.__parameters
+    def block(self):
+        return self.__block
+    def storage(self):
+        return self.__storage
+    def dots(self):
+        return self.__dots
 
-        # Do some sanity checking
-        assert isinstance(params, FunctionParameters)
-        assert dots is None or isinstance(dots, types.DotsParameter)
-        assert isinstance(name, GenericString)
-        assert isinstance(block, statement.Block)
-
-        return FunctionDefinition(jsn['pos'], name, params, block, storage, dots)
-
-    def __init__(self, pos, name, parameters, block, storage, dots):
-        super().__init__(pos)
-        self.__name = name
-        self.__parameters = parameters
-        self.__block = block
-        self.__storage = storage
-        self.__dots = dots
+    def is_variadic(self):
+        return not (self.dots() is None)
 
 # Used to mark the end of the program!
-class FinalDef(Node):
+class FinalDef(Token):
     CODE = "450800"
     LABEL = "FinalDef"
-
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], FinalDef.CODE)
-        assert not jsn['children']
-        return FinalDef(jsn['pos'])
 
 # Represents the root AST node for a program
 # For now we just get all the "components" of a program and worry about what
@@ -114,13 +94,3 @@ class FinalDef(Node):
 class Program(Node):
     CODE = "460000"
     LABEL = "Program"
-
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Program.CODE)
-        return Program(jsn['pos'],\
-                       [Node.from_json(c) for c in jsn['children']])
-
-    def __init__(self, pos, components):
-        super().__init__(pos)
-        self.__components = components
