@@ -9,6 +9,22 @@ class DotsParameter(Node):
         Node.check_code(jsn['type'], DotsParameter.CODE)
         return DotsParameter(jsn['pos'])
 
+class TypeName(Node):
+    CODE = "61000"
+    LABEL = "TypeName"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], TypeName.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 1
+        assert isinstance(children[0], GenericString)
+        return TypeName(jsn['pos'], children[0])
+
+    def __init__(self, pos, name):
+        super().__init__(pos)
+        self.__name = name
+
 class Pointer(Node):
     CODE = "60200"
     LABEL = "Pointer"
