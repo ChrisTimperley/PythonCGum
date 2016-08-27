@@ -47,6 +47,15 @@ class Node(object):
         self.__label = label
         self.__children = children
 
+    def label(self):
+        return self.__label
+    def pos(self):
+        return self.__pos
+    def length(self):
+        return self.__length
+    def children(self):
+        return self.__children
+
     def to_s(self):
         raise NotImplementedError('No `to_s` method exists for this object')
     def to_json(self):
@@ -56,51 +65,22 @@ class GenericList(Node):
     CODE = "470000"
     LABEL = "GenericList"
 
-    @staticmethod
-    def from_json(jsn):
-        return Node.from_json(GenericList, jsn)
-
-    def __init__(self, pos, length, children, label):
-        super().__init__(pos, children)
-        self.__contents = contents
-
     def contents(self):
-        return self.__contents
+        return self.__children
 
 class GenericString(Node):
     CODE = "480000"
     LABEL = "GenericString"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], GenericString.CODE)
-        assert jsn['type'] == GenericString.CODE
-        return GenericString(jsn['pos'], jsn['label'])
-
-    def __init__(self, pos, contents):
-        super().__init__(pos)
-        self.__contents = contents
-
     def read(self):
-        return self.__contents
-
+        return self.label()
     def to_s(self):
-        return self.__contents
+        return self.label()
 
 # :-(
 class NotParsedCorrectly(Node):
     CODE = "450700"
     LABEL = "NotParsedCorrectly"
-
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], NotParsedCorrectly.CODE)
-        return NotParsedCorrectly(jsn['pos'],\
-                                  [Node.from_json(c) for c in jsn['children']])
-
-    def __init__(self, pos, children):
-        super().__init__(pos)
-        self.__children = children
 
 # I really have no idea what the point of this node is? Seems to contain nodes
 # whose presence is otherwise optional. In the case those nodes are missing, a
@@ -110,41 +90,23 @@ class Some(Node):
     CODE = "290100"
     LABEL = "Some"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Some.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
-
-    pass
-
 # Strangely, None can have children
 class NoneNode(Node):
     CODE = "290001"
     LABEL = "None"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], NoneNode.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) == 1
         assert isinstance(children[0], GenericString)
-        return NoneNode(jsn['pos'], children[0])
-
-    def __init__(self, pos, string):
-        super().__init__(pos)
-        self.__string = string
+        super().__init__(pos, length, label, children)
 
 # Equally, I have no idea what the Left node is for?
 class Left(Node):
     CODE = "20100"
     LABEL = "Left"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Left.CODE)
-        assert len(jsn['children']) == 1
-        return Left(jsn['pos'], Node.from_json(jsn['children'][0]))
-
-    def __init__(self, pos, left):
-        super().__init__(pos)
-        self.__left = left
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 1
+        super().__init__(pos, length, label, children)
