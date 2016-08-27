@@ -232,11 +232,15 @@ class Some(Node):
     def from_json(jsn):
         Node.check_code(jsn['type'], Some.CODE)
         children = [Node.from_json(c) for c in jsn['children']]
-        print(children)
-        assert len(children) == 2
-        assert isinstance(children[1], GenericString)
-        assert children[1].to_s() == ";"
-        return Some(jsn['pos'], children[0], children[1])
+        assert len(children) <= 2
+        expr = children[0]
+        if len(children) == 2:
+            semi_colon = children[1]
+            assert isinstance(semi_colon, GenericString)
+            assert semi_colon.to_s() == ";"
+        else:
+            semi_colon = None
+        return Some(jsn['pos'], expr, semi_colon)
 
     def __init__(self, pos, expr, semicolon):
         super().__init__(pos)
