@@ -20,4 +20,4 @@ def from_file(fn):
 if __name__ == "__main__":
 
     # Let's try and build an example AST
-    from_file("example.cgum.json")
+    from_file("faulty.cgum.json")

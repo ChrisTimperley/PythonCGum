@@ -1,191 +1,141 @@
 from basic import *
 
-class DotsParameter(Node):
+class DotsParameter(Token):
     CODE = "210000"
     LABEL = "DotsParameter"
-
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], DotsParameter.CODE)
-        return DotsParameter(jsn['pos'])
 
 class StructUnionName(Node):
     CODE = "60900"
     LABEL = "StructUnionName"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], StructUnionName.CODE)
-        assert not jsn['children']
-        return StructUnionName(jsn['pos'], jsn['label'])
+    def __init__(self, pos, length, label, children):
+        assert isinstance(label, str)
+        assert not children
+        super().__init__(pos, length, label, children)
 
-    def __init__(self, pos, name):
-        super().__init__(pos)
-        self.__name = name
+    def name(self):
+        return self.label()
 
 class TypeName(Node):
     CODE = "61000"
     LABEL = "TypeName"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], TypeName.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) == 1
         assert isinstance(children[0], GenericString)
-        return TypeName(jsn['pos'], children[0])
-
-    def __init__(self, pos, name):
-        super().__init__(pos)
-        self.__name = name
+        super().__init__(pos, length, label, children)
+    
+    def name(self):
+        return self.__children[0].to_s()
 
 class Pointer(Node):
     CODE = "60200"
     LABEL = "Pointer"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Pointer.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) <= 1
-        typ = children[0] if children else None
-        assert (typ is None) or isinstance(typ, FullType)
-        return Pointer(jsn['pos'], typ)
-
-    def __init__(self, pos, typ):
-        super().__init__(pos)
-        self.__typ = typ
+        assert (not children) or isinstance(children[0], FullType)
+        super().__init__(pos, length, label, children) 
+    
+    def typ(self):
+        return children[0] if children else None
 
 # What is this?
 class Si(Node):
     CODE = "80100"
     LABEL = "Si"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Si.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) == 1
-        return Si(jsn['pos'], children[0])
+        super().__init__(pos, length, label, children)
 
-    def __init__(self, pos, typ):
-        super().__init__(pos)
-        self.__typ = typ
+    def typ(self):
+        return self.__children[0]
 
-class Void(Node):
+class Void(Token):
     CODE = "70001"
     LABEL = "Void"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Void.CODE)
-        return Void(jsn['pos'])
-
-class CChar(Node):
+class CChar(Token):
     CODE = "80001"
     LABEL = "CChar"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], CChar.CODE)
-        return CChar(jsn['pos'])
-
-# And this?
-class CInt(Node):
+class CInt(Token):
     CODE = "100003"
     LABEL = "CInt"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], CInt.CODE)
-        return CInt(jsn['pos'])
-
+# Not sure about this?
 class IntType(Node):
     CODE = "70100"
     LABEL = "IntType"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], IntType.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) == 1
-        return IntType(jsn['pos'], children[0])
-
-    def __init__(self, pos, typ):
-        super().__init__(pos)
-        self.__typ = typ
+        super().__init__(pos, length, label, children)
 
 # TODO: Exactly what is this implementing?
 class BaseType(Node):
     CODE = "60100"
     LABEL = "BaseType"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], BaseType.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
+    def __init__(self, pos, length, label, children):
+        assert label is None
         assert len(children) == 1
-        return BaseType(jsn['pos'], children[0])
+        super().__init__(pos, length, label, children)
 
-    def __init__(self, pos, base):
-        super().__init__(pos)
-        self.__base = base
+    def base(self):
+        return self.__children[0]
 
 class TypeQualifier(Node):
     CODE = "50000"
     LABEL = "TypeQualifier"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], TypeQualifier.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
-        assert len(children) == 1 and isinstance(children[0], GenericString)
-        return TypeQualifier(jsn['pos'], children[0])
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 1
+        assert isinstance(children[0], GenericString)
+        super().__init__(pos, length, label, children)
 
-    def __init__(self, pos, qualifier):
-        super().__init__(pos)
-        self.__qualifier = qualifier
+    def qualifier(self):
+        return self.__children[0]
 
 # Provides a full type definition
 class FullType(Node):
     CODE = "40000"
     LABEL = "FullType"
 
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], FullType.CODE)
-        children = [Node.from_json(c) for c in jsn['children']]
-        assert len(children) <= 3
-        
-        qualifier = children.pop(0)
-        if isinstance(children[0], TypeName):
-            name = children.pop(0)
-        else:
-            name = None
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) >= 2 and len(children) <= 3
 
-        # Optional
-        base_type = children.pop(0) if children else None
+        tmp = children.copy()
+        self.__qualifier = tmp.pop(0)
+        self.__name = tmp.pop(0) if isinstance(tmp[0], TypeName) else None
+        self.__base_type = tmp.pop(0) if tmp else None
 
-        assert isinstance(qualifier, TypeQualifier)
-        assert name is None or isinstance(name, TypeName)
-        return FullType(jsn['pos'], qualifier, name, base_type)
+        assert isinstance(self.__qualifier, TypeQualifier)
+        assert self.__name is None or isinstance(self.__name, TypeName)
+        assert self.__base_type is None or isinstance(self.__base_type, BaseType)
 
-    def __init__(self, pos, qualifier, name, base_type):
-        super().__init__(pos)
-        self.__qualifier = qualifier
-        self.__name = name
-        self.__base_type = base_type
+        super().__init__(pos, length, label, children)
+    
+    def qualifier(self):
+        return self.__qualifier
+    def name(self):
+        return self.__name
+    def base_type(self):
+        return self.__base_type
 
 class Storage(Node):
     CODE = "340000"
     LABEL = "Storage"
-
-    @staticmethod
-    def from_json(jsn):
-        Node.check_code(jsn['type'], Storage.CODE)
-        return Storage(jsn['pos'],\
-                       GenericString.from_json(jsn['children'][0]))
-
-    def __init__(self, pos, label):
-        super().__init__(pos)
-        self.__label = label
+   
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 1
+        assert isinstance(children[0], GenericString)
+        super().__init__(pos, length, label, children)
