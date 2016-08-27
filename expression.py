@@ -222,8 +222,6 @@ class Some(Node):
         assert len(children) == 1 or \
             (isinstance(children[1], GenericString) and (children[1].to_s() == ";"))
         super().__init__(pos, length, label, children)
-        self.__expr = expr
-        self.__semicolon = semicolon
 
     def expr(self):
         return self.__children[0]

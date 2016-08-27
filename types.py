@@ -117,13 +117,8 @@ class FullType(Node):
         self.__name = tmp.pop(0) if isinstance(tmp[0], TypeName) else None
         self.__base_type = tmp.pop(0) if tmp else None
 
-        print(children)
-
         assert isinstance(self.__qualifier, TypeQualifier)
         assert self.__name is None or isinstance(self.__name, TypeName)
-        assert self.__base_type is None or \
-            isinstance(self.__base_type, BaseType) or\
-            isinstance(self.__base_type, Pointer)
 
         super().__init__(pos, length, label, children)
     
