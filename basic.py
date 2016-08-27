@@ -21,15 +21,7 @@ def lookup_table():
 
 # The base class used by all AST nodes
 class Node(object):
-    @staticmethod
-    def from_json(jsn, typ):
-        assert jsn['type'] == typ.CODE
-        children = [Node.build(c) for c in jsn['children']]
-        return typ(jsn['pos'], children)
-
-    # Syntatic sugar for "from_json" method in "parse" module, relies on the
-    # parse module having been loaded, of course. We could get round this, but
-    # the system is fairly neat and more than good enough.
+    # Constructs an AST node from a given JSON definition
     @staticmethod
     def from_json(jsn):
         assert 'type' in jsn, "expected 'type' property in AST node"
@@ -41,22 +33,20 @@ class Node(object):
                              "Has CGum type label: %s.") % (typid, jsn['typeLabel']))
         print("Converting AST node of (Python) type: %s" % typ.__name__)
 
-        try:
-            return typ.from_json(jsn)
-        except Exception as e:
-            raise Exception("Failed to convert AST node at position %s. Reason: %s"\
-                            % (jsn['pos'], str(e)))
+        # Build the children of this node, if there are any, then extract any
+        # attached label
+        children = [Node.build(c) for c in jsn['children']]
+        label = jsn['label'] if 'label' in jsn else None
 
-    # Compares the code of a JSON AST object against the code expected by the
-    # Python class it has been passed to. Nice for debugging. Converts the
-    # actual code into an integer for the check
-    @staticmethod
-    def check_code(actual, expected):
-        assert actual == expected,\
-            ("actual (%s) and expected (%s) AST type codes didn't match." % (actual, expected))
+        # Construct a node of the correct type, using the extracted information
+        return typ(pos, length, label, children)
 
-    def __init__(self, pos):
-        self.pos = pos
+    def __init__(self, pos, length, label, children):
+        self.__pos = pos
+        self.__length = length
+        self.__label = label
+        self.__children = children
+
     def to_s(self):
         raise NotImplementedError('No `to_s` method exists for this object')
     def to_json(self):
@@ -68,12 +58,10 @@ class GenericList(Node):
 
     @staticmethod
     def from_json(jsn):
-        assert jsn['type'] == GenericList.CODE
-        contents = [Node.from_json(c) for c in jsn['children']]
-        return GenericList(jsn['pos'], contents)
+        return Node.from_json(GenericList, jsn)
 
-    def __init__(self, pos, contents):
-        super().__init__(pos)
+    def __init__(self, pos, length, children, label):
+        super().__init__(pos, children)
         self.__contents = contents
 
     def contents(self):
