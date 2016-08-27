@@ -97,6 +97,17 @@ class FunctionDefinition(Node):
         self.__storage = storage
         self.__dots = dots
 
+# Used to mark the end of the program!
+class FinalDef(Node):
+    CODE = "450800"
+    LABEL = "FinalDef"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], FinalDef.CODE)
+        assert not jsn['children']
+        return FinalDef(jsn['pos'])
+
 # Represents the root AST node for a program
 # For now we just get all the "components" of a program and worry about what
 # kind of components they might be later.
