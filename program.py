@@ -61,7 +61,7 @@ class FunctionDefinition(Node):
     def from_json(jsn):
         Node.check_code(jsn['type'], FunctionDefinition.CODE)
         children = [Node.from_json(c) for c in jsn['children']]
-        assert len(children) <= 4
+        assert len(children) <= 5
 
         # Find any optional storage information for this function
         if isinstance(children[0], types.Storage):
@@ -80,7 +80,6 @@ class FunctionDefinition(Node):
 
         name = children[1]
         block = children[2]
-
 
         # Do some sanity checking
         assert isinstance(params, FunctionParameters)
