@@ -66,7 +66,7 @@ class Node(object):
     # Recursively renumbers all nodes belonging to the sub-tree rooted at this
     # node. Numbers start at zero. Unfortunately necessary, since the CGum AST
     # output doesn't provide node numbers.
-    def renumber(self, num=0):
+    def renumber(self, num=-1):
         num += 1
         print("Assigning number %d to %s at %d" % (num, self.typeLabel(), self.__pos))
         self.__number = num
