@@ -9,12 +9,18 @@ class FunctionParameter(Node):
     @staticmethod
     def from_json(jsn):
         Node.check_code(jsn['type'], FunctionParameter.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) <= 1
+        name = children[0] if children else None
         return FunctionParameter(jsn['pos'],\
-                                 Node.from_json(jsn['children'][0]))
+                                 (children[0] if children else None))
 
     def __init__(self, pos, name):
         super().__init__(pos)
         self.__name = name
+
+    def incomplete(self):
+        return self.__name is None
 
     def name(self):
         return self.__name.read()

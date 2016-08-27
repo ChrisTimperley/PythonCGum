@@ -4,6 +4,58 @@ from basic import *
 class Expression(Node):
     pass
 
+class Assignment(Expression):
+    CODE = "240700"
+    LABEL = "Assignment"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Assignment.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 3
+        assert isinstance(children[1], GenericString)
+        return Assignment(jsn['pos'], children[0], children[2])
+
+    def __init__(self, pos, lhs, rhs):
+        super().__init__(pos)
+        self.__lhs = lhs
+        self.__rhs = rhs
+
+class Postfix(Expression):
+    CODE = "240800"
+    LABEL = "Postfix"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Postfix.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 2
+        assert isinstance(children[1], GenericString)
+        return Postfix(jsn['pos'], children[0], children[1])
+
+    def __init__(self, pos, operand, operator):
+        super().__init__(pos)
+        self.__operand = operand
+        self.__operator = operator
+
+class RecordPtAccess(Expression):
+    CODE = "241400"
+    LABEL = "RecordPtAccess"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], RecordPtAccess.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert isinstance(children[1], GenericString) 
+        return RecordPtAccess(jsn['pos'],\
+                              children[0],
+                              children[1])
+
+    def __init__(self, pos, expr, member):
+        super().__init__(pos)
+        self.__expr = expr
+        self.__member = member
+
 class Identity(Expression):
     CODE = "240100"
     LABEL = "Ident"
@@ -60,9 +112,8 @@ class Cast(Expression):
     def to_s(self):
         return "(UNKNOWN_TYPE) %s" % self.__expr.to_s()
 
-# Does not specify the variable that is being assigned to. A little bit
-# annoying. Is InitExpr not assignment?
-class Assignment(Expression):
+# What is the difference between Init and Assignment?
+class InitExpr(Expression):
     pass
 #    CODE = 
 

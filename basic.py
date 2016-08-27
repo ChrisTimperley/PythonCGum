@@ -35,7 +35,12 @@ class Node(object):
             raise Exception(("no Python representation of AST node with type %s found." +\
                              "Has CGum type label: %s.") % (typid, jsn['typeLabel']))
         print("Converting AST node of (Python) type: %s" % typ.__name__)
-        return typ.from_json(jsn)
+
+        try:
+            return typ.from_json(jsn)
+        except Exception as e:
+            raise Exception("Failed to convert AST node at position %s. Reason: %s"\
+                            % (jsn['pos'], str(e)))
 
     # Compares the code of a JSON AST object against the code expected by the
     # Python class it has been passed to. Nice for debugging. Converts the

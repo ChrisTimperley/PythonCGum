@@ -4,6 +4,47 @@ import expression
 class Statement(Node):
     pass
 
+# What is this?
+class Si(Node):
+    CODE = "80100"
+    LABEL = "Si"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Si.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 1
+        return Si(jsn['pos'], children[0])
+
+    def __init__(self, pos, typ):
+        super().__init__(pos)
+        self.__typ = typ
+
+# And this?
+class CInt(Node):
+    CODE = "100003"
+    LABEL = "CInt"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], CInt.CODE)
+        return CInt(jsn['pos'])
+
+class IntType(Node):
+    CODE = "70100"
+    LABEL = "IntType"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], IntType.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 1
+        return IntType(jsn['pos'], children[0])
+
+    def __init__(self, pos, typ):
+        super().__init__(pos)
+        self.__typ = typ
+
 # TODO: Exactly what is this implementing?
 class BaseType(Node):
     CODE = "60100"
