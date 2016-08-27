@@ -11,13 +11,20 @@ class FunctionParameter(Node):
     def from_json(jsn):
         Node.check_code(jsn['type'], FunctionParameter.CODE)
         children = [Node.from_json(c) for c in jsn['children']]
-        assert len(children) <= 1
+        assert len(children) <= 2
+        if children and isinstance(children[0], types.FullType):
+            typ = children.pop(0)
+        else:
+            typ = None
         name = children[0] if children else None
-        return FunctionParameter(jsn['pos'],\
-                                 (children[0] if children else None))
 
-    def __init__(self, pos, name):
+        assert typ is None or isinstance(typ, types.FullType)
+        assert name is None or isinstance(name, GenericString)
+        return FunctionParameter(jsn['pos'], typ, name)
+
+    def __init__(self, pos, typ, name):
         super().__init__(pos)
+        self.__typ = typ
         self.__name = name
 
     def incomplete(self):
