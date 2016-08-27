@@ -127,8 +127,18 @@ class Cast(Expression):
 
 # What is the difference between Init and Assignment?
 class InitExpr(Expression):
-    pass
-#    CODE = 
+    CODE = "360100"
+    LABEL = "InitExpr"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], InitExpr.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        return InitExpr(jsn['pos'], children)
+
+    def __init__(self, pos, expr):
+        super().__init__(pos)
+        self.__expr = expr
 
 class Ternary(Expression):
     CODE = "240500"
