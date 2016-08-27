@@ -58,6 +58,15 @@ class Si(Node):
         super().__init__(pos)
         self.__typ = typ
 
+class Void(Node):
+    CODE = "70001"
+    LABEL = "Void"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Void.CODE)
+        return Void(jsn['pos'])
+
 class CChar(Node):
     CODE = "80001"
     LABEL = "CChar"

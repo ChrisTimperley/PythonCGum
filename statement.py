@@ -90,13 +90,12 @@ class While(Statement):
         Node.check_code(jsn['type'], While.CODE)
         children = [Node.from_json(c) for c in jsn['children']]
         assert len(children) == 2
-        assert isinstance(children[1], Block)
         return While(jsn['pos'], children[0], children[1])
 
-    def __init__(self, pos, condition, block):
+    def __init__(self, pos, condition, do):
         super().__init__(pos)
         self.__condition = condition
-        self.__block = block
+        self.__do = do
 
 class For(Statement):
     CODE = "310300"
