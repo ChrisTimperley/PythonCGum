@@ -4,6 +4,16 @@ from basic import *
 class Expression(Node):
     pass
 
+# Not sure what this is?
+class DotsParameter(Node):
+    CODE = "210000"
+    LABEL = "DotsParameter"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], DotsParameter.CODE)
+        return DotsParameter(jsn['pos'])
+
 class Assignment(Expression):
     CODE = "240700"
     LABEL = "Assignment"

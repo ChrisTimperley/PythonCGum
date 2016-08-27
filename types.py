@@ -1,5 +1,14 @@
 from basic import *
 
+class DotsParameter(Node):
+    CODE = "210000"
+    LABEL = "DotsParameter"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], DotsParameter.CODE)
+        return DotsParameter(jsn['pos'])
+
 class Pointer(Node):
     CODE = "60200"
     LABEL = "Pointer"

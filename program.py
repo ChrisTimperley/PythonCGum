@@ -61,6 +61,7 @@ class FunctionDefinition(Node):
     def from_json(jsn):
         Node.check_code(jsn['type'], FunctionDefinition.CODE)
         children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) <= 4
 
         # Find any optional storage information for this function
         if isinstance(children[0], types.Storage):
@@ -68,24 +69,34 @@ class FunctionDefinition(Node):
         else:
             storage = None
 
-        # Get the required information for the function
+        # Get the parameter names
         params = children[0]
+
+        # Find any optional dots parameter
+        if isinstance(children[1], types.DotsParameter):
+            dots = children.pop(1)
+        else:
+            dots = None
+
         name = children[1]
         block = children[2]
 
+
         # Do some sanity checking
         assert isinstance(params, FunctionParameters)
+        assert dots is None or isinstance(dots, types.DotsParameter)
         assert isinstance(name, GenericString)
         assert isinstance(block, statement.Block)
 
-        return FunctionDefinition(jsn['pos'], name, params, block, storage)
+        return FunctionDefinition(jsn['pos'], name, params, block, storage, dots)
 
-    def __init__(self, pos, name, parameters, block, storage):
+    def __init__(self, pos, name, parameters, block, storage, dots):
         super().__init__(pos)
         self.__name = name
         self.__parameters = parameters
         self.__block = block
         self.__storage = storage
+        self.__dots = dots
 
 # Represents the root AST node for a program
 # For now we just get all the "components" of a program and worry about what
