@@ -21,6 +21,11 @@ def lookup_table():
 
 # The base class used by all AST nodes
 class Node(object):
+    @staticmethod
+    def from_json(jsn, typ):
+        assert jsn['type'] == typ.CODE
+        children = [Node.build(c) for c in jsn['children']]
+        return typ(jsn['pos'], children)
 
     # Syntatic sugar for "from_json" method in "parse" module, relies on the
     # parse module having been loaded, of course. We could get round this, but
