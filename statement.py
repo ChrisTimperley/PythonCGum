@@ -60,6 +60,26 @@ class Definition(Node):
 class ExprStatement(Node):
     pass
 
+class For(Statement):
+    CODE = "310300"
+    LABEL = "For"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], For.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 3
+        assert isinstance(children[0], ExprStatement)
+        assert isinstance(children[1], ExprStatement)
+        assert isinstance(children[2], ExprStatement)
+        return For(jsn['pos'], children[0], children[1], children[2])
+
+    def __init__(self, pos, initialisation, condition, after):
+        super().__init__(pos)
+        self.__initialisation = initialisation
+        self.__condition = condition
+        self.__after = after
+
 # Never seems to return the result of an expression?
 class Return(Statement):
     CODE = "280003"
@@ -68,6 +88,7 @@ class Return(Statement):
     @staticmethod
     def from_json(jsn):
         Node.check_code(jsn['type'], Return.CODE)
+        assert not jsn['children']
         return Return(jsn['pos'])
 
     def to_s(self):
