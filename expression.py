@@ -42,14 +42,9 @@ class ArrayAccess(Expression):
 # Not entirely sure what this is meant to be?
 # It has no children, so either it ignores the type whose size it measures, or
 # it does something entirely different.
-class SizeOfType(Expression):
+class SizeOfType(Token, Expression):
     CODE = "241600"
     LABEL = "SizeOfType"
-
-    def __init__(self, pos, length, label, children):
-        assert not children
-        assert label is None
-        super().__init__(pos, length, label, children)
 
 class Assignment(Expression):
     CODE = "240700"
