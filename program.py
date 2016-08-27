@@ -18,7 +18,7 @@ class FunctionParameter(Node):
         self.__name = tmp.pop(0) if tmp else None
 
         assert self.__typ is None or isinstance(typ, types.FullType)
-        assert self.__name is None or isinstance(name, GenericString)
+        assert self.__name is None or isinstance(self.__name, GenericString)
         super().__init__(pos, length, label, children)
 
     def is_incomplete(self):

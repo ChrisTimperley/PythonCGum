@@ -136,6 +136,9 @@ class Storage(Node):
    
     def __init__(self, pos, length, label, children):
         assert label is None
-        assert len(children) == 1
-        assert isinstance(children[0], GenericString)
+        assert len(children) >= 1
+        assert any([isinstance(c, GenericString) for c in children])
         super().__init__(pos, length, label, children)
+
+    def classes(self):
+        return self.__children
