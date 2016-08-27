@@ -18,6 +18,23 @@ class Sequence(Expression):
         super().__init__(pos)
         self.__exprs = exprs
 
+class RecordAccess(Expression):
+    CODE = "241300"
+    LABEL = "RecordAccess"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], RecordAccess.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 2
+        assert isinstance(children[1], GenericString)
+        return RecordAccess(jsn['pos'], children[0], children[1])
+
+    def __init__(self, pos, record, member):
+        super().__init__(pos)
+        self.__record = record
+        self.__member = member
+
 class ArrayAccess(Expression):
     CODE = "241200"
     LABEL = "ArrayAccess"
