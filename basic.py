@@ -35,11 +35,11 @@ class Node(object):
 
         # Build the children of this node, if there are any, then extract any
         # attached label
-        children = [Node.build(c) for c in jsn['children']]
+        children = [Node.from_json(c) for c in jsn['children']]
         label = jsn['label'] if 'label' in jsn else None
 
         # Construct a node of the correct type, using the extracted information
-        return typ(pos, length, label, children)
+        return typ(jsn['pos'], jsn['length'], label, children)
 
     def __init__(self, pos, length, label, children):
         self.__pos = pos
