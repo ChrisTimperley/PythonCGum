@@ -9,6 +9,20 @@ class DotsParameter(Node):
         Node.check_code(jsn['type'], DotsParameter.CODE)
         return DotsParameter(jsn['pos'])
 
+class StructUnionName(Node):
+    CODE = "60900"
+    LABEL = "StructUnionName"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], StructUnionName.CODE)
+        assert not jsn['children']
+        return StructUnionName(jsn['pos'], jsn['label'])
+
+    def __init__(self, pos, name):
+        super().__init__(pos)
+        self.__name = name
+
 class TypeName(Node):
     CODE = "61000"
     LABEL = "TypeName"
