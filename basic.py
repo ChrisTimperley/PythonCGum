@@ -114,6 +114,23 @@ class NotParsedCorrectly(Node):
 class Some(Node):
     pass
 
+# Strangely, None can have children
+class NoneNode(Node):
+    CODE = "290001"
+    LABEL = "None"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], NoneNode.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 1
+        assert isinstance(children[0], GenericString)
+        return NoneNode(jsn['pos'], children[0])
+
+    def __init__(self, pos, string):
+        super().__init__(pos)
+        self.__string = string
+
 # Equally, I have no idea what the Left node is for?
 class Left(Node):
     CODE = "20100"

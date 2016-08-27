@@ -58,7 +58,19 @@ class Definition(Node):
 
 
 class ExprStatement(Node):
-    pass
+    CODE = "260300"
+    LABEL = "ExprStatement"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], ExprStatement.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 1
+        return ExprStatement(jsn['pos'], children[0])
+
+    def __init__(self, pos, expr):
+        super().__init__(pos)
+        self.__expr = expr
 
 class For(Statement):
     CODE = "310300"
