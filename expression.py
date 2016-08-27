@@ -4,6 +4,20 @@ from basic import *
 class Expression(Node):
     pass
 
+class Sequence(Expression):
+    CODE = "240600"
+    LABEL = "Sequence"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], Sequence.CODE)
+        return Sequence(jsn['pos'],\
+                        [Node.from_json(c) for c in jsn['children']])
+
+    def __init__(self, pos, exprs):
+        super().__init__(pos)
+        self.__exprs = exprs
+
 class ArrayAccess(Expression):
     CODE = "241200"
     LABEL = "ArrayAccess"
