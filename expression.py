@@ -4,6 +4,22 @@ from basic import *
 class Expression(Node):
     pass
 
+class ArrayAccess(Expression):
+    CODE = "241200"
+    LABEL = "ArrayAccess"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], ArrayAccess.CODE)
+        children = [Node.from_json(c) for c in jsn['children']]
+        assert len(children) == 2
+        return ArrayAccess(jsn['pos'], children[0], children[1])
+
+    def __init__(self, pos, arr, index):
+        super().__init__(pos)
+        self.__arr = arr
+        self.__index = index
+
 # Not entirely sure what this is meant to be?
 # It has no children, so either it ignores the type whose size it measures, or
 # it does something entirely different.
