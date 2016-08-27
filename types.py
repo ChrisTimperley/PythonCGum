@@ -163,12 +163,11 @@ class FullType(Node):
         else:
             name = None
 
-        # Optional - may be Pointer or BaseType
+        # Optional
         base_type = children.pop(0) if children else None
 
         assert isinstance(qualifier, TypeQualifier)
         assert name is None or isinstance(name, TypeName)
-        assert base_type is None or isinstance(base_type, BaseType) or isinstance(base_type, Pointer)
         return FullType(jsn['pos'], qualifier, name, base_type)
 
     def __init__(self, pos, qualifier, name, base_type):
