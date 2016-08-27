@@ -14,8 +14,11 @@ def from_file(fn):
     print("Attempting to read CGum AST from a JSON file: %s" % fn)
     assert os.path.isfile(fn), "file not found"
     with open(fn, 'r') as f:
-        Node.from_json(json.load(f)['root'])
+        program = Node.from_json(json.load(f)['root'])
     print("Finished converting CGum AST from JSON into Python")
+    print("Performing node renumbering...")
+    program.renumber()
+    print("Finishing node renumbering")
 
 if __name__ == "__main__":
 

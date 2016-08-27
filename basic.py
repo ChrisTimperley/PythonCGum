@@ -42,10 +42,11 @@ class Node(object):
         return typ(jsn['pos'], jsn['length'], label, children)
 
     def __init__(self, pos, length, label, children):
-        self.__pos = pos
-        self.__length = length
+        self.__pos = int(pos)
+        self.__length = int(length)
         self.__label = label
         self.__children = children
+        self.__number = None
 
     def label(self):
         return self.__label
@@ -55,6 +56,23 @@ class Node(object):
         return self.__length
     def children(self):
         return self.__children
+    def number(self):
+        return self.__number
+
+    # Returns the CGum AST type label for this node
+    def typeLabel(self):
+        return self.__class__.LABEL
+
+    # Recursively renumbers all nodes belonging to the sub-tree rooted at this
+    # node. Numbers start at zero. Unfortunately necessary, since the CGum AST
+    # output doesn't provide node numbers.
+    def renumber(self, num=0):
+        num += 1
+        print("Assigning number %d to %s at %d" % (num, self.typeLabel(), self.__pos))
+        self.__number = num
+        for c in self.__children:
+            num = c.renumber(num)
+        return num
 
     def to_s(self):
         raise NotImplementedError('No `to_s` method exists for this object')
