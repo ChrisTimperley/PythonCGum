@@ -34,6 +34,15 @@ class Si(Node):
         super().__init__(pos)
         self.__typ = typ
 
+class CChar(Node):
+    CODE = "80001"
+    LABEL = "CChar"
+
+    @staticmethod
+    def from_json(jsn):
+        Node.check_code(jsn['type'], CChar.CODE)
+        return CChar(jsn['pos'])
+
 # And this?
 class CInt(Node):
     CODE = "100003"
