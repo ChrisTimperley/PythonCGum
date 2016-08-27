@@ -9,10 +9,9 @@ class Pointer(Node):
         Node.check_code(jsn['type'], Pointer.CODE)
         children = [Node.from_json(c) for c in jsn['children']]
         assert len(children) <= 1
-        
         typ = children[0] if children else None
-        assert typ is None or isinstance(typ, FullType)
-
+        assert (typ is None) or isinstance(typ, FullType)
+        print("building Pointer")
         return Pointer(jsn['pos'], typ)
 
     def __init__(self, pos, typ):
@@ -100,14 +99,8 @@ class FullType(Node):
     def from_json(jsn):
         Node.check_code(jsn['type'], FullType.CODE)
         children = [Node.from_json(c) for c in jsn['children']]
-
-        qualifier = children[0]
-        base_type = children[1]
-
-        assert isinstance(qualifier, TypeQualifier)
-        assert isinstance(base_type, BaseType)
-
-        return FullType(jsn['pos'], qualifier, base_type)
+        assert isinstance(children[0], TypeQualifier)
+        return FullType(jsn['pos'], children[0], children[1])
 
     def __init__(self, pos, qualifier, base_type):
         super().__init__(pos)
