@@ -35,16 +35,6 @@ class Delete(Action):
     def from_json(jsn):
         return Delete(jsn['tree'])
 
-    # To rollback the effects of a Remove operation, we shift all IDs after X
-    # forward by the size of X, simulating an insertion.
-    def correct(self, id_map):
-        parent_id = id_map[self.parent_id()] # we could destructively remove here?
-        SIZE = 1 # TODO: For now we assume the size is 1
-        for (post_id, curr_id) in id_map.items():
-            if curr_id > parent_id:
-                id_map[post_id] += SIZE
-        self.set_parent_id(id_map[post_id])
-
     def __str__(self):
         return "DEL(%d)" % self.parent_id()
 
@@ -55,12 +45,8 @@ class Move(Action):
 
     def __init__(self, tree_id, parent_id, position):
         super().__init__(parent_id)
-        self.__tree_id = int(tree_id)
-        self.__position = int(position)
-
-    # This one may be a little trickier to correct
-    def correct(self, id_map):
-        pass
+        self.__tree_id = tree_id
+        self.__position = position
 
     def tree_id(self):
         return self.__tree_id
@@ -77,10 +63,10 @@ class Insert(Action):
     def from_json(jsn):
         return Insert(jsn['tree'], jsn['parent'], jsn['at'])
 
-    def __init__(self, tree_id, parent_id, position):
+    def __init__(self, child_id, parent_id, position):
         super().__init__(parent_id)
-        self.__tree_id = int(tree_id)
-        self.__position = int(position)
+        self.__child_id = child_id
+        self.__position = position
 
     def correct(self, id_map):
         post_parent_id = self.parent_id()
@@ -88,23 +74,16 @@ class Insert(Action):
             self.set_parent_id(id_map[post_parent_id] - 1)
         return id_map
 
-    def tree_id(self):
-        return self.__tree_id
+    def child_id(self):
+        return self.__child_id
+    def set_child_id(self, x):
+        self.__child_id = x
     def position(self):
         return self.__position
 
-    # To rollback the effects of an Insert operation, we shift all IDs after
-    # X backwards by 1, simulating a deletion.
-    def correct(self, id_map):
-        parent_id = id_map[self.parent_id()]
-        for (post_id, curr_id) in id_map.items():
-            if curr_id >= parent_id:
-                id_map[post_id] -= 1
-        self.set_parent_id(id_map[self.parent_id()])
-
     def __str__(self):
         return "INS(%d, %d, %d)" % \
-            (self.tree_id(), self.parent_id(), self.position())
+            (self.child_id(), self.parent_id(), self.position())
 
 # TODO: Fix me! I should remove a node from a parent at a given ID
 class Remove(Action):
@@ -197,9 +176,17 @@ class Diff(object):
             for (original_id, current_id) in id_map.items():
                 if current_id > at:
                     id_map[original_id] -= 1
+
+        # HANDLE REMOVALS
+        # SHOULD BE SIMILAR TO THE ABOVE
+
+        # Handle insertions
+        for insert in inserts:
+            parent = insert.parent_id()
+            child = insert.child_id()
     
         # Put the actions together in the correct order
-        self.__actions = deletions
+        self.__actions = deletions + updates
 
     def __str__(self):
         return '\n'.join(map(str, self.__actions))
