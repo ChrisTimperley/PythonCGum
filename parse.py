@@ -6,6 +6,7 @@ import statement
 import preprocessor
 import types
 import program
+import diff
 from basic import *
 
 # Parses a JSON CGum AST, stored in a file at a specified location, into an
@@ -23,4 +24,8 @@ def from_file(fn):
 if __name__ == "__main__":
 
     # Let's try and build an example AST
-    from_file("example/for-loop/before.cgum.json")
+    before = from_file("example/for-loop/before.cgum.json")
+    after = from_file("example/for-loop/after.cgum.json")
+    diff = diff.Diff.from_file("example/for-loop/diff.cgum.json")
+
+    print(diff)

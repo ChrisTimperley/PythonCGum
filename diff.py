@@ -8,22 +8,24 @@ class Action(object):
             'insert': Insert,
             'remove': Remove,
             'update': Update
-        })[jsn['action']].from_jsn(jsn)
+        })[jsn['action']].from_json(jsn)
 
-# Insert(DonorID, ParentID, Position)
-#
 # Doesn't handle insert root
-class Insert(object):
+class Insert(Action):
     @staticmethod
     def from_json(jsn):
-        return Add(jsn['tree'], jsn['parent'], jsn['at'])
+        return Insert(jsn['tree'], jsn['parent'], jsn['at'])
 
     def __init__(self, tree_id, parent_id, position):
         self.__tree_id = tree_id
-        self.__parent_id = parent_Id
+        self.__parent_id = parent_id
         self.__position = position
 
-class Remove(Object):
+    def __str__(self):
+        return "INS(%d, %d, %d)" % \
+            (self.__tree_id, self.__parent_id, self.__position)
+
+class Remove(Action):
     @staticmethod
     def from_json(jsn):
         return Remove(jsn['parent'])
@@ -31,7 +33,10 @@ class Remove(Object):
     def __init__(self, parent_id):
         self.__parent_id = parent_id
 
-class Update(Object):
+    def __str__(self):
+        return "DEL(%d)" % self.__parent_id
+
+class Update(Action):
     @staticmethod
     def from_json(jsn):
         return Update(jsn['tree'], jsn['label'])
@@ -39,6 +44,9 @@ class Update(Object):
     def __init__(self, tree_id, label):
         self.__tree_id = tree_id
         self.__label = label
+
+    def __str__(self):
+        return "UPD(%d, \"%s\")" % (self.__tree_id, self.__label)
 
 class Diff(object):
     @staticmethod
@@ -52,3 +60,6 @@ class Diff(object):
 
     def __init__(self, actions):
         self.__actions = actions
+
+    def __str__(self):
+        return '\n'.join(map(str, self.__actions))
