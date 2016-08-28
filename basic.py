@@ -47,6 +47,8 @@ class Node(object):
         self.__label = label
         self.__children = children
         self.__number = None
+        self.__depth = None
+        self.__size = None
 
     def label(self):
         return self.__label
@@ -58,6 +60,10 @@ class Node(object):
         return self.__children
     def number(self):
         return self.__number
+    def size(self):
+        return self.__size
+    def depth(self):
+        return self.__depth
 
     # Returns the CGum AST type label for this node
     def typeLabel(self):
