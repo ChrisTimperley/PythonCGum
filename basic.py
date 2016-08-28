@@ -65,6 +65,13 @@ class Node(object):
     def depth(self):
         return self.__depth
 
+    # Pretty-prints the tree rooted at this node; useful for debugging
+    def pp(self, depth=0):
+        print("%s%s - %d" % ((" " * depth), self.__class__.__name__, self.__number))
+        depth += 2
+        for c in self.__children:
+            c.pp(depth=depth)
+
     # Returns the CGum AST type label for this node
     def typeLabel(self):
         return self.__class__.LABEL
@@ -77,7 +84,7 @@ class Node(object):
     def renumber(self, num=0):
         for c in self.__children:
             num = c.renumber(num)
-        print("Assigning number %d to %s at %d" % (num, self.typeLabel(), self.__pos))
+        #print("Assigning number %d to %s at %d" % (num, self.typeLabel(), self.__pos))
         self.__number = num
         return num + 1
 

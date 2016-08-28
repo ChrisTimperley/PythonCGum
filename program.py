@@ -121,9 +121,9 @@ class Program(Node):
         with open(fn, 'r') as f:
             program = Node.from_json(json.load(f)['root'])
         print("Finished converting CGum AST from JSON into Python")
-        print("Performing node renumbering...")
+        #print("Performing node renumbering...")
         program.renumber()
-        print("Finishing node renumbering")
+        #print("Finishing node renumbering")
         return program
 
     def __init__(self, pos, length, label, children):
