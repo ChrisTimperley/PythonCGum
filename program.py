@@ -1,7 +1,10 @@
 from basic import *
+import os.path
 import statement
+import expression
 import preprocessor
 import types
+import json
 
 class FunctionParameter(Node):
     CODE = "220100"
@@ -96,6 +99,20 @@ class FinalDef(Token):
 class Program(Node):
     CODE = "460000"
     LABEL = "Program"
+
+    # Parses a JSON CGum AST, stored in a file at a specified location, into an
+    # equivalent, Python representation
+    @staticmethod
+    def from_file(fn):
+        print("Attempting to read CGum AST from a JSON file: %s" % fn)
+        assert os.path.isfile(fn), "file not found"
+        with open(fn, 'r') as f:
+            program = Node.from_json(json.load(f)['root'])
+        print("Finished converting CGum AST from JSON into Python")
+        print("Performing node renumbering...")
+        program.renumber()
+        print("Finishing node renumbering")
+        return program
 
     def __init__(self, pos, length, label, children):
         assert label is None
