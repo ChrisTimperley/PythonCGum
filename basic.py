@@ -6,7 +6,7 @@ __CODE_CLASS_LOOKUP = {}
 # look-up table upon its first request.
 def __build_lookup_table(typ):
     if hasattr(typ, 'CODE'):
-        print("Registering AST type [%s]: %s" % (typ.CODE, typ.__name__))
+        #print("Registering AST type [%s]: %s" % (typ.CODE, typ.__name__))
         __CODE_CLASS_LOOKUP[typ.CODE] = typ
     for sub_typ in typ.__subclasses__():
         __build_lookup_table(sub_typ)
@@ -31,7 +31,7 @@ class Node(object):
         except KeyError as e:
             raise Exception(("no Python representation of AST node with type %s found." +\
                              "Has CGum type label: %s.") % (typid, jsn['typeLabel']))
-        print("Converting AST node of (Python) type: %s" % typ.__name__)
+        #print("Converting AST node of (Python) type: %s" % typ.__name__)
 
         # Build the children of this node, if there are any, then extract any
         # attached label
