@@ -1,3 +1,4 @@
 int main() {
-  dinosaur(one);
+  break;
+  return;
 }

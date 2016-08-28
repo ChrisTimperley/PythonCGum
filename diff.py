@@ -1,4 +1,9 @@
 #!/usr/bin/env
+#
+#
+#
+#
+#
 from utility import *
 import json
 import tempfile
@@ -25,16 +30,20 @@ class Action(object):
         return x
 
 # Gives the ID of the node in the original tree that was deleted.
-# If we want to be able to sequentially generate the edit by applying actions
-# then we need to modify this ID to the correct ID at the point of application.
 class Delete(Action):
     @staticmethod
     def from_json(jsn):
         return Delete(jsn['tree'])
 
-    # Hmm... Surely this is the same ID?
-    def correct(self, map_id):
-        return map_id
+    # To rollback the effects of a Remove operation, we shift all IDs after X
+    # forward by the size of X, simulating an insertion.
+    def correct(self, id_map):
+        parent_id = id_map[self.parent_id()] # we could destructively remove here?
+        SIZE = 1 # TODO: For now we assume the size is 1
+        for (post_id, curr_id) in id_map.items():
+            if curr_id > parent_id:
+                id_map[post_id] += SIZE
+        self.set_parent_id(id_map[post_id])
 
     def __str__(self):
         return "DEL(%d)" % self.parent_id()
@@ -51,7 +60,7 @@ class Move(Action):
 
     # This one may be a little trickier to correct
     def correct(self, id_map):
-        return id_map
+        pass
 
     def tree_id(self):
         return self.__tree_id
@@ -84,6 +93,15 @@ class Insert(Action):
     def position(self):
         return self.__position
 
+    # To rollback the effects of an Insert operation, we shift all IDs after
+    # X backwards by 1, simulating a deletion.
+    def correct(self, id_map):
+        parent_id = id_map[self.parent_id()]
+        for (post_id, curr_id) in id_map.items():
+            if curr_id >= parent_id:
+                id_map[post_id] -= 1
+        self.set_parent_id(id_map[self.parent_id()])
+
     def __str__(self):
         return "INS(%d, %d, %d)" % \
             (self.tree_id(), self.parent_id(), self.position())
@@ -95,13 +113,15 @@ class Remove(Action):
         assert not ('at' in jsn)
         return Remove(jsn['parent'])
 
-    # Since we only ever seem to remove single nodes, we can correct the ID
-    # by adding one.
+    # To rollback the effects of a Remove operation, we shift all IDs after X
+    # forward by the size of X, simulating an insertion.
     def correct(self, id_map):
-        post_parent_id = self.__parent_id
-        id_map[post_parent_id] = \
-            self.set_parent_id(id_map[post_parent_id] + 1)
-        return id_map
+        parent_id = id_map[self.parent_id()] # we could destructively remove here?
+        SIZE = 1 # TODO: For now we assume the size is 1
+        for (post_id, curr_id) in id_map.items():
+            if curr_id > parent_id:
+                id_map[post_id] += SIZE
+        self.set_parent_id(id_map[post_id])
 
     def __str__(self):
         return "REM(%d)" % self.parent_id()
@@ -115,9 +135,10 @@ class Update(Action):
         super().__init__(parent_id)
         self.__label = label
 
-    # Update actions have no effect on the IDs of successive edits
+    # Update actions have no effect on the IDs of successive edits, but we do
+    # need to fetch the altered ID from the map for this action.
     def correct(self, id_map):
-        return id_map
+        self.set_parent_id(id_map[self.parent_id()])
 
     def label(self):
         return self.__label
@@ -148,11 +169,14 @@ class Diff(object):
     # Fixes the IDs in the patch, such that a theoretically executable
     # patch is produced
     def correct(self):
-        id_map = {}
+        # Create a map, from the original IDs referred to in the program
+        # to their position at the current point of unrolling.
+        id_map = {action.parent_id() for action in self.__actions}
+        id_map = {pid: pid for pid in id_map}
+
+        # Rollback the structural effects of each change in order to attain
+        # the correct parent IDs for each edit.
         for action in reversed(self.__actions):
-            parent_id = action.parent_id()
-            if not (parent_id in id_map):
-                id_map[parent_id] = parent_id
             action.correct(id_map)
 
     def __str__(self):
