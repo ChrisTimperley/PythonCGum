@@ -22,7 +22,10 @@ class Insert(object):
 class Remove(Object):
     @staticmethod
     def from_json(jsn):
-        pass
+        return Remove(jsn['parent'])
+
+    def __init__(self, parent_id):
+        self.__parent_id = parent_id
 
 # Update(
 class Update(Object):
