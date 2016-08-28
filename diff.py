@@ -21,7 +21,7 @@ class Action(object):
         })[jsn['action']].from_json(jsn)
 
     def __init__(self, parent_id):
-        self.__parent_id = parent_id
+        self.__parent_id = int(parent_id)
 
     def parent_id(self):
         return self.__parent_id
@@ -55,8 +55,8 @@ class Move(Action):
 
     def __init__(self, tree_id, parent_id, position):
         super().__init__(parent_id)
-        self.__tree_id = tree_id
-        self.__position = position
+        self.__tree_id = int(tree_id)
+        self.__position = int(position)
 
     # This one may be a little trickier to correct
     def correct(self, id_map):
@@ -79,8 +79,8 @@ class Insert(Action):
 
     def __init__(self, tree_id, parent_id, position):
         super().__init__(parent_id)
-        self.__tree_id = tree_id
-        self.__position = position
+        self.__tree_id = int(tree_id)
+        self.__position = int(position)
 
     def correct(self, id_map):
         post_parent_id = self.parent_id()
@@ -174,10 +174,32 @@ class Diff(object):
         id_map = {action.parent_id() for action in self.__actions}
         id_map = {pid: pid for pid in id_map}
 
-        # Rollback the structural effects of each change in order to attain
-        # the correct parent IDs for each edit.
-        for action in reversed(self.__actions):
-            action.correct(id_map)
+        # Separate the edits by type. Deal with deletions and removals first,
+        # then handle inserts, and finally, do nothing with the updates.
+        inserts = []
+        deletions = []
+        removals = []
+        updates = []
+        for action in self.__actions:
+            ({
+                Insert: inserts,
+                Delete: deletions,
+                Remove: removals,
+                Update: updates
+            })[action.__class__].append(action)
+
+        # First, correct the deletions by going forward and shifting the IDs
+        # of future edits (after that ID) back by one.
+        for deletion in deletions:
+            at = deletion.parent_id()
+            at = id_map.pop(at)
+            deletion.set_parent_id(at)
+            for (original_id, current_id) in id_map.items():
+                if current_id > at:
+                    id_map[original_id] -= 1
+    
+        # Put the actions together in the correct order
+        self.__actions = deletions
 
     def __str__(self):
         return '\n'.join(map(str, self.__actions))
