@@ -1,0 +1,55 @@
+{
+	"root": {
+		"type": "460000",
+		"typeLabel": "Program",
+		"pos": "0",
+		"length": "15",
+		"children": [
+			{
+				"type": "450200",
+				"typeLabel": "Definition",
+				"pos": "0",
+				"length": "14",
+				"children": [
+					{
+						"type": "380000",
+						"typeLabel": "Definition",
+						"pos": "0",
+						"length": "14",
+						"children": [
+							{
+								"type": "200000",
+								"typeLabel": "ParamList",
+								"pos": "8",
+								"length": "2",
+								"children": []
+							},
+							{
+								"type": "480000",
+								"label": "main",
+								"typeLabel": "GenericString",
+								"pos": "4",
+								"length": "4",
+								"children": []
+							},
+							{
+								"type": "330000",
+								"typeLabel": "Compound",
+								"pos": "10",
+								"length": "4",
+								"children": []
+							}
+						]
+					}
+				]
+			},
+			{
+				"type": "450800",
+				"typeLabel": "FinalDef",
+				"pos": "15",
+				"length": "0",
+				"children": []
+			}
+		]
+	}
+}

@@ -1,0 +1,31 @@
+Insert Return(2) into Compound(3) at 0
+
+# Inserting a single node into any node at Post-ID X gives a Pre-ID X-1
+# Removing a node at a given ID has no immediate effect on the Pre-ID, but it
+# will affect the IDs of all future operations
+# Updating a node will have no effect on its ID, nor any effect on future IDs
+
+BEFORE:
+0 to ParamList
+1 to GenericString
+2 to Compound
+3 to Definition
+4 to Definition
+5 to Program
+
+PROGRAM (5)
+ DEFINITION (4)
+  FUN DEFINITION (3)
+    PARAM LIST (0)
+    GENRIC STRING (1)
+    COMPOUND (2)
+
+->
+
+PROGRAM (6)
+ DEFINITION (5)
+  FUN DEFINITION (4)
+   PARAM LIST (0)
+   GENERIC STRING (1)
+   COMPOUND (3)
+    RETURN (2)

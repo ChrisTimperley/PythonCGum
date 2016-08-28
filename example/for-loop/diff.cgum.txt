@@ -1,4 +1,4 @@
-Insert Compound(53) into For(54) at 3
+Insert Compound(53) into For(54) at 3 (NEED TO KNOW SIZE)
 Insert 300100(52) into Compound(53) at 0
 Insert 490100(29) into 300100(52) at 0
 Insert Binary(38) into 300100(52) at 1
@@ -7,7 +7,7 @@ Update Constant: 10(18) to 100
 Insert 242000(35) into Binary(38) at 0
 Insert GenericString: ==(36) into Binary(38) at 1
 Insert Constant: 0(37) into Binary(38) at 2
-Update GenericString: printf(43) to print
+Update GenericString: printf(43) to print # STAYS THE SAME, COULD BE CHANGED BY AN INSERTION?
 Update Constant: "Let's count to ten!"(4) to "Let's count to one hundred!"
 Insert Binary(34) into 242000(35) at 0
 Update Constant: "We're finished counting"(45) to "We're done!"
@@ -15,3 +15,5 @@ Insert Ident(31) into Binary(34) at 0
 Insert GenericString: %(32) into Binary(34) at 1
 Insert Constant: 2(33) into Binary(34) at 2
 Insert GenericString: i(30) into Ident(31) at 0
+
+# Topological sorting

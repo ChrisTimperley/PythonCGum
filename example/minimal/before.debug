@@ -1,0 +1,83 @@
+Attempting to read CGum AST from a JSON file: example/minimal/before.cgum.json
+Registering AST type [61000]: TypeName
+Registering AST type [290100]: Some
+Registering AST type [340000]: Storage
+Registering AST type [70100]: IntType
+Registering AST type [80100]: Si
+Registering AST type [460000]: Program
+Registering AST type [60200]: Pointer
+Registering AST type [450200]: Definition
+Registering AST type [380000]: FunctionDefinition
+Registering AST type [60100]: BaseType
+Registering AST type [50000]: TypeQualifier
+Registering AST type [20100]: Left
+Registering AST type [300100]: IfElse
+Registering AST type [270400]: Default
+Registering AST type [280003]: Return
+Registering AST type [270200]: Case
+Registering AST type [310100]: While
+Registering AST type [280001]: Continue
+Registering AST type [310300]: For
+Registering AST type [300200]: Switch
+Registering AST type [280002]: Break
+Registering AST type [240900]: Infix
+Registering AST type [280200]: ReturnExpr
+Registering AST type [240500]: Ternary
+Registering AST type [241000]: Unary
+Registering AST type [241400]: RecordPtAccess
+Registering AST type [240600]: Sequence
+Registering AST type [241600]: SizeOfType
+Registering AST type [240100]: Identity
+Registering AST type [240400]: FunctionCall
+Registering AST type [241200]: ArrayAccess
+Registering AST type [241300]: RecordAccess
+Registering AST type [241100]: Binary
+Registering AST type [240200]: Constant
+Registering AST type [242000]: Parentheses
+Registering AST type [241700]: Cast
+Registering AST type [240800]: Postfix
+Registering AST type [360100]: InitExpr
+Registering AST type [240700]: Assignment
+Registering AST type [200000]: FunctionParameters
+Registering AST type [70001]: Void
+Registering AST type [280001]: Continue
+Registering AST type [280003]: Return
+Registering AST type [100003]: CInt
+Registering AST type [241600]: SizeOfType
+Registering AST type [450800]: FinalDef
+Registering AST type [210000]: DotsParameter
+Registering AST type [80001]: CChar
+Registering AST type [280002]: Break
+Registering AST type [490100]: IfToken
+Registering AST type [480000]: GenericString
+Registering AST type [290001]: NoneNode
+Registering AST type [60900]: StructUnionName
+Registering AST type [470000]: GenericList
+Registering AST type [350100]: DeclarationList
+Registering AST type [260300]: ExprStatement
+Registering AST type [450700]: NotParsedCorrectly
+Registering AST type [450300]: PreprocessorStatement
+Registering AST type [40000]: FullType
+Registering AST type [450100]: Declaration
+Registering AST type [330000]: Block
+Registering AST type [290100]: Some
+Registering AST type [220100]: FunctionParameter
+Registering AST type [400400]: OtherDirective
+Converting AST node of (Python) type: Program
+Converting AST node of (Python) type: Definition
+Converting AST node of (Python) type: FunctionDefinition
+Converting AST node of (Python) type: FunctionParameters
+Converting AST node of (Python) type: GenericString
+Converting AST node of (Python) type: Block
+Converting AST node of (Python) type: Return
+Converting AST node of (Python) type: FinalDef
+Finished converting CGum AST from JSON into Python
+Performing node renumbering...
+Assigning number 0 to ParamList at 8
+Assigning number 1 to GenericString at 4
+Assigning number 2 to Return at 15
+Assigning number 3 to Compound at 11
+Assigning number 4 to Definition at 0
+Assigning number 5 to Definition at 0
+Assigning number 6 to Program at 0
+Finishing node renumbering

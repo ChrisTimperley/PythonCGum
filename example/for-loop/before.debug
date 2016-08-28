@@ -1,68 +1,68 @@
 Attempting to read CGum AST from a JSON file: example/for-loop/before.cgum.json
-Registering AST type [460000]: Program
 Registering AST type [340000]: Storage
-Registering AST type [450700]: NotParsedCorrectly
-Registering AST type [290100]: Some
-Registering AST type [350100]: DeclarationList
-Registering AST type [61000]: TypeName
-Registering AST type [380000]: FunctionDefinition
-Registering AST type [20100]: Left
-Registering AST type [240100]: Identity
-Registering AST type [240400]: FunctionCall
-Registering AST type [240800]: Postfix
-Registering AST type [242000]: Parentheses
-Registering AST type [240200]: Constant
-Registering AST type [240600]: Sequence
-Registering AST type [240500]: Ternary
-Registering AST type [241600]: SizeOfType
-Registering AST type [241000]: Unary
-Registering AST type [241200]: ArrayAccess
-Registering AST type [360100]: InitExpr
-Registering AST type [280200]: ReturnExpr
-Registering AST type [241100]: Binary
-Registering AST type [241700]: Cast
-Registering AST type [241300]: RecordAccess
-Registering AST type [240900]: Infix
-Registering AST type [241400]: RecordPtAccess
-Registering AST type [240700]: Assignment
+Registering AST type [260300]: ExprStatement
+Registering AST type [200000]: FunctionParameters
+Registering AST type [450300]: PreprocessorStatement
+Registering AST type [40000]: FullType
+Registering AST type [460000]: Program
+Registering AST type [60200]: Pointer
 Registering AST type [270400]: Default
+Registering AST type [280003]: Return
+Registering AST type [280001]: Continue
+Registering AST type [310300]: For
 Registering AST type [270200]: Case
 Registering AST type [310100]: While
 Registering AST type [280002]: Break
-Registering AST type [310300]: For
-Registering AST type [280001]: Continue
 Registering AST type [300200]: Switch
 Registering AST type [300100]: IfElse
-Registering AST type [280003]: Return
-Registering AST type [50000]: TypeQualifier
-Registering AST type [400400]: OtherDirective
-Registering AST type [450200]: Definition
-Registering AST type [290001]: NoneNode
-Registering AST type [260300]: ExprStatement
-Registering AST type [470000]: GenericList
-Registering AST type [60100]: BaseType
-Registering AST type [450100]: Declaration
-Registering AST type [200000]: FunctionParameters
-Registering AST type [40000]: FullType
+Registering AST type [20100]: Left
 Registering AST type [60900]: StructUnionName
-Registering AST type [60200]: Pointer
 Registering AST type [220100]: FunctionParameter
+Registering AST type [450100]: Declaration
+Registering AST type [400400]: OtherDirective
+Registering AST type [290100]: Some
+Registering AST type [290100]: Some
 Registering AST type [80100]: Si
-Registering AST type [450300]: PreprocessorStatement
+Registering AST type [350100]: DeclarationList
+Registering AST type [290001]: NoneNode
 Registering AST type [280001]: Continue
-Registering AST type [280003]: Return
-Registering AST type [450800]: FinalDef
-Registering AST type [280002]: Break
-Registering AST type [100003]: CInt
-Registering AST type [241600]: SizeOfType
-Registering AST type [80001]: CChar
 Registering AST type [490100]: IfToken
 Registering AST type [70001]: Void
 Registering AST type [210000]: DotsParameter
-Registering AST type [290100]: Some
+Registering AST type [241600]: SizeOfType
+Registering AST type [450800]: FinalDef
+Registering AST type [280003]: Return
+Registering AST type [80001]: CChar
+Registering AST type [100003]: CInt
+Registering AST type [280002]: Break
 Registering AST type [330000]: Block
-Registering AST type [480000]: GenericString
+Registering AST type [61000]: TypeName
 Registering AST type [70100]: IntType
+Registering AST type [450200]: Definition
+Registering AST type [470000]: GenericList
+Registering AST type [60100]: BaseType
+Registering AST type [380000]: FunctionDefinition
+Registering AST type [480000]: GenericString
+Registering AST type [50000]: TypeQualifier
+Registering AST type [450700]: NotParsedCorrectly
+Registering AST type [241700]: Cast
+Registering AST type [240400]: FunctionCall
+Registering AST type [240900]: Infix
+Registering AST type [241400]: RecordPtAccess
+Registering AST type [240200]: Constant
+Registering AST type [241100]: Binary
+Registering AST type [242000]: Parentheses
+Registering AST type [240500]: Ternary
+Registering AST type [241600]: SizeOfType
+Registering AST type [240100]: Identity
+Registering AST type [241300]: RecordAccess
+Registering AST type [240600]: Sequence
+Registering AST type [280200]: ReturnExpr
+Registering AST type [241200]: ArrayAccess
+Registering AST type [240700]: Assignment
+Registering AST type [240800]: Postfix
+Registering AST type [360100]: InitExpr
+Registering AST type [241000]: Unary
 Converting AST node of (Python) type: Program
 Converting AST node of (Python) type: Definition
 Converting AST node of (Python) type: FunctionDefinition
@@ -124,63 +124,62 @@ Converting AST node of (Python) type: Constant
 Converting AST node of (Python) type: FinalDef
 Finished converting CGum AST from JSON into Python
 Performing node renumbering...
-Assigning number 0 to Program at 0
-Assigning number 1 to Definition at 0
-Assigning number 2 to Definition at 0
-Assigning number 3 to ParamList at 8
-Assigning number 4 to GenericString at 4
-Assigning number 5 to Compound at 11
-Assigning number 6 to ExprStatement at 15
-Assigning number 7 to Some at 15
-Assigning number 8 to FunCall at 15
-Assigning number 9 to Ident at 15
-Assigning number 10 to GenericString at 15
-Assigning number 11 to GenericList at 21
-Assigning number 12 to Left at 22
-Assigning number 13 to Constant at 22
-Assigning number 14 to GenericString at 44
-Assigning number 15 to For at 48
-Assigning number 16 to DeclList at 53
-Assigning number 17 to GenericString at 57
-Assigning number 18 to InitExpr at 61
-Assigning number 19 to Constant at 61
-Assigning number 20 to ExprStatement at 64
+Assigning number 0 to ParamList at 8
+Assigning number 1 to GenericString at 4
+Assigning number 2 to GenericString at 15
+Assigning number 3 to Ident at 15
+Assigning number 4 to Constant at 22
+Assigning number 5 to Left at 22
+Assigning number 6 to GenericList at 21
+Assigning number 7 to FunCall at 15
+Assigning number 8 to GenericString at 44
+Assigning number 9 to Some at 15
+Assigning number 10 to ExprStatement at 15
+Assigning number 11 to GenericString at 57
+Assigning number 12 to Constant at 61
+Assigning number 13 to InitExpr at 61
+Assigning number 14 to DeclList at 53
+Assigning number 15 to GenericString at 64
+Assigning number 16 to Ident at 64
+Assigning number 17 to GenericString at 66
+Assigning number 18 to Constant at 68
+Assigning number 19 to Binary at 64
+Assigning number 20 to GenericString at 70
 Assigning number 21 to Some at 64
-Assigning number 22 to Binary at 64
-Assigning number 23 to Ident at 64
-Assigning number 24 to GenericString at 64
-Assigning number 25 to GenericString at 66
-Assigning number 26 to Constant at 68
-Assigning number 27 to GenericString at 70
+Assigning number 22 to ExprStatement at 64
+Assigning number 23 to GenericString at 72
+Assigning number 24 to Ident at 72
+Assigning number 25 to GenericString at 73
+Assigning number 26 to Postfix at 72
+Assigning number 27 to Some at 72
 Assigning number 28 to ExprStatement at 72
-Assigning number 29 to Some at 72
-Assigning number 30 to Postfix at 72
-Assigning number 31 to Ident at 72
-Assigning number 32 to GenericString at 72
-Assigning number 33 to GenericString at 73
-Assigning number 34 to Compound at 77
-Assigning number 35 to ExprStatement at 83
-Assigning number 36 to Some at 83
+Assigning number 29 to GenericString at 83
+Assigning number 30 to Ident at 83
+Assigning number 31 to Constant at 90
+Assigning number 32 to Left at 90
+Assigning number 33 to GenericString at 111
+Assigning number 34 to Ident at 111
+Assigning number 35 to Left at 111
+Assigning number 36 to GenericList at 89
 Assigning number 37 to FunCall at 83
-Assigning number 38 to Ident at 83
-Assigning number 39 to GenericString at 83
-Assigning number 40 to GenericList at 89
-Assigning number 41 to Left at 90
-Assigning number 42 to Constant at 90
-Assigning number 43 to Left at 111
-Assigning number 44 to Ident at 111
-Assigning number 45 to GenericString at 111
-Assigning number 46 to GenericString at 113
-Assigning number 47 to ExprStatement at 121
-Assigning number 48 to Some at 121
-Assigning number 49 to FunCall at 121
-Assigning number 50 to Ident at 121
-Assigning number 51 to GenericString at 121
-Assigning number 52 to GenericList at 127
-Assigning number 53 to Left at 128
-Assigning number 54 to Constant at 128
-Assigning number 55 to GenericString at 154
-Assigning number 56 to ReturnExpr at 158
-Assigning number 57 to Constant at 165
-Assigning number 58 to FinalDef at 170
+Assigning number 38 to GenericString at 113
+Assigning number 39 to Some at 83
+Assigning number 40 to ExprStatement at 83
+Assigning number 41 to Compound at 77
+Assigning number 42 to For at 48
+Assigning number 43 to GenericString at 121
+Assigning number 44 to Ident at 121
+Assigning number 45 to Constant at 128
+Assigning number 46 to Left at 128
+Assigning number 47 to GenericList at 127
+Assigning number 48 to FunCall at 121
+Assigning number 49 to GenericString at 154
+Assigning number 50 to Some at 121
+Assigning number 51 to ExprStatement at 121
+Assigning number 52 to Constant at 165
+Assigning number 53 to ReturnExpr at 158
+Assigning number 54 to Compound at 11
+Assigning number 55 to Definition at 0
+Assigning number 56 to Definition at 0
+Assigning number 57 to Program at 0
 Finishing node renumbering
