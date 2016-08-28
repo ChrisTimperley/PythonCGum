@@ -1,5 +1,8 @@
 #!/usr/bin/env
+from utility import *
 import json
+import tempfile
+from subprocess import Popen
 
 class Action(object):
     @staticmethod
@@ -125,8 +128,10 @@ class Update(Action):
 class Diff(object):
     @staticmethod
     def from_source_files(fn_from, fn_to):
-        #with open
-        pass
+        tmp_f = tempfile.NamedTemporaryFile()
+        assert Popen(("gumtree jsondiff \"%s\" \"%s\"" % (fn_from, fn_to)), \
+                     shell=True, stdin=FNULL, stdout=tmp_f).wait() == 0
+        return Diff.from_file(tmp_f.name)
 
     @staticmethod
     def from_file(fn):

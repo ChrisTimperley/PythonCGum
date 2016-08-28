@@ -9,8 +9,10 @@ if __name__ == "__main__":
     before = program.Program.from_source_file("example/minimal/before.c")
 
     print("\nAFTER")
-    after = program.Program.from_file("example/minimal/after.cgum.json")
-    diff = diff.Diff.from_file("example/minimal/diff.cgum.json")
+    after = program.Program.from_source_file("example/minimal/after.c")
+
+    diff = diff.Diff.from_source_files("example/minimal/before.c",\
+                                       "example/minimal/after.c")
 
     print("\nDIFF")
     print(diff)

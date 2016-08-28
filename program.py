@@ -1,4 +1,5 @@
 from basic import *
+from utility import *
 import statement
 import expression
 import preprocessor
@@ -6,11 +7,8 @@ import typs
 
 from subprocess import Popen
 import os.path
-import os
 import json
 import tempfile
-
-FNULL = open(os.devnull, 'w')
 
 class FunctionParameter(Node):
     CODE = "220100"
