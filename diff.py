@@ -7,8 +7,23 @@ class Action(object):
         return ({
             'insert': Insert,
             'remove': Remove,
-            'update': Update
+            'update': Update,
+            'move': Move
         })[jsn['action']].from_json(jsn)
+
+class Move(Action):
+    @staticmethod
+    def from_json(jsn):
+        return Move(jsn['tree'], jsn['parent'], jsn['at'])
+
+    def __init__(self, tree_id, parent_id, position):
+        self.__tree_id = tree_id
+        self.__parent_id = parent_id
+        self.__position = position
+
+    def __str__(self):
+        return "MOV(%d, %d, %d)" % \
+            (self.__tree_id, self.__parent_id, self.__position)
 
 # Doesn't handle insert root
 class Insert(Action):
@@ -46,7 +61,7 @@ class Update(Action):
         self.__label = label
 
     def __str__(self):
-        return "UPD(%d, \"%s\")" % (self.__tree_id, self.__label)
+        return "UPD(%d, %s)" % (self.__tree_id, self.__label)
 
 class Diff(object):
     @staticmethod
