@@ -1,0 +1,10 @@
+Insert ExprStatement(19) into Compound(29) at 1
+Insert Some(18) into ExprStatement(19) at 0
+Insert FunCall(16) into Some(18) at 0
+Insert GenericString: ;(17) into Some(18) at 1
+Insert Ident(12) into FunCall(16) at 0
+Insert GenericList(15) into FunCall(16) at 1
+Insert GenericString: printf(11) into Ident(12) at 0
+Insert Left(14) into GenericList(15) at 0
+Insert Constant: "small"(13) into Left(14) at 0
+Update Constant: "world!"(13) to "universe!"

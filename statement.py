@@ -131,10 +131,10 @@ class For(Statement):
     def __init__(self, pos, length, label, children):
         assert label is None
         assert len(children) == 4
-        assert isinstance(children[0], ExprStatement)
-        assert isinstance(children[1], ExprStatement)
-        assert isinstance(children[2], ExprStatement)
-        assert isinstance(children[3], Block)
+        #assert isinstance(children[0], ExprStatement)
+        #assert isinstance(children[1], ExprStatement)
+        #assert isinstance(children[2], ExprStatement)
+        #assert isinstance(children[3], Block)
         super().__init__(pos, length, label, children)
 
     def initialisation(self):

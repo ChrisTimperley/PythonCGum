@@ -1,0 +1,100 @@
+[
+  {
+    "action": "insert",
+    "tree": 53,
+    "parent": 54,
+    "at": 3
+  },
+  {
+    "action": "insert",
+    "tree": 52,
+    "parent": 53,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 29,
+    "parent": 52,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 38,
+    "parent": 52,
+    "at": 1
+  },
+  {
+    "action": "move",
+    "tree": 41,
+    "parent": 52,
+    "at": 2
+  },
+  {
+    "action": "update",
+    "tree": 18,
+    "label": "100"
+  },
+  {
+    "action": "insert",
+    "tree": 35,
+    "parent": 38,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 36,
+    "parent": 38,
+    "at": 1
+  },
+  {
+    "action": "insert",
+    "tree": 37,
+    "parent": 38,
+    "at": 2
+  },
+  {
+    "action": "update",
+    "tree": 43,
+    "label": "print"
+  },
+  {
+    "action": "update",
+    "tree": 4,
+    "label": "\"Let's count to one hundred!\""
+  },
+  {
+    "action": "insert",
+    "tree": 34,
+    "parent": 35,
+    "at": 0
+  },
+  {
+    "action": "update",
+    "tree": 45,
+    "label": "\"We're done!\""
+  },
+  {
+    "action": "insert",
+    "tree": 31,
+    "parent": 34,
+    "at": 0
+  },
+  {
+    "action": "insert",
+    "tree": 32,
+    "parent": 34,
+    "at": 1
+  },
+  {
+    "action": "insert",
+    "tree": 33,
+    "parent": 34,
+    "at": 2
+  },
+  {
+    "action": "insert",
+    "tree": 30,
+    "parent": 31,
+    "at": 0
+  }
+]

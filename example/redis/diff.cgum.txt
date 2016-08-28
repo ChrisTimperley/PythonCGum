@@ -1,0 +1,12 @@
+Insert Binary(20573) into Left(20574) at 0
+Insert Constant: 1(20575) into Left(20576) at 0
+Move RecordPtAccess(20570) into Binary(20573) at 0
+Insert GenericString: +(20571) into Binary(20573) at 1
+Insert Constant: 1(20572) into Binary(20573) at 2
+Delete GenericString: c(20572)
+Delete Ident(20573)
+Delete GenericString: argc(20574)
+Delete RecordPtAccess(20575)
+Delete GenericString: -(20576)
+Delete Constant: 1(20577)
+Delete Binary(20578)

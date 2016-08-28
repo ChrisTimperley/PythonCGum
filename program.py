@@ -91,6 +91,15 @@ class FinalDef(Token):
 # Represents the root AST node for a program
 # For now we just get all the "components" of a program and worry about what
 # kind of components they might be later.
+#
+# Throw away the FinalDef
 class Program(Node):
     CODE = "460000"
     LABEL = "Program"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) >= 1
+        assert isinstance(children[-1], FinalDef)
+        children.pop()
+        super().__init__(pos, length, label, children)
