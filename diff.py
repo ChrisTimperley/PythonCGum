@@ -1,4 +1,6 @@
 #!/usr/bin/env
+import json
+
 class Action(object):
     @staticmethod
     def from_json(jsn):
@@ -39,5 +41,14 @@ class Update(Object):
         self.__label = label
 
 class Diff(object):
+    @staticmethod
+    def from_file(fn):
+        with open(fn, 'r') as f:
+            return Diff.from_json(json.load(f))
+
+    @staticmethod
+    def from_json(jsn):
+        pass
+
     def __init__(self, actions):
         self.__actions = actions
