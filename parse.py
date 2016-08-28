@@ -1,16 +1,15 @@
 #!/usr/bin/env python3
-import os.path
-from program import Program
+import program
 import diff
 
 if __name__ == "__main__":
 
     # Let's try and build an example AST
     print("BEFORE")
-    before = Program.from_file("example/minimal/before.cgum.json")
+    before = program.Program.from_source_file("example/minimal/before.c")
 
     print("\nAFTER")
-    after = Program.from_file("example/minimal/after.cgum.json")
+    after = program.Program.from_file("example/minimal/after.cgum.json")
     diff = diff.Diff.from_file("example/minimal/diff.cgum.json")
 
     print("\nDIFF")

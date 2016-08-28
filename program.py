@@ -1,10 +1,16 @@
 from basic import *
-import os.path
 import statement
 import expression
 import preprocessor
-import types
+import typs
+
+from subprocess import Popen
+import os.path
+import os
 import json
+import tempfile
+
+FNULL = open(os.devnull, 'w')
 
 class FunctionParameter(Node):
     CODE = "220100"
@@ -17,10 +23,10 @@ class FunctionParameter(Node):
         # Find the optional type and name of this parameter
         tmp = children.copy()
         self.__typ = \
-            tmp.pop(0) if (tmp and isinstance(tmp[0], types.FullType)) else None
+            tmp.pop(0) if (tmp and isinstance(tmp[0], typs.FullType)) else None
         self.__name = tmp.pop(0) if tmp else None
 
-        assert self.__typ is None or isinstance(self.__typ, types.FullType)
+        assert self.__typ is None or isinstance(self.__typ, typs.FullType)
         assert self.__name is None or isinstance(self.__name, GenericString)
         super().__init__(pos, length, label, children)
 
@@ -56,18 +62,18 @@ class FunctionDefinition(Node):
 
         tmp = children.copy()
         self.__storage = \
-            tmp.pop(0) if isinstance(tmp[0], types.Storage) else None
+            tmp.pop(0) if isinstance(tmp[0], typs.Storage) else None
         self.__parameters = tmp.pop(0)
         self.__dots = \
-            tmp.pop(0) if isinstance(tmp[0], types.DotsParameter) else None
+            tmp.pop(0) if isinstance(tmp[0], typs.DotsParameter) else None
         self.__name = tmp.pop(0)
         self.__block = tmp.pop(0)
 
         assert isinstance(self.__parameters, FunctionParameters)
         assert self.__dots is None or \
-            isinstance(self.__dots, types.DotsParameter)
+            isinstance(self.__dots, typs.DotsParameter)
         assert self.__storage is None or \
-            isinstance(self.__storage, types.Storage)
+            isinstance(self.__storage, typs.Storage)
         assert isinstance(self.__name, GenericString)
         assert isinstance(self.__block, statement.Block)
         super().__init__(pos, length, label, children)
@@ -99,6 +105,14 @@ class FinalDef(Token):
 class Program(Node):
     CODE = "460000"
     LABEL = "Program"
+
+    # Generates an AST for a given source code file, using GumTree and CGum
+    @staticmethod
+    def from_source_file(fn):
+        tmp_f = tempfile.NamedTemporaryFile()
+        assert Popen(("gumtree parse \"%s\"" % fn), shell=True, \
+                     stdin=FNULL, stdout=tmp_f).wait() == 0
+        return Program.from_file(tmp_f.name)
 
     # Parses a JSON CGum AST, stored in a file at a specified location, into an
     # equivalent, Python representation
