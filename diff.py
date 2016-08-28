@@ -48,7 +48,7 @@ class Diff(object):
 
     @staticmethod
     def from_json(jsn):
-        pass
+        return Diff([Action.from_json(action) for action in jsn])
 
     def __init__(self, actions):
         self.__actions = actions
