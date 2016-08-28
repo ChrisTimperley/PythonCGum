@@ -148,11 +148,6 @@ class Diff(object):
     # Fixes the IDs in the patch, such that a theoretically executable
     # patch is produced
     def correct(self):
-        # Create a map, from the original IDs referred to in the program
-        # to their position at the current point of unrolling.
-        id_map = {action.parent_id() for action in self.__actions}
-        id_map = {pid: pid for pid in id_map}
-
         # Separate the edits by type. Deal with deletions and removals first,
         # then handle inserts, and finally, do nothing with the updates.
         inserts = []
@@ -166,6 +161,12 @@ class Diff(object):
                 Remove: removals,
                 Update: updates
             })[action.__class__].append(action)
+
+        # Create a map, from the original IDs referred to in the program
+        # to their position at the current point of unrolling.
+        id_map = {action.parent_id() for action in self.__actions}
+        id_map = id_map.union({insert.child_id() for insert in inserts})
+        id_map = {pid: pid for pid in id_map}
 
         # First, correct the deletions by going forward and shifting the IDs
         # of future edits (after that ID) back by one.
@@ -181,12 +182,17 @@ class Diff(object):
         # SHOULD BE SIMILAR TO THE ABOVE
 
         # Handle insertions
-        for insert in inserts:
-            parent = insert.parent_id()
-            child = insert.child_id()
-    
+        for insert in reversed(inserts):
+            parent = id_map[insert.parent_id()]
+            child = id_map[insert.child_id()]
+            for (original_id, current_id) in id_map.items():
+                if current_id > child:
+                    id_map[original_id] -= 1
+            insert.set_parent_id(parent - 1)
+            insert.set_child_id(child)
+
         # Put the actions together in the correct order
-        self.__actions = deletions + updates
+        self.__actions = deletions + inserts + updates
 
     def __str__(self):
         return '\n'.join(map(str, self.__actions))

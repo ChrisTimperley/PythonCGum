@@ -13,8 +13,8 @@ if __name__ == "__main__":
     after = program.Program.from_source_file("example/minimal/after.c")
     after.pp()
 
-    diff = diff.Diff.from_source_files("example/minimal/before.c",\
-                                       "example/minimal/after.c")
+    diff = diff.Diff.from_source_files("example/minimal/after.c",\
+                                       "example/minimal/before.c")
 
     print("\nDIFF")
     print(diff)
