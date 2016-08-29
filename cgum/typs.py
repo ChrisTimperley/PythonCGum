@@ -67,6 +67,19 @@ class CInt(Token):
     CODE = "100003"
     LABEL = "CInt"
 
+class CDouble(Token):
+    CODE = "110002"
+    LABEL = "CDouble"
+
+class FloatType(Node):
+    CODE = "70200"
+    LABEL = "FloatType"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 1
+        super().__init__(pos, length, label, children)
+
 # Not sure about this?
 class IntType(Node):
     CODE = "70100"
