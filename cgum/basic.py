@@ -70,6 +70,8 @@ class Node(object):
         return self.__size
     def depth(self):
         return self.__depth
+    def child(self, i):
+        return self.__children[i]
 
     # Returns a list of all the ancestors of this node, in order from nearest
     # to furthest.

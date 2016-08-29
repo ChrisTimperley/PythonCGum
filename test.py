@@ -1,11 +1,20 @@
 #!/usr/bin/python3
 import cgum.program
+import cgum.diff
 
-prog = cgum.program.Program.from_source_file("example/minimal/before.c")
+before = cgum.program.Program.from_source_file("example/hello-world/before.c")
+after = cgum.program.Program.from_source_file("example/hello-world/after.c")
+diff = cgum.diff.Diff.from_source_files("example/hello-world/before.c",\
+                                        "example/hello-world/after.c")
 
-prog.pp()
+print("BEFORE")
+before.pp()
+print("\nAFTER")
+after.pp()
+print("")
+print(diff)
+print("")
 
-ret = prog.find(12)
-
-for ancestor in ret.ancestors():
-    print(ancestor.typeLabel())
+moved = diff.actions()[0]
+print("MOVED FROM: %s" % moved.moved_from(before, after).typeLabel())
+print("MOVED TO: %s" % moved.moved_to(before, after).typeLabel())

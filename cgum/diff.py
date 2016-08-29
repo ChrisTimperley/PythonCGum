@@ -1,9 +1,4 @@
 #!/usr/bin/env
-#
-#
-#
-#
-#
 from cgum.utility import *
 import json
 import tempfile
@@ -48,17 +43,17 @@ class Move(Action):
         return Move(jsn['tree'], jsn['parent'], jsn['at'])
 
     def __init__(self, tree_id, parent_id, position):
+        assert position > 0
         super().__init__(parent_id)
         self.__tree_id = tree_id
         self.__position = position
 
     # Returns the node in the before AST
-    def from(self, before, after):
-        raise NotImplementedError("Look into Move indexing")
-
+    def moved_from(self, before, after):
+        return before.find(self.tree_id())
     # Returns the node in the after AST
-    def to(self, before, after):
-        raise NotImplementedError("Look into Move indexing")
+    def moved_to(self, before, after):
+        return after.find(self.parent_id()).child(self.__position - 1)
 
     def tree_id(self):
         return self.__tree_id
@@ -178,6 +173,8 @@ class Diff(object):
                 Move: self.__moves
             })[action.__class__].append(action)
 
+    def actions(self):
+        return self.__actions
     def insertions(self):
         return self.__insertions
     def deletions(self):
@@ -240,6 +237,3 @@ class Diff(object):
 
     def __str__(self):
         return '\n'.join(map(str, self.__actions))
-
-    # Returns a list of the functions which were modified by the diff.
-    def modified_functions(self, before, after):
