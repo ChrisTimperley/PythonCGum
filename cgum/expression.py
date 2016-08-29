@@ -1,17 +1,17 @@
 from cgum.basic import *
 
-# Base class used by all AST nodes deemed to represent a C expression
-class Expression(Node):
-    pass
+class Expression(object):
+    def is_expression(self):
+        return True
 
-class Sequence(Expression):
+class Sequence(Node, Expression):
     CODE = "240600"
     LABEL = "Sequence"
 
     def expressions(self):
         return self.children()
 
-class Constructor(Expression):
+class Constructor(Node, Expression):
     CODE = "241900"
     LABEL = "Constructor"
 
@@ -20,7 +20,7 @@ class Constructor(Expression):
         assert len(children) == 1
         super().__init__(pos, length, label, children)
 
-class RecordAccess(Expression):
+class RecordAccess(Node, Expression):
     CODE = "241300"
     LABEL = "RecordAccess"
 
@@ -35,7 +35,7 @@ class RecordAccess(Expression):
     def member(self):
         return self.__children[1]
 
-class ArrayAccess(Expression):
+class ArrayAccess(Node, Expression):
     CODE = "241200"
     LABEL = "ArrayAccess"
 
@@ -55,7 +55,7 @@ class SizeOfType(Token, Expression):
     CODE = "241600"
     LABEL = "SizeOfType"
 
-class Assignment(Expression):
+class Assignment(Node, Expression):
     CODE = "240700"
     LABEL = "Assignment"
 
@@ -72,7 +72,7 @@ class Assignment(Expression):
 
 # This seems to just represent Postfix expressions? This has nothing to do with
 # Infix expression?
-class Infix(Expression):
+class Infix(Node, Expression):
     CODE = "240900"
     LABEL = "Infix"
 
@@ -87,7 +87,7 @@ class Infix(Expression):
     def operator(self):
         return self.__children[1]
 
-class Postfix(Expression):
+class Postfix(Node, Expression):
     CODE = "240800"
     LABEL = "Postfix"
 
@@ -102,7 +102,7 @@ class Postfix(Expression):
     def operator(self):
         return self.__children[1]
 
-class RecordPtAccess(Expression):
+class RecordPtAccess(Node, Expression):
     CODE = "241400"
     LABEL = "RecordPtAccess"
 
@@ -117,7 +117,7 @@ class RecordPtAccess(Expression):
     def member(self):
         return self.__children[1]
 
-class Identity(Expression):
+class Identity(Node, Expression):
     CODE = "240100"
     LABEL = "Ident"
 
@@ -132,7 +132,7 @@ class Identity(Expression):
     def to_s(self):
         return self.of()
 
-class SizeOfExpr(Expression):
+class SizeOfExpr(Node, Expression):
     CODE = "241500"
     LABEL = "SizeOfExpr"
 
@@ -144,7 +144,7 @@ class SizeOfExpr(Expression):
     def expr(self):
         return self.__children[0]
 
-class Constant(Expression):
+class Constant(Node, Expression):
     CODE = "240200"
     LABEL = "Constant"
 
@@ -158,7 +158,7 @@ class Constant(Expression):
     def to_s(self):
         return self.__label
 
-class Cast(Expression):
+class Cast(Node, Expression):
     CODE = "241700"
     LABEL = "Cast"
 
@@ -172,7 +172,7 @@ class Cast(Expression):
     def to_s(self):
         return "(UNKNOWN_TYPE) %s" % self.expr().to_s()
 
-class InitList(Expression):
+class InitList(Node, Expression):
     CODE = "360200"
     LABEL = "InitList"
 
@@ -185,7 +185,7 @@ class InitList(Expression):
     def contents(self):
         return self.__children
 
-class DesignatorField(Expression):
+class DesignatorField(Node, Expression):
     CODE = "370100"
     LABEL = "DesignatorField"
 
@@ -199,7 +199,7 @@ class DesignatorField(Expression):
     def to_s(self):
         return self.__label
 
-class InitDesignators(Expression):
+class InitDesignators(Node, Expression):
     CODE = "360300"
     LABEL = "InitDesignators"
 
@@ -214,7 +214,7 @@ class InitDesignators(Expression):
     def expr(self):
         return self.__children[1]
 
-class InitFieldOld(Expression):
+class InitFieldOld(Node, Expression):
     CODE = "360400"
     LABEL = "InitFieldOld"
 
@@ -231,7 +231,7 @@ class InitFieldOld(Expression):
         return self.__children[1]
 
 # What is the difference between Init and Assignment?
-class InitExpr(Expression):
+class InitExpr(Node, Expression):
     CODE = "360100"
     LABEL = "InitExpr"
 
@@ -240,7 +240,7 @@ class InitExpr(Expression):
         assert len(children) == 1
         super().__init__(pos, length, label, children)
 
-class Ternary(Expression):
+class Ternary(Node, Expression):
     CODE = "240500"
     LABEL = "CondExpr"
 
@@ -256,7 +256,7 @@ class Ternary(Expression):
     def els(self):
         return self.__children[2]
 
-class FunctionCall(Expression):
+class FunctionCall(Node, Expression):
     CODE = "240400"
     LABEL = "FunCall"
 
@@ -273,7 +273,7 @@ class FunctionCall(Expression):
     def function_name(self):
         return self.function().to_s()
 
-class Parentheses(Expression):
+class Parentheses(Node, Expression):
     CODE = "242000"
     LABEL = "ParenExpr"
 
@@ -292,7 +292,7 @@ class Parentheses(Expression):
 # whose presence is otherwise optional. In the case those nodes are missing, a
 # None can be found instead.
 # From observation, it only ever seems to contain one item, followed by a ;
-class Some(Node):
+class Some(Node, Expression):
     CODE = "290100"
     LABEL = "Some"
 
@@ -305,7 +305,7 @@ class Some(Node):
     def expr(self):
         return self.__children[0]
 
-class Unary(Expression):
+class Unary(Node, Expression):
     CODE = "241000"
     LABEL = "Unary"
 
@@ -320,7 +320,7 @@ class Unary(Expression):
     def operator(self):
         return self.__children[1]
 
-class Binary(Expression):
+class Binary(Node, Expression):
     CODE = "241100"
     LABEL = "Binary"
 
@@ -336,19 +336,3 @@ class Binary(Expression):
         return self.__children[1].to_s()
     def rhs(self):
         return self.__children[2]
-
-# TODO: Returns the result of an expression; should be a statement?
-class ReturnExpr(Expression):
-    CODE = "280200"
-    LABEL = "ReturnExpr"
-
-    def __init__(self, pos, length, label, children):
-        assert label is None
-        assert len(children) == 1
-        super().__init__(pos, length, label, children)
-
-    def expr(self):
-        return self.__children[0]
-
-    def to_s(self):
-        return "return %s" % self.__expr.to_s()

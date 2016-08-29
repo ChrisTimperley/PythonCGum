@@ -2,11 +2,12 @@ from cgum.basic import *
 import cgum.expression as expression
 
 # Mix-in implemented by all statement types
-class Statement(Node):
-    pass
+class Statement(object):
+    def is_statement(self):
+        return True
 
 # TODO: Understand this better
-class StatementExpression(Statement, expression.Expression):
+class StatementExpression(Node, Statement, expression.Expression):
     CODE = "241800"
     LABEL = "StatementExpr"
 
@@ -14,7 +15,8 @@ class StatementExpression(Statement, expression.Expression):
         assert label is None
         super().__init__(pos, length, label, children)
 
-class DeclarationList(Node):
+# For now, declarations are statements
+class DeclarationList(Node, Statement):
     CODE = "350100"
     LABEL = "DeclList"
 
@@ -41,7 +43,7 @@ class Declaration(Node):
         return self.__children[0]
 
 # Generic definition class
-class Definition(Node):
+class Definition(Node, Statement):
     CODE = "450200"
     LABEL = "Definition"
 
@@ -56,7 +58,7 @@ class Definition(Node):
     def to_s(self):
         return self.defined().to_s()
 
-class Goto(Statement):
+class Goto(Node, Statement):
     CODE = "280100"
     LABEL = "Goto"
 
@@ -80,7 +82,7 @@ class Continue(Token, Statement):
         return "continue"
 
 # Used to specify the default switch case
-class Default(Statement):
+class Default(Node, Statement):
     CODE = "270400"
     LABEL = "Default"
 
@@ -89,7 +91,7 @@ class Default(Statement):
         assert len(children) == 1
         super().__init__(pos, length, label, children)
 
-class Case(Statement):
+class Case(Node, Statement):
     CODE = "270200"
     LABEL = "Case"
 
@@ -102,7 +104,7 @@ class Case(Statement):
     def stmt(self):
         return self.__children[1]
 
-class Switch(Statement):
+class Switch(Node, Statement):
     CODE = "300200"
     LABEL = "Switch"
 
@@ -123,7 +125,7 @@ class Break(Token, Statement):
     def to_s(self):
         return "break"
 
-class ExprStatement(Node):
+class ExprStatement(Node, Statement):
     CODE = "260300"
     LABEL = "ExprStatement"
 
@@ -135,7 +137,7 @@ class ExprStatement(Node):
     def expr(self):
         return self.__children[0]
 
-class DoWhile(Statement):
+class DoWhile(Node, Statement):
     CODE = "310200"
     LABEL = "DoWhile"
 
@@ -149,7 +151,7 @@ class DoWhile(Statement):
     def do(self):
         return self.__children[0]
 
-class While(Statement):
+class While(Node, Statement):
     CODE = "310100"
     LABEL = "While"
 
@@ -163,7 +165,7 @@ class While(Statement):
     def do(self):
         return self.__children[1]
 
-class For(Statement):
+class For(Node, Statement):
     CODE = "310300"
     LABEL = "For"
 
@@ -185,7 +187,21 @@ class For(Statement):
     def block(self):
         return self.__children[3]
 
-# Never seems to return the result of an expression?
+class ReturnExpr(Node, Statement):
+    CODE = "280200"
+    LABEL = "ReturnExpr"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 1
+        super().__init__(pos, length, label, children)
+
+    def expr(self):
+        return self.__children[0]
+
+    def to_s(self):
+        return "return %s" % self.__expr.to_s()
+
 class Return(Token, Statement):
     CODE = "280003"
     LABEL = "Return"
@@ -197,7 +213,7 @@ class IfToken(Token):
     CODE = "490100"
     LABEL = "IfToken"
 
-class IfElse(Statement):
+class IfElse(Node, Statement):
     CODE = "300100"
     LABEL = "If"
 
