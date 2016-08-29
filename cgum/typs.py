@@ -71,6 +71,14 @@ class CDouble(Token):
     CODE = "110002"
     LABEL = "CDouble"
 
+class CLongLong(Token):
+    CODE = "100005"
+    LABEL = "CLongLong"
+
+class SizeType(Token):
+    CODE = "70002"
+    LABEL = "SizeType"
+
 class FloatType(Node):
     CODE = "70200"
     LABEL = "FloatType"
