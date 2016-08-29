@@ -170,11 +170,27 @@ class InitList(Expression):
     def __init__(self, pos, length, label, children):
         assert label is None
         assert len(children) > 0
-        assert all(isinstance(c, InitExpr) for c in children)
+        #assert all(isinstance(c, InitExpr) for c in children)
         super().__init__(pos, length, label, children)
 
     def contents(self):
         return self.__children
+
+class InitFieldOld(Expression):
+    CODE = "360400"
+    LABEL = "InitFieldOld"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 2
+        assert isinstance(children[0], GenericString)
+        assert isinstance(children[1], InitExpr)
+        super().__init__(pos, length, label, children)
+
+    def field(self):
+        return self.__children[0].to_s()
+    def expr(self):
+        return self.__children[1]
 
 # What is the difference between Init and Assignment?
 class InitExpr(Expression):
