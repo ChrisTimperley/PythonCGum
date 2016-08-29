@@ -35,6 +35,10 @@ class Delete(Action):
     def from_json(jsn):
         return Delete(jsn['tree'])
 
+    # Returns the deleted node from the before AST
+    def deleted(self, before, after):
+        return before.find(self.parent_id())
+
     def __str__(self):
         return "DEL(%d)" % self.parent_id()
 
@@ -47,6 +51,14 @@ class Move(Action):
         super().__init__(parent_id)
         self.__tree_id = tree_id
         self.__position = position
+
+    # Returns the node in the before AST
+    def from(self, before, after):
+        raise NotImplementedError("Look into Move indexing")
+
+    # Returns the node in the after AST
+    def to(self, before, after):
+        raise NotImplementedError("Look into Move indexing")
 
     def tree_id(self):
         return self.__tree_id
@@ -67,6 +79,10 @@ class Insert(Action):
         super().__init__(parent_id)
         self.__child_id = child_id
         self.__position = position
+
+    # Returns the node which was inserted into the AST
+    def inserted(self, before, after):
+        return after.find(self.__child_id)
 
     def correct(self, id_map):
         post_parent_id = self.parent_id()
@@ -91,6 +107,10 @@ class Remove(Action):
     def from_json(jsn):
         assert not ('at' in jsn)
         return Remove(jsn['parent'])
+
+    # Returns the node which was removed from the before AST
+    def removed(self, before, after):
+        raise NotImplementedError("Look into how removal indices work")
 
     # To rollback the effects of a Remove operation, we shift all IDs after X
     # forward by the size of X, simulating an insertion.
