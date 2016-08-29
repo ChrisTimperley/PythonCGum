@@ -11,6 +11,15 @@ class Sequence(Expression):
     def expressions(self):
         return self.children()
 
+class Constructor(Expression):
+    CODE = "241900"
+    LABEL = "Constructor"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 1
+        super().__init__(pos, length, label, children)
+
 class RecordAccess(Expression):
     CODE = "241300"
     LABEL = "RecordAccess"
@@ -175,6 +184,35 @@ class InitList(Expression):
 
     def contents(self):
         return self.__children
+
+class DesignatorField(Expression):
+    CODE = "370100"
+    LABEL = "DesignatorField"
+
+    def __init__(self, pos, length, label, children):
+        assert isinstance(label, str)
+        assert not children
+        super().__init__(pos, length, label, children)
+
+    def field(self):
+        return self.__label
+    def to_s(self):
+        return self.__label
+
+class InitDesignators(Expression):
+    CODE = "360300"
+    LABEL = "InitDesignators"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 2
+        assert isinstance(children[0], DesignatorField)
+        super().__init__(pos, length, label, children)
+
+    def field(self):
+        return self.__children[0].to_s()
+    def expr(self):
+        return self.__children[1]
 
 class InitFieldOld(Expression):
     CODE = "360400"
