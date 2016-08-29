@@ -52,6 +52,10 @@ class Node(object):
         self.__numberStart = None
         self.__parent = None
 
+    # By default nodes are not statements, unless overridden by another class.
+    def is_statement(self):
+        return False
+
     def parent(self):
         return self.__parent
     def label(self):
@@ -72,6 +76,13 @@ class Node(object):
         return self.__depth
     def child(self, i):
         return self.__children[i]
+
+    # Returns a list of all the descendants of this node, in order from nearest
+    # to furthest.
+    def descendants(self):
+        return reduce(lambda d, c: d + [c] + c.descendants,\
+                      self.__children,\
+                      [])
 
     # Returns a list of all the ancestors of this node, in order from nearest
     # to furthest.

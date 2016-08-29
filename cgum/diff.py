@@ -43,7 +43,7 @@ class Move(Action):
         return Move(jsn['tree'], jsn['parent'], jsn['at'])
 
     def __init__(self, tree_id, parent_id, position):
-        assert position > 0
+        #assert position > 0
         super().__init__(parent_id)
         self.__tree_id = tree_id
         self.__position = position
@@ -53,7 +53,8 @@ class Move(Action):
         return before.find(self.tree_id())
     # Returns the node in the after AST
     def moved_to(self, before, after):
-        return after.find(self.parent_id()).child(self.__position - 1)
+        return after.find(self.parent_id()).child(self.__position)
+        #return after.find(self.parent_id()).child(self.__position - 1)
 
     def tree_id(self):
         return self.__tree_id
@@ -96,7 +97,6 @@ class Insert(Action):
         return "INS(%d, %d, %d)" % \
             (self.child_id(), self.parent_id(), self.position())
 
-# TODO: Fix me! I should remove a node from a parent at a given ID
 class Remove(Action):
     @staticmethod
     def from_json(jsn):
@@ -128,6 +128,11 @@ class Update(Action):
     def __init__(self, parent_id, label):
         super().__init__(parent_id)
         self.__label = label
+
+    # Returns the node that was updated by this operation (within the
+    # original tree)
+    def updated(self, before, after):
+        before.find(self.parent_id())
 
     # Update actions have no effect on the IDs of successive edits, but we do
     # need to fetch the altered ID from the map for this action.
