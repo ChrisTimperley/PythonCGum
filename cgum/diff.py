@@ -144,6 +144,30 @@ class Diff(object):
 
     def __init__(self, actions):
         self.__actions = actions
+        self.__insertions = []
+        self.__deletions = []
+        self.__removals = []
+        self.__updates = []
+        self.__moves = []
+        for action in self.__actions:
+            ({
+                Insert: self.__insertions,
+                Delete: self.__deletions,
+                Remove: self.__removals,
+                Update: self.__updates,
+                Move: self.__moves
+            })[action.__class__].append(action)
+
+    def insertions(self):
+        return self.__insertions
+    def deletions(self):
+        return self.__deletions
+    def removals(self):
+        return self.__removals
+    def moves(self):
+        return self.__moves
+    def updates(self):
+        return self.__updates
 
     # Fixes the IDs in the patch, such that a theoretically executable
     # patch is produced
