@@ -1,9 +1,9 @@
 from cgum.basic import Node, GenericString, GenericList, Token
 from cgum.utility import FNULL
-import cgum.statement
-import cgum.expression
-import cgum.preprocessor
-import cgum.typs
+import cgum.statement as statement
+import cgum.expression as expression
+import cgum.preprocessor as preprocessor
+import cgum.typs as typs
 
 from subprocess import Popen
 import os.path

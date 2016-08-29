@@ -1,5 +1,5 @@
 from cgum.basic import Node, GenericString, GenericList, Token
-import cgum.expression
+import cgum.expression as expression
 
 # Mix-in implemented by all statement types
 class Statement(Node):
