@@ -49,6 +49,7 @@ class Node(object):
         self.__number = None
         self.__depth = None
         self.__size = None
+        self.__numberStart = None
 
     def label(self):
         return self.__label
@@ -60,10 +61,22 @@ class Node(object):
         return self.__children
     def number(self):
         return self.__number
+    def numberRange(self):
+        return (self.__numberStart, self.__number)
     def size(self):
         return self.__size
     def depth(self):
         return self.__depth
+
+    # Finds a node with a given number within the sub-tree rooted at this node
+    def find(self, num):
+        if self.__number == num:
+            return self
+
+        [c.numberRange() for c in self__children]
+
+    # Returns the node of the function that this node belongs to, or None if it
+    # doesn't belong to a function (i.e. it's a top-level statement).
 
     # Pretty-prints the tree rooted at this node; useful for debugging
     def pp(self, depth=0):
@@ -79,9 +92,8 @@ class Node(object):
     # Recursively renumbers all nodes belonging to the sub-tree rooted at this
     # node. Numbers start at zero. Unfortunately necessary, since the CGum AST
     # output doesn't provide node numbers.
-    #
-    # FIX: Changed to post-order assignment
     def renumber(self, num=0):
+        self.__numberStart = num
         for c in self.__children:
             num = c.renumber(num)
         #print("Assigning number %d to %s at %d" % (num, self.typeLabel(), self.__pos))

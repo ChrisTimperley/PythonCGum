@@ -196,3 +196,6 @@ class Diff(object):
 
     def __str__(self):
         return '\n'.join(map(str, self.__actions))
+
+    # Returns a list of the functions which were modified by the diff.
+    def modified_functions(self, before, after):
