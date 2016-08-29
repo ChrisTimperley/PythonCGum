@@ -7,4 +7,5 @@ prog.pp()
 
 ret = prog.find(12)
 
-print(ret.parent().typeLabel())
+for ancestor in ret.ancestors():
+    print(ancestor.typeLabel())

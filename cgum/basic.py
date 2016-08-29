@@ -71,6 +71,14 @@ class Node(object):
     def depth(self):
         return self.__depth
 
+    # Returns a list of all the ancestors of this node, in order from nearest
+    # to furthest.
+    def ancestors(self):
+        if self.__parent:
+            return [self.__parent] + self.__parent.ancestors()
+        else:
+            return []
+
     # Returns the index of the range that a given node belongs to, or None if
     # it belongs to none of them.
     def __find_helper(self, num, ranges, mn, mx):
