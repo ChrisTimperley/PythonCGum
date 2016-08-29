@@ -5,6 +5,15 @@ import cgum.expression as expression
 class Statement(Node):
     pass
 
+# TODO: Understand this better
+class StatementExpression(Statement, expression.Expression):
+    CODE = "241800"
+    LABEL = "StatementExpr"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        super().__init__(pos, length, label, children)
+
 class DeclarationList(Node):
     CODE = "350100"
     LABEL = "DeclList"

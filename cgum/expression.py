@@ -163,6 +163,19 @@ class Cast(Expression):
     def to_s(self):
         return "(UNKNOWN_TYPE) %s" % self.expr().to_s()
 
+class InitList(Expression):
+    CODE = "360200"
+    LABEL = "InitList"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) > 0
+        assert all(isinstance(c, InitExpr) for c in children)
+        super().__init__(pos, length, label, children)
+
+    def contents(self):
+        return self.__children
+
 # What is the difference between Init and Assignment?
 class InitExpr(Expression):
     CODE = "360100"

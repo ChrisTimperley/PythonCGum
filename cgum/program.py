@@ -10,6 +10,21 @@ import os.path
 import json
 import tempfile
 
+class Label(Node):
+    CODE = "270100"
+    LABEL = "Label"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 2
+        assert isinstance(children[0], GenericString)
+        super().__init__(pos, length, label, children)
+
+    def name(self):
+        return self.__children[0].to_s()
+    def statement(self):
+        return self.__children[1]
+
 class FunctionParameter(Node):
     CODE = "220100"
     LABEL = "ParameterType"
