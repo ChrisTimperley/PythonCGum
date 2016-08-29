@@ -1,7 +1,7 @@
 from cgum.basic import *
 
 # Represents a C preprocessor statement
-class PreprocessorStatement(cgum.basic.Node):
+class PreprocessorStatement(Node):
     CODE = "450300"
     LABEL = "CppTop"
 
@@ -16,7 +16,7 @@ class PreprocessorStatement(cgum.basic.Node):
     def to_s(self):
         return self.statement().to_s()
 
-class OtherDirective(cgum.basic.Node):
+class OtherDirective(Node):
     CODE = "400400"
     LABEL = "OtherDirective"
 
