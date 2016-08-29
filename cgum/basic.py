@@ -68,12 +68,28 @@ class Node(object):
     def depth(self):
         return self.__depth
 
+    # Returns the index of the range that a given node belongs to, or None if
+    # it belongs to none of them.
+    def __find_helper(self, num, ranges, mn, mx):
+        if mx < mn:
+            return -1
+        pivot = (mn + mx) // 2
+        (num_start, num_end) = ranges[pivot]
+        if num < num_start:
+            return self.__find_helper(num, ranges, mn, pivot - 1)
+        elif num > num_end:
+            return self.__find_helper(num, ranges, pivot + 1, mx)
+        else:
+            return pivot
+
     # Finds a node with a given number within the sub-tree rooted at this node
     def find(self, num):
         if self.__number == num:
             return self
-
-        [c.numberRange() for c in self__children]
+        ind = self.__find_helper(num,\
+                                 [c.numberRange() for c in self.__children],\
+                                 0, len(self.__children) - 1)
+        return self.__children[ind].find(num) if ind >= 0 else None
 
     # Returns the node of the function that this node belongs to, or None if it
     # doesn't belong to a function (i.e. it's a top-level statement).

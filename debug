@@ -1,0 +1,26 @@
+Attempting to read CGum AST from a JSON file: /tmp/tmpet9h48z0
+Finished converting CGum AST from JSON into Python
+Program - 16
+  Definition - 15
+    FunctionDefinition - 14
+      FunctionParameters - 0
+      GenericString - 1
+      Block - 13
+        ExprStatement - 10
+          Some - 9
+            FunctionCall - 7
+              Identity - 3
+                GenericString - 2
+              GenericList - 6
+                Left - 5
+                  Constant - 4
+            GenericString - 8
+        Break - 11
+        Return - 12
+0 0
+0 0
+2 0
+2 2
+2 0
+2 2
+Return

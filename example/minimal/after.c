@@ -1,3 +1,4 @@
 int main() {
-  printf(); 
+  printf();
+  cool(7);
 }
