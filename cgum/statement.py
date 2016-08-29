@@ -135,6 +135,20 @@ class ExprStatement(Node):
     def expr(self):
         return self.__children[0]
 
+class DoWhile(Statement):
+    CODE = "310200"
+    LABEL = "DoWhile"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 2
+        super().__init__(pos, length, label, children)
+
+    def condition(self):
+        return self.__children[1]
+    def do(self):
+        return self.__children[0]
+
 class While(Statement):
     CODE = "310100"
     LABEL = "While"
