@@ -1,4 +1,4 @@
-from basic import *
+from cgum.basic import *
 
 # Base class used by all AST nodes deemed to represent a C expression
 class Expression(Node):

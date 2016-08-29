@@ -1,4 +1,4 @@
-from basic import *
+from cgum.basic import *
 
 class DotsParameter(Token):
     CODE = "210000"

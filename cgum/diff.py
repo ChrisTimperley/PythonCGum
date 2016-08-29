@@ -4,7 +4,7 @@
 #
 #
 #
-from utility import *
+from cgum.utility import *
 import json
 import tempfile
 from subprocess import Popen
