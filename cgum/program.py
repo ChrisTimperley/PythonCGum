@@ -10,6 +10,15 @@ import os.path
 import json
 import tempfile
 
+# TODO: Probe
+class Asm(Node):
+    CODE = "260800"
+    LABEL = "Asm"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        super().__init__(pos, length, label, children)
+
 class Label(Node):
     CODE = "270100"
     LABEL = "Label"
