@@ -123,6 +123,18 @@ class Identity(Expression):
     def to_s(self):
         return self.of()
 
+class SizeOfExpr(Expression):
+    CODE = "241500"
+    LABEL = "SizeOfExpr"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 1
+        super().__init__(pos, length, label, children)
+
+    def expr(self):
+        return self.__children[0]
+
 class Constant(Expression):
     CODE = "240200"
     LABEL = "Constant"

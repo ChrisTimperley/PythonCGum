@@ -47,6 +47,22 @@ class Definition(Node):
     def to_s(self):
         return self.defined().to_s()
 
+class Goto(Statement):
+    CODE = "280100"
+    LABEL = "Goto"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert len(children) == 1
+        assert isinstance(children[0], GenericString)
+        super().__init__(pos, length, label, children)
+
+    def destination(self):
+        return self.__children[0]
+
+    def to_s(self):
+        return "goto %s" % self.destination()
+
 class Continue(Token, Statement):
     CODE = "280001"
     LABEL = "Continue"
