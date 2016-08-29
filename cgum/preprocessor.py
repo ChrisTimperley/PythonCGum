@@ -1,4 +1,4 @@
-import cgum.basic
+from cgum.basic import *
 
 # Represents a C preprocessor statement
 class PreprocessorStatement(cgum.basic.Node):

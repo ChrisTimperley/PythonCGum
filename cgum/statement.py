@@ -1,4 +1,4 @@
-from cgum.basic import Node, GenericString, GenericList, Token
+from cgum.basic import *
 import cgum.expression as expression
 
 # Mix-in implemented by all statement types

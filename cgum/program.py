@@ -1,4 +1,4 @@
-from cgum.basic import Node, GenericString, GenericList, Token
+from cgum.basic import *
 from cgum.utility import FNULL
 import cgum.statement as statement
 import cgum.expression as expression
