@@ -50,7 +50,10 @@ class Node(object):
         self.__depth = None
         self.__size = None
         self.__numberStart = None
+        self.__parent = None
 
+    def parent(self):
+        return self.__parent
     def label(self):
         return self.__label
     def pos(self):
@@ -104,6 +107,12 @@ class Node(object):
     # Returns the CGum AST type label for this node
     def typeLabel(self):
         return self.__class__.LABEL
+
+    # Finds the parent of each node and attaches it to its "__parent" attribute.
+    def attach_parent(self, parent=None):
+        self.__parent = parent
+        for c in self.__children:
+            c.attach_parent(self)
 
     # Recursively renumbers all nodes belonging to the sub-tree rooted at this
     # node. Numbers start at zero. Unfortunately necessary, since the CGum AST

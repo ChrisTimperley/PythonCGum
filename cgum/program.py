@@ -147,6 +147,7 @@ class Program(Node):
         print("Finished converting CGum AST from JSON into Python")
         #print("Performing node renumbering...")
         program.renumber()
+        program.attach_parent()
         #print("Finishing node renumbering")
         return program
 
