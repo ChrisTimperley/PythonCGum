@@ -48,22 +48,31 @@ class Move(Action):
         self.__tree_id = tree_id
         self.__position = position
 
+    # Annotates this action by recording the from and to nodes
+    def annotate(self, before, after):
+        self.__moved_from = before.find(self.moved_from_id())
+        self.__moved_to = after.find(self.moved_to_id())
+
     # Returns the node in the before AST
-    def moved_from(self, before, after):
-        return before.find(self.tree_id())
+    def moved_from(self):
+        if self.__moved_from is None:
+            raise Exception("moved_from: action hasn't been annotated")
+        return self.__moved_from
     # Returns the node in the after AST
-    def moved_to(self, before, after):
-        return after.find(self.parent_id()).child(self.__position)
-        #return after.find(self.parent_id()).child(self.__position - 1)
+    def moved_to(self):
+        if self.__moved_to is None:
+            raise Exception("moved_to: action hasn't been annotated")
+        return self.__moved_to
 
-    def tree_id(self):
-        return self.__tree_id
-    def position(self):
-        return self.__position
+    # Returns the ID of the node that was moved in the before AST
+    def moved_from_id(self):
+        return self.__moved_to_id
+    def moved_to_id(self):
+        return self.__moved_from_id
 
-    def __str__(self):
-        return "MOV(%d, %d, %d)" % \
-            (self.tree_id(), self.parent_id(), self.position())
+    #def __str__(self):
+    #    return "MOV(%d, %d, %d)" % \
+    #        (self.tree_id(), self.parent_id(), self.position())
 
 # Doesn't handle insert root
 class Insert(Action):
