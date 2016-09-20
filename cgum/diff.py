@@ -1,4 +1,9 @@
 #!/usr/bin/env
+#
+# TODO:
+# Use mappings to inform construction and to avoid problems in GumTree's diff
+# encodings
+#
 from cgum.utility import *
 import json
 import tempfile
@@ -199,55 +204,6 @@ class Diff(object):
         return self.__moves
     def updates(self):
         return self.__updates
-
-    # Fixes the IDs in the patch, such that a theoretically executable
-    # patch is produced
-    def correct(self):
-        # Separate the edits by type. Deal with deletions and removals first,
-        # then handle inserts, and finally, do nothing with the updates.
-        inserts = []
-        deletions = []
-        removals = []
-        updates = []
-        for action in self.__actions:
-            ({
-                Insert: inserts,
-                Delete: deletions,
-                Remove: removals,
-                Update: updates
-            })[action.__class__].append(action)
-
-        # Create a map, from the original IDs referred to in the program
-        # to their position at the current point of unrolling.
-        id_map = {action.parent_id() for action in self.__actions}
-        id_map = id_map.union({insert.child_id() for insert in inserts})
-        id_map = {pid: pid for pid in id_map}
-
-        # First, correct the deletions by going forward and shifting the IDs
-        # of future edits (after that ID) back by one.
-        for deletion in deletions:
-            at = deletion.parent_id()
-            at = id_map.pop(at)
-            deletion.set_parent_id(at)
-            for (original_id, current_id) in id_map.items():
-                if current_id > at:
-                    id_map[original_id] -= 1
-
-        # HANDLE REMOVALS
-        # SHOULD BE SIMILAR TO THE ABOVE
-
-        # Handle insertions
-        for insert in reversed(inserts):
-            parent = id_map[insert.parent_id()]
-            child = id_map[insert.child_id()]
-            for (original_id, current_id) in id_map.items():
-                if current_id > child:
-                    id_map[original_id] -= 1
-            insert.set_parent_id(parent - 1)
-            insert.set_child_id(child)
-
-        # Put the actions together in the correct order
-        self.__actions = deletions + inserts + updates
 
     def __str__(self):
         return '\n'.join(map(str, self.__actions))
