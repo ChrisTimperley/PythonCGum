@@ -94,12 +94,6 @@ class Insert(Action):
     def inserted(self, before, after):
         return after.find(self.__child_id)
 
-    def correct(self, id_map):
-        post_parent_id = self.parent_id()
-        id_map[post_parent_id] = \
-            self.set_parent_id(id_map[post_parent_id] - 1)
-        return id_map
-
     def child_id(self):
         return self.__child_id
     def set_child_id(self, x):
@@ -121,16 +115,6 @@ class Remove(Action):
     def removed(self, before, after):
         raise NotImplementedError("Look into how removal indices work")
 
-    # To rollback the effects of a Remove operation, we shift all IDs after X
-    # forward by the size of X, simulating an insertion.
-    def correct(self, id_map):
-        parent_id = id_map[self.parent_id()] # we could destructively remove here?
-        SIZE = 1 # TODO: For now we assume the size is 1
-        for (post_id, curr_id) in id_map.items():
-            if curr_id > parent_id:
-                id_map[post_id] += SIZE
-        self.set_parent_id(id_map[post_id])
-
     def __str__(self):
         return "REM(%d)" % self.parent_id()
 
@@ -147,11 +131,6 @@ class Update(Action):
     # original tree)
     def updated(self, before, after):
         before.find(self.parent_id())
-
-    # Update actions have no effect on the IDs of successive edits, but we do
-    # need to fetch the altered ID from the map for this action.
-    def correct(self, id_map):
-        self.set_parent_id(id_map[self.parent_id()])
 
     def label(self):
         return self.__label
