@@ -1,9 +1,4 @@
 #!/usr/bin/env
-#
-# TODO:
-# Use mappings to inform construction and to avoid problems in GumTree's diff
-# encodings
-#
 from cgum.utility import *
 import json
 import tempfile
@@ -122,40 +117,47 @@ class Insert(Action):
         return "INS(%d, %d, %d)" % \
             (self.__inserted_id, self.__parent_id, self.__position)
 
-class Remove(Action):
-    @staticmethod
-    def from_json(jsn):
-        assert not ('at' in jsn)
-        return Remove(jsn['parent'])
-
-    # Returns the node which was removed from the before AST
-    def removed(self, before, after):
-        raise NotImplementedError("Look into how removal indices work")
-
-    def __str__(self):
-        return "REM(%d)" % self.parent_id()
-
 class Update(Action):
     @staticmethod
-    def from_json(jsn):
-        return Update(jsn['tree'], jsn['label'])
+    def from_json_with_mapping(jsn, mapping):
+        after_id = mapping.after(jsn['tree'])        
+        return Update(jsn['tree'], after_id, jsn['label'])
 
-    def __init__(self, parent_id, label):
-        super().__init__(parent_id)
+    def __init__(self, before_id, after_id, label):
+        self.__before_id = before_id
+        self.__after_id = after_id
         self.__label = label
+        self.__before = None
+        self.__after = None
 
-    # Returns the node that was updated by this operation (within the
-    # original tree)
-    def updated(self, before, after):
-        before.find(self.parent_id())
+    # Annotates this action by caching the before and after forms of the node
+    def annotate(self, before, after):
+        self.__inserted = after.find(self.__inserted_id)
+        self.__parent = after.find(self.__parent_id)
 
+    # Returns the node that was the subject of this Update operation, in P
+    def before(self):
+        return self.__before
+    # Returns the node that was the subject of this Update operation, in P'
+    def after(self):
+        return self.__after
+
+    # Returns the ID of the node in P
+    def before_id(self):
+        return self.__before_id
+    # Returns the ID of the node in P'
+    def after_id(self):
+        return self.__after_id
+    # Returns the updated label for this node
     def label(self):
         return self.__label
 
+    # Returns a string description of the operation, in its original GumTree
+    # encoding
     def __str__(self):
-        return "UPD(%d, %s)" % (self.parent_id(), self.label())
+        return "UPD(%d, %s)" % (self.__before_id, self.__label)
 
-class Diff(object):
+class AnnotatedDiff(object):
     @staticmethod
     def from_source_files(fn_from, fn_to):
         tmp_f = tempfile.NamedTemporaryFile()
