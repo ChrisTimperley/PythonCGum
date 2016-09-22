@@ -11,19 +11,19 @@ from subprocess import Popen
 
 class Action(object):
     @staticmethod
-    def from_json(jsn):
+    def from_json_with_mapping(jsn, mapping):
         return ({
             'insert': Insert,
             'remove': Remove,
             'update': Update,
             'move': Move,
             'delete': Delete
-        })[jsn['action']].from_json(jsn)
+        })[jsn['action']].from_json_with_mapping(jsn, mapping)
 
 # Gives the ID of the node in the original tree that was deleted.
 class Delete(Action):
     @staticmethod
-    def from_json(jsn):
+    def from_json_with_mapping(jsn, mapping):
         return Delete(jsn['tree'])
 
     def __init__(self, node_id):
@@ -40,6 +40,7 @@ class Delete(Action):
     def __str__(self):
         return "DEL(%d)" % self.__deleted_id
 
+# This needs correction via mappings
 class Move(Action):
     @staticmethod
     def from_json(jsn):
