@@ -45,7 +45,8 @@ class Move(Action):
     @staticmethod
     def from_json_with_mapping(jsn, mapping):
         from_id = jsn['tree']
-        return Move(from_id, mapping.after(from_id), jsn['parent'], jsn['at'])
+        to_id = mapping.after(from_id)
+        return Move(from_id, to_id, jsn['parent'], jsn['at'])
 
     def __init__(self, from_id, to_id, parent_id, position): 
         self.__from_id = from_id
@@ -82,31 +83,44 @@ class Move(Action):
         return "MOV(%d, %d, %d)" % \
             (self.__from_id, self.__parent_id, self.__position)
 
-# Doesn't handle insert root
+# Doesn't handle insert root?
 class Insert(Action):
     @staticmethod
-    def from_json(jsn):
+    def from_json_with_mapping(jsn, mapping):
         return Insert(jsn['tree'], jsn['parent'], jsn['at'])
 
-    def __init__(self, child_id, parent_id, position):
-        super().__init__(parent_id)
-        self.__child_id = child_id
+    def __init__(self, inserted_id, parent_id, position):
+        self.__inserted_id = inserted_id
+        self.__parent_id = parent_id
         self.__position = position
+        self.__inserted = None
+        self.__parent = None
+
+    # Annotates this action by caching the inserted and parent nodes
+    def annotate(self, before, after):
+        self.__inserted = after.find(self.__inserted_id)
+        self.__parent = after.find(self.__parent_id)
 
     # Returns the node which was inserted into the AST
-    def inserted(self, before, after):
-        return after.find(self.__child_id)
-
-    def child_id(self):
+    def inserted(self):
+        return self.__inserted
+    # Returns the parent of the node that was inserted into the AST
+    def parent(self):
+        return self.__parent
+    
+    # Returns the ID of the node that was inserted into the AST
+    def inserted_id(self):
         return self.__child_id
-    def set_child_id(self, x):
-        self.__child_id = x
+    def parent_id(self):
+        return self.__parent_id
+    # Returns the position that the node was inserted into its parents subtree,
+    # according to GumTree output; flawed.
     def position(self):
         return self.__position
 
     def __str__(self):
         return "INS(%d, %d, %d)" % \
-            (self.child_id(), self.parent_id(), self.position())
+            (self.__inserted_id, self.__parent_id, self.__position)
 
 class Remove(Action):
     @staticmethod
