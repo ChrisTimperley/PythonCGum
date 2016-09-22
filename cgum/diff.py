@@ -40,43 +40,47 @@ class Delete(Action):
     def __str__(self):
         return "DEL(%d)" % self.__deleted_id
 
-# This needs correction via mappings
+# Position parameter is NOT to be trusted
 class Move(Action):
     @staticmethod
-    def from_json(jsn):
-        return Move(jsn['tree'], jsn['parent'], jsn['at'])
+    def from_json_with_mapping(jsn, mapping):
+        from_id = jsn['tree']
+        return Move(from_id, mapping.after(from_id), jsn['parent'], jsn['at'])
 
-    def __init__(self, tree_id, parent_id, position):
-        #assert position > 0
-        super().__init__(parent_id)
-        self.__tree_id = tree_id
+    def __init__(self, from_id, to_id, parent_id, position): 
+        self.__from_id = from_id
+        self.__to_id = to_id
+        self.__parent_id = parent_id
         self.__position = position
+        self.__from = None
+        self.__to = None
 
     # Annotates this action by recording the from and to nodes
     def annotate(self, before, after):
-        self.__moved_from = before.find(self.moved_from_id())
-        self.__moved_to = after.find(self.moved_to_id())
+        self.__from = before.find(self.__from_id)
+        self.__to = after.find(self.__to_id)
 
     # Returns the node in the before AST
     def moved_from(self):
-        if self.__moved_from is None:
+        if self.__from is None:
             raise Exception("moved_from: action hasn't been annotated")
-        return self.__moved_from
+        return self.__from
     # Returns the node in the after AST
     def moved_to(self):
-        if self.__moved_to is None:
+        if self.__to is None:
             raise Exception("moved_to: action hasn't been annotated")
-        return self.__moved_to
+        return self.__to
 
     # Returns the ID of the node that was moved in the before AST
     def moved_from_id(self):
-        return self.__moved_to_id
+        return self.__to_id
     def moved_to_id(self):
-        return self.__moved_from_id
+        return self.__from_id
 
-    #def __str__(self):
-    #    return "MOV(%d, %d, %d)" % \
-    #        (self.tree_id(), self.parent_id(), self.position())
+    # Returns the original (incorrect) GumTree description
+    def __str__(self):
+        return "MOV(%d, %d, %d)" % \
+            (self.__from_id, self.__parent_id, self.__position)
 
 # Doesn't handle insert root
 class Insert(Action):
