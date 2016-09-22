@@ -20,27 +20,25 @@ class Action(object):
             'delete': Delete
         })[jsn['action']].from_json(jsn)
 
-    def __init__(self, parent_id):
-        self.__parent_id = int(parent_id)
-
-    def parent_id(self):
-        return self.__parent_id
-    def set_parent_id(self, x):
-        self.__parent_id = x
-        return x
-
 # Gives the ID of the node in the original tree that was deleted.
 class Delete(Action):
     @staticmethod
     def from_json(jsn):
         return Delete(jsn['tree'])
 
+    def __init__(self, node_id):
+        self.__deleted_id = node_id
+        self.__deleted = None
+
+    def annotate(self, before, after):
+        self.__deleted = before.find(self.__deleted_id)
+
     # Returns the deleted node from the before AST
     def deleted(self, before, after):
-        return before.find(self.parent_id())
+        return before.find(self.__deleted_id)
 
     def __str__(self):
-        return "DEL(%d)" % self.parent_id()
+        return "DEL(%d)" % self.__deleted_id
 
 class Move(Action):
     @staticmethod
