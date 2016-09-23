@@ -4,6 +4,32 @@ import json
 import tempfile
 from subprocess import Popen
 
+class Mappings(object):
+    @staticmethod
+    def from_json(jsn):
+        before_to_after = dict()
+        after_to_before = dict()
+        for m in jsn:
+            src = int(m['src'])
+            dest = int(m['dest'])
+            before_to_after[src] = dest
+            after_to_before[dst] = src
+        return Mappings(before_to_after, after_to_before)
+
+    def __init__(self, before_to_after, after_to_before):
+        self.before_to_after = before_to_after
+        self.after_to_before = after_to_before
+
+    # Given the number of a node in P, returns the number of the matching node
+    # in P', or None if no such match exists.
+    def after(self, num):
+        return self.before_to_after.get(num, None)
+
+    # Given the number of a node in P', returns the number of the matching node
+    # in P, or None if no such match exists.
+    def before(self, num):
+        return self.after_to_before.get(num, None)
+
 class Action(object):
     @staticmethod
     def from_json_with_mapping(jsn, mapping):
@@ -172,9 +198,12 @@ class AnnotatedDiff(object):
 
     @staticmethod
     def from_json(jsn):
-        return Diff([Action.from_json(action) for action in jsn])
+        mappings = Mappings.from_json(jsn['mappings'])
+        actions = \
+            [Action.from_json_with_mappings(a) for a in jsn['actions']]
+        return AnnotatedDiff(actions, mappings)
 
-    def __init__(self, actions):
+    def __init__(self, actions, mappings):
         self.__actions = actions
         self.__insertions = []
         self.__deletions = []
