@@ -189,12 +189,12 @@ class AnnotatedDiff(object):
         tmp_f = tempfile.NamedTemporaryFile()
         assert Popen(("gumtree jsondiff \"%s\" \"%s\"" % (fn_from, fn_to)), \
                      shell=True, stdin=FNULL, stdout=tmp_f).wait() == 0
-        return Diff.from_file(tmp_f.name)
+        return AnnotatedDiff.from_file(tmp_f.name)
 
     @staticmethod
     def from_file(fn):
         with open(fn, 'r') as f:
-            return Diff.from_json(json.load(f))
+            return AnnotatedDiff.from_json(json.load(f))
 
     @staticmethod
     def from_json(jsn):
