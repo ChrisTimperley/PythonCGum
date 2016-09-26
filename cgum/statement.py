@@ -6,7 +6,6 @@ class Statement(object):
     def is_statement(self):
         return True
     def nearestStmt(self):
-        print("hello")
         return self
 
 # TODO: Understand this better
