@@ -242,7 +242,6 @@ class AnnotatedDiff(object):
     # Given a node in P, return the matching node in P', or None if no such
     # match exists.
     def was_is(self, node):
-        print(node.number())
         return self.__after.find(self.__mappings.after(node.number()))
 
     # Given a node in P', return the matching node in P, or None if no such
