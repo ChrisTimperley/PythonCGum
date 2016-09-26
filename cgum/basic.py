@@ -52,6 +52,13 @@ class Node(object):
         self.__numberStart = None
         self.__parent = None
 
+    # Determines whether this node is equivalent to a given node.
+    def equivalent(self, other):
+        if type(self) != type(other) or len(self.__children) != len(other.children()):
+            return False
+        return all([c1.equivalent(c2) for (c1, c2) in \
+                    zip(self.__children, other.children())])
+
     # By default nodes are not statements, unless overridden by another class.
     def is_statement(self):
         return False
