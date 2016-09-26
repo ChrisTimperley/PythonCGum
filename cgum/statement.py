@@ -5,6 +5,8 @@ import cgum.expression as expression
 class Statement(object):
     def is_statement(self):
         return True
+    def nearestStmt(self):
+        return self
 
 # TODO: Understand this better
 class StatementExpression(Node, Statement, expression.Expression):

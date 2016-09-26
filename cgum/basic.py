@@ -92,6 +92,14 @@ class Node(object):
         else:
             return []
 
+    # Returns the nearest statement to this node.
+    # By default, we find the nearest statement to the parent node, if there
+    # is one. If not, None is returned.
+    # Statements implement a different nearestStmt, which returns the statement
+    # in question.
+    def nearestStmt(self):
+        return self.__parent.nearestStmt() if self.__parent else None
+
     # Returns the index of the range that a given node belongs to, or None if
     # it belongs to none of them.
     def __find_helper(self, num, ranges, mn, mx):
