@@ -27,7 +27,7 @@ class DeclarationList(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def declarations(self):
-        return self.__children
+        return self.children()
 
 # A declaration isn't quite a statement, but this is the best place for it,
 # for now.
@@ -42,7 +42,7 @@ class Declaration(Node):
         super().__init__(pos, length, label, children)
 
     def declarations(self):
-        return self.__children[0]
+        return self.child(0)
 
 # Generic definition class
 class Definition(Statement, Node):
@@ -55,7 +55,7 @@ class Definition(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def defined(self):
-        return self.__children[0]
+        return self.child(0)
 
     def to_s(self):
         return self.defined().to_s()
@@ -71,7 +71,7 @@ class Goto(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def destination(self):
-        return self.__children[0]
+        return self.child(0)
 
     def to_s(self):
         return "goto %s" % self.destination()
@@ -102,9 +102,9 @@ class Case(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def expr(self):
-        return self.__children[0]
+        return self.child(0)
     def stmt(self):
-        return self.__children[1]
+        return self.child(1)
 
 class Switch(Statement, Node):
     CODE = "300200"
@@ -117,9 +117,9 @@ class Switch(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def expr(self):
-        return self.__children[0]
+        return self.child(0)
     def block(self):
-        return self.__children[1]
+        return self.child(1)
 
 class Break(Statement, Token):
     CODE = "280002"
@@ -137,7 +137,7 @@ class ExprStatement(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def expr(self):
-        return self.__children[0]
+        return self.children(0)
 
 class DoWhile(Statement, Node):
     CODE = "310200"
@@ -149,9 +149,9 @@ class DoWhile(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def condition(self):
-        return self.__children[1]
+        return self.child(1)
     def do(self):
-        return self.__children[0]
+        return self.child(0)
 
 class While(Statement, Node):
     CODE = "310100"
@@ -163,9 +163,9 @@ class While(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def condition(self):
-        return self.__children[0]
+        return self.child(0)
     def do(self):
-        return self.__children[1]
+        return self.child(1)
 
 class For(Statement, Node):
     CODE = "310300"
@@ -181,13 +181,13 @@ class For(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def initialisation(self):
-        return self.__children[0]
+        return self.child(0)
     def condition(self):
-        return self.__children[1]
+        return self.child(1)
     def after(self):
-        return self.__children[2]
+        return self.child(2)
     def block(self):
-        return self.__children[3]
+        return self.child(3)
 
 class ReturnExpr(Statement, Node):
     CODE = "280200"
@@ -199,7 +199,7 @@ class ReturnExpr(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def expr(self):
-        return self.__children[0]
+        return self.child(0)
 
     def to_s(self):
         return "return %s" % self.__expr.to_s()
@@ -225,15 +225,15 @@ class IfElse(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def condition(self):
-        return self.__children[1]
+        return self.child(1)
     def then(self):
-        return self.__children[2]
+        return self.child(2)
     def els(self):
-        return self.__children[3] if len(children) == 4 else None
+        return self.child(3) if len(self.children()) == 4 else None
 
 class Block(Node):
     CODE = "330000"
     LABEL = "Compound"
 
     def contents(self):
-        return self.__children
+        return self.children()
