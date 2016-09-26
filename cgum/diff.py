@@ -55,8 +55,8 @@ class Delete(Action):
         self.__deleted = before.find(self.__deleted_id)
 
     # Returns the deleted node from the before AST
-    def deleted(self, before, after):
-        return before.find(self.__deleted_id)
+    def deleted(self):
+        return self.__deleted
 
     def __str__(self):
         return "DEL(%d)" % self.__deleted_id
