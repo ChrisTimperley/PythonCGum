@@ -1,5 +1,6 @@
 #!/usr/bin/env
 from cgum.utility import *
+from cgum.program import Program
 import json
 import tempfile
 from subprocess import Popen
@@ -157,8 +158,8 @@ class Update(Action):
 
     # Annotates this action by caching the before and after forms of the node
     def annotate(self, before, after):
-        self.__inserted = after.find(self.__inserted_id)
-        self.__parent = after.find(self.__parent_id)
+        self.__before = before.find(self.__before_id)
+        self.__after = after.find(self.__after_id)
 
     # Returns the node that was the subject of this Update operation, in P
     def before(self):
@@ -188,27 +189,32 @@ class AnnotatedDiff(object):
         tmp_f = tempfile.NamedTemporaryFile()
         assert Popen(("gumtree jsondiff \"%s\" \"%s\"" % (fn_from, fn_to)), \
                      shell=True, stdin=FNULL, stdout=tmp_f).wait() == 0
-        return AnnotatedDiff.from_file(tmp_f.name)
+        return AnnotatedDiff.from_file(tmp_f.name,\
+                                       Program.from_source_file(fn_from),\
+                                       Program.from_source_file(fn_to))
 
     @staticmethod
-    def from_file(fn):
+    def from_file(fn, before, after):
         with open(fn, 'r') as f:
-            return AnnotatedDiff.from_json(json.load(f))
+            return AnnotatedDiff.from_json(json.load(f), before, after)
 
     @staticmethod
-    def from_json(jsn):
+    def from_json(jsn, before, after):
         mappings = Mappings.from_json(jsn['matches'])
         actions = \
             [Action.from_json_with_mappings(a, mappings) for a in jsn['actions']]
-        return AnnotatedDiff(actions, mappings)
+        return AnnotatedDiff(actions, mappings, before, after)
 
-    def __init__(self, actions, mappings):
+    def __init__(self, actions, mappings, before, after):
         self.__actions = actions
         self.__insertions = []
         self.__deletions = []
         self.__updates = []
         self.__moves = []
+
+        # Annotate and group the actions
         for action in self.__actions:
+            action.annotate(before, after)
             ({
                 Insert: self.__insertions,
                 Delete: self.__deletions,
