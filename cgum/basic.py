@@ -137,19 +137,14 @@ class Node(object):
     def typeLabel(self):
         return self.__class__.LABEL
 
-    # Finds the parent of each node and attaches it to its "__parent" attribute.
-    def attach_parent(self, parent=None):
-        self.__parent = parent
-        for c in self.__children:
-            c.attach_parent(self)
-
     # Recursively renumbers all nodes belonging to the sub-tree rooted at this
     # node. Numbers start at zero. Unfortunately necessary, since the CGum AST
     # output doesn't provide node numbers.
-    def renumber(self, num=0):
+    def renumber(self, num=0, parent=None):
         self.__numberStart = num
+        self.__parent = parent
         for c in self.__children:
-            num = c.renumber(num)
+            num = c.renumber(num, self)
         #print("Assigning number %d to %s at %d" % (num, self.typeLabel(), self.__pos))
         self.__number = num
         return num + 1

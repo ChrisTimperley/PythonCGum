@@ -146,7 +146,7 @@ class Insert(Action):
 class Update(Action):
     @staticmethod
     def from_json_with_mappings(jsn, mapping):
-        after_id = mapping.after(jsn['tree'])        
+        after_id = mapping.after(jsn['tree'])
         return Update(jsn['tree'], after_id, jsn['label'])
 
     def __init__(self, before_id, after_id, label):
@@ -207,6 +207,10 @@ class AnnotatedDiff(object):
 
     def __init__(self, actions, mappings, before, after):
         self.__actions = actions
+        self.__mappings = mappings
+        self.__before = before
+        self.__after = after
+
         self.__insertions = []
         self.__deletions = []
         self.__updates = []
@@ -232,6 +236,19 @@ class AnnotatedDiff(object):
         return self.__moves
     def updates(self):
         return self.__updates
+    def mappings(self):
+        return self.__mappings
+
+    # Given a node in P, return the matching node in P', or None if no such
+    # match exists.
+    def was_is(self, node):
+        print(node.number())
+        return self.__after.find(self.__mappings.after(node.number()))
+
+    # Given a node in P', return the matching node in P, or None if no such
+    # match exists.
+    def is_was(self, node):
+        return self.__before.find(self.__mappings.before(node.number()))
 
     def __str__(self):
         return '\n'.join(map(str, self.__actions))
