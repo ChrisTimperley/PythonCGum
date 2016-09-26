@@ -6,10 +6,11 @@ class Statement(object):
     def is_statement(self):
         return True
     def nearestStmt(self):
+        print("hello")
         return self
 
 # TODO: Understand this better
-class StatementExpression(Node, Statement, expression.Expression):
+class StatementExpression(Statement, expression.Expression, Node):
     CODE = "241800"
     LABEL = "StatementExpr"
 
@@ -18,7 +19,7 @@ class StatementExpression(Node, Statement, expression.Expression):
         super().__init__(pos, length, label, children)
 
 # For now, declarations are statements
-class DeclarationList(Node, Statement):
+class DeclarationList(Statement, Node):
     CODE = "350100"
     LABEL = "DeclList"
 
@@ -45,7 +46,7 @@ class Declaration(Node):
         return self.__children[0]
 
 # Generic definition class
-class Definition(Node, Statement):
+class Definition(Statement, Node):
     CODE = "450200"
     LABEL = "Definition"
 
@@ -60,7 +61,7 @@ class Definition(Node, Statement):
     def to_s(self):
         return self.defined().to_s()
 
-class Goto(Node, Statement):
+class Goto(Statement, Node):
     CODE = "280100"
     LABEL = "Goto"
 
@@ -76,7 +77,7 @@ class Goto(Node, Statement):
     def to_s(self):
         return "goto %s" % self.destination()
 
-class Continue(Token, Statement):
+class Continue(Statement, Token):
     CODE = "280001"
     LABEL = "Continue"
 
@@ -84,7 +85,7 @@ class Continue(Token, Statement):
         return "continue"
 
 # Used to specify the default switch case
-class Default(Node, Statement):
+class Default(Statement, Node):
     CODE = "270400"
     LABEL = "Default"
 
@@ -93,7 +94,7 @@ class Default(Node, Statement):
         assert len(children) == 1
         super().__init__(pos, length, label, children)
 
-class Case(Node, Statement):
+class Case(Statement, Node):
     CODE = "270200"
     LABEL = "Case"
 
@@ -106,7 +107,7 @@ class Case(Node, Statement):
     def stmt(self):
         return self.__children[1]
 
-class Switch(Node, Statement):
+class Switch(Statement, Node):
     CODE = "300200"
     LABEL = "Switch"
 
@@ -121,13 +122,13 @@ class Switch(Node, Statement):
     def block(self):
         return self.__children[1]
 
-class Break(Token, Statement):
+class Break(Statement, Token):
     CODE = "280002"
     LABEL = "Break"
     def to_s(self):
         return "break"
 
-class ExprStatement(Node, Statement):
+class ExprStatement(Statement, Node):
     CODE = "260300"
     LABEL = "ExprStatement"
 
@@ -139,7 +140,7 @@ class ExprStatement(Node, Statement):
     def expr(self):
         return self.__children[0]
 
-class DoWhile(Node, Statement):
+class DoWhile(Statement, Node):
     CODE = "310200"
     LABEL = "DoWhile"
 
@@ -153,7 +154,7 @@ class DoWhile(Node, Statement):
     def do(self):
         return self.__children[0]
 
-class While(Node, Statement):
+class While(Statement, Node):
     CODE = "310100"
     LABEL = "While"
 
@@ -167,7 +168,7 @@ class While(Node, Statement):
     def do(self):
         return self.__children[1]
 
-class For(Node, Statement):
+class For(Statement, Node):
     CODE = "310300"
     LABEL = "For"
 
@@ -189,7 +190,7 @@ class For(Node, Statement):
     def block(self):
         return self.__children[3]
 
-class ReturnExpr(Node, Statement):
+class ReturnExpr(Statement, Node):
     CODE = "280200"
     LABEL = "ReturnExpr"
 
@@ -204,7 +205,7 @@ class ReturnExpr(Node, Statement):
     def to_s(self):
         return "return %s" % self.__expr.to_s()
 
-class Return(Token, Statement):
+class Return(Statement, Token):
     CODE = "280003"
     LABEL = "Return"
     def to_s(self):
@@ -215,7 +216,7 @@ class IfToken(Token):
     CODE = "490100"
     LABEL = "IfToken"
 
-class IfElse(Node, Statement):
+class IfElse(Statement, Node):
     CODE = "300100"
     LABEL = "If"
 
