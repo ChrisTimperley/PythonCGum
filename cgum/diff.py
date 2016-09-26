@@ -13,7 +13,7 @@ class Mappings(object):
             src = int(m['src'])
             dest = int(m['dest'])
             before_to_after[src] = dest
-            after_to_before[dst] = src
+            after_to_before[dest] = src
         return Mappings(before_to_after, after_to_before)
 
     def __init__(self, before_to_after, after_to_before):
@@ -32,19 +32,18 @@ class Mappings(object):
 
 class Action(object):
     @staticmethod
-    def from_json_with_mapping(jsn, mapping):
+    def from_json_with_mappings(jsn, mapping):
         return ({
             'insert': Insert,
-            'remove': Remove,
             'update': Update,
             'move': Move,
             'delete': Delete
-        })[jsn['action']].from_json_with_mapping(jsn, mapping)
+        })[jsn['action']].from_json_with_mappings(jsn, mapping)
 
 # Gives the ID of the node in the original tree that was deleted.
 class Delete(Action):
     @staticmethod
-    def from_json_with_mapping(jsn, mapping):
+    def from_json_with_mappings(jsn, mapping):
         return Delete(jsn['tree'])
 
     def __init__(self, node_id):
@@ -64,7 +63,7 @@ class Delete(Action):
 # Position parameter is NOT to be trusted
 class Move(Action):
     @staticmethod
-    def from_json_with_mapping(jsn, mapping):
+    def from_json_with_mappings(jsn, mapping):
         from_id = jsn['tree']
         to_id = mapping.after(from_id)
         return Move(from_id, to_id, jsn['parent'], jsn['at'])
@@ -107,7 +106,7 @@ class Move(Action):
 # Doesn't handle insert root?
 class Insert(Action):
     @staticmethod
-    def from_json_with_mapping(jsn, mapping):
+    def from_json_with_mappings(jsn, mapping):
         return Insert(jsn['tree'], jsn['parent'], jsn['at'])
 
     def __init__(self, inserted_id, parent_id, position):
@@ -145,7 +144,7 @@ class Insert(Action):
 
 class Update(Action):
     @staticmethod
-    def from_json_with_mapping(jsn, mapping):
+    def from_json_with_mappings(jsn, mapping):
         after_id = mapping.after(jsn['tree'])        
         return Update(jsn['tree'], after_id, jsn['label'])
 
@@ -198,23 +197,21 @@ class AnnotatedDiff(object):
 
     @staticmethod
     def from_json(jsn):
-        mappings = Mappings.from_json(jsn['mappings'])
+        mappings = Mappings.from_json(jsn['matches'])
         actions = \
-            [Action.from_json_with_mappings(a) for a in jsn['actions']]
+            [Action.from_json_with_mappings(a, mappings) for a in jsn['actions']]
         return AnnotatedDiff(actions, mappings)
 
     def __init__(self, actions, mappings):
         self.__actions = actions
         self.__insertions = []
         self.__deletions = []
-        self.__removals = []
         self.__updates = []
         self.__moves = []
         for action in self.__actions:
             ({
                 Insert: self.__insertions,
                 Delete: self.__deletions,
-                Remove: self.__removals,
                 Update: self.__updates,
                 Move: self.__moves
             })[action.__class__].append(action)
@@ -225,8 +222,6 @@ class AnnotatedDiff(object):
         return self.__insertions
     def deletions(self):
         return self.__deletions
-    def removals(self):
-        return self.__removals
     def moves(self):
         return self.__moves
     def updates(self):
