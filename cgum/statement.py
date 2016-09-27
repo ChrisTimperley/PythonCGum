@@ -140,7 +140,7 @@ class ExprStatement(Statement, Node):
         super().__init__(pos, length, label, children)
 
     def expr(self):
-        return self.children(0)
+        return self.child(0)
 
 class DoWhile(Statement, Node):
     CODE = "310200"

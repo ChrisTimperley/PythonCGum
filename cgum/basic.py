@@ -188,14 +188,6 @@ class NotParsedCorrectly(Node):
     CODE = "450700"
     LABEL = "NotParsedCorrectly"
 
-# I really have no idea what the point of this node is? Seems to contain nodes
-# whose presence is otherwise optional. In the case those nodes are missing, a
-# None can be found instead.
-# From observation, it only ever seems to contain one item, followed by a ;
-class Some(Node):
-    CODE = "290100"
-    LABEL = "Some"
-
 # Strangely, None can have children
 class NoneNode(Node):
     CODE = "290001"

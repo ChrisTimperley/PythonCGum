@@ -31,9 +31,9 @@ class RecordAccess(Node, Expression):
         super().__init__(pos, length, label, children)
 
     def record(self):
-        return self.__children[0]
+        return self.child(0)
     def member(self):
-        return self.__children[1]
+        return self.child(1)
 
 class ArrayAccess(Node, Expression):
     CODE = "241200"
@@ -44,9 +44,9 @@ class ArrayAccess(Node, Expression):
         super().__init__(pos, length, label, children)
 
     def array(self):
-        return self.__children[0]
+        return self.child(0)
     def index(self):
-        return self.__children[1]
+        return self.child(1)
 
 # Not entirely sure what this is meant to be?
 # It has no children, so either it ignores the type whose size it measures, or
@@ -66,9 +66,9 @@ class Assignment(Expression, Node):
         super().__init__(pos, length, label, children)
 
     def lhs(self):
-        return self.__children[0]
+        return self.child(0)
     def rhs(self):
-        return self.__children[2]
+        return self.child(2)
 
 # This seems to just represent Postfix expressions? This has nothing to do with
 # Infix expression?
@@ -83,9 +83,9 @@ class Infix(Node, Expression):
         super().__init__(pos, length, label, children)
 
     def operand(self):
-        return self.__children[0]
+        return self.child(0)
     def operator(self):
-        return self.__children[1]
+        return self.child(1)
 
 class Postfix(Node, Expression):
     CODE = "240800"
