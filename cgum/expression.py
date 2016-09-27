@@ -98,9 +98,9 @@ class Postfix(Node, Expression):
         super().__init__(pos, length, label, children)
 
     def operand(self):
-        return self.__children[0]
+        return self.child(0)
     def operator(self):
-        return self.__children[1]
+        return self.child(1)
 
 class RecordPtAccess(Node, Expression):
     CODE = "241400"
@@ -113,9 +113,9 @@ class RecordPtAccess(Node, Expression):
         super().__init__(pos, length, label, children)
 
     def expr(self):
-        return self.__children[0]
+        return self.child(0)
     def member(self):
-        return self.__children[1]
+        return self.child(1)
 
 class Identity(Node, Expression):
     CODE = "240100"
@@ -128,7 +128,7 @@ class Identity(Node, Expression):
         super().__init__(pos, length, label, children)
 
     def of(self):
-        return self.__childen[0].read()
+        return self.child(0).read()
     def to_s(self):
         return self.of()
 
@@ -142,7 +142,7 @@ class SizeOfExpr(Node, Expression):
         super().__init__(pos, length, label, children)
 
     def expr(self):
-        return self.__children[0]
+        return self.child(0)
 
 class Constant(Node, Expression):
     CODE = "240200"
