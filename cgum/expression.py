@@ -256,7 +256,7 @@ class Ternary(Node, Expression):
     def els(self):
         return self.__children[2]
 
-class FunctionCall(Node, Expression):
+class FunctionCall(Expression, Node):
     CODE = "240400"
     LABEL = "FunCall"
 
@@ -267,9 +267,9 @@ class FunctionCall(Node, Expression):
         super().__init__(pos, length, label, children)
 
     def function(self):
-        return self.__children[0]
+        return self.child(0)
     def arguments(self): # For now we still go through the GenericList
-        return self.__children[1]
+        return self.child(1)
     def function_name(self):
         return self.function().to_s()
 
