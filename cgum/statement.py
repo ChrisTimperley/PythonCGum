@@ -17,6 +17,9 @@ class StatementExpression(Statement, expression.Expression, Node):
         assert label is None
         super().__init__(pos, length, label, children)
 
+    def expr(self):
+        return self.child(0)
+
 # For now, declarations are statements
 class DeclarationList(Statement, Node):
     CODE = "350100"

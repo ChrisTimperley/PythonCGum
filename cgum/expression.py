@@ -55,7 +55,7 @@ class SizeOfType(Token, Expression):
     CODE = "241600"
     LABEL = "SizeOfType"
 
-class Assignment(Node, Expression):
+class Assignment(Expression, Node):
     CODE = "240700"
     LABEL = "Assignment"
 
@@ -303,7 +303,7 @@ class Some(Node, Expression):
         super().__init__(pos, length, label, children)
 
     def expr(self):
-        return self.__children[0]
+        return self.child(0)
 
 class Unary(Node, Expression):
     CODE = "241000"
@@ -316,9 +316,9 @@ class Unary(Node, Expression):
         super().__init__(pos, length, label, children)
 
     def operand(self):
-        return self.__children[0]
+        return self.child(0)
     def operator(self):
-        return self.__children[1]
+        return self.child(1)
 
 class Binary(Node, Expression):
     CODE = "241100"
