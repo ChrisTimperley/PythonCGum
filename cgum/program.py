@@ -132,14 +132,13 @@ class Program(Node):
     @staticmethod
     def from_source_file(fn):
         tmp_f = tempfile.NamedTemporaryFile()
-        assert Popen(("gumtree parse \"%s\"" % fn), shell=True, \
-                     stdin=FNULL, stdout=tmp_f).wait() == 0
+        Program.parse_to_json_file(fn, tmp_f)
         return Program.from_file(tmp_f.name)
 
     # Parses a JSON CGum AST, stored in a file at a specified location, into an
     # equivalent, Python representation
     @staticmethod
-    def from_file(fn):
+    def from_json_file(fn):
         print("Attempting to read CGum AST from a JSON file: %s" % fn)
         assert os.path.isfile(fn), "file not found"
         with open(fn, 'r') as f:
@@ -154,3 +153,8 @@ class Program(Node):
         assert isinstance(children[-1], FinalDef)
         children.pop()
         super().__init__(pos, length, label, children)
+
+    @staticmethod
+    def parse_to_json_file(src_fn, jsn_fn):
+        assert Popen(("gumtree parse \"%s\"" % src_fn), shell=True, \
+                     stdin=FNULL, stdout=jsn_fn).wait() == 0
