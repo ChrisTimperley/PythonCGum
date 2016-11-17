@@ -133,7 +133,7 @@ class Program(Node):
     def from_source_file(fn):
         tmp_f = tempfile.NamedTemporaryFile()
         Program.parse_to_json_file(fn, tmp_f)
-        return Program.from_file(tmp_f.name)
+        return Program.from_json_file(tmp_f.name)
 
     # Parses a JSON CGum AST, stored in a file at a specified location, into an
     # equivalent, Python representation
