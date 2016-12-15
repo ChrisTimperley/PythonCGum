@@ -226,6 +226,11 @@ class AnnotatedDiff(object):
                 Move: self.__moves
             })[action.__class__].append(action)
 
+    def before(self):
+        return self.__before
+    def after(self):
+        return self.__after
+
     def actions(self):
         return self.__actions
     def insertions(self):
