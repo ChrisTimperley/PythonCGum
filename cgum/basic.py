@@ -24,6 +24,8 @@ class Node(object):
     # Constructs an AST node from a given JSON definition
     @staticmethod
     def from_json(jsn):
+        print("Parsing: %s" % jsn['typeLabel'])
+        print(jsn)
         assert 'type' in jsn, "expected 'type' property in AST node"
         typid = jsn['type']
         try:
@@ -63,13 +65,13 @@ class Node(object):
     def is_statement(self):
         return False
 
-    # Finds all nodes within the sub-tree rooted at this node which satisfy a
+    # Collects all nodes within the sub-tree rooted at this node which satisfy a
     # given predicate (in the form of a lambda expression)
-    def find(self, pred, found=[]):
+    def collect(self, pred, found=[]):
         if pred(self):
             found.append(self)
         for c in self.__children:
-            c.find(pred, found)
+            c.collect(pred, found)
         return found
 
     def parent(self):

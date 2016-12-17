@@ -189,9 +189,19 @@ class AnnotatedDiff(object):
         tmp_f = tempfile.NamedTemporaryFile()
         assert Popen(("gumtree jsondiff \"%s\" \"%s\"" % (fn_from, fn_to)), \
                      shell=True, stdin=FNULL, stdout=tmp_f).wait() == 0
+        try:
+            before = Program.from_source_file(fn_from)
+        except Exception as e:
+            print(type(e))
+            print("cool jelly?")
+            raise
+        print("loaded before")
+        after = Program.from_source_file(fn_to)
+        print("loaded after")
+        print("ran jsondiff")
         return AnnotatedDiff.from_file(tmp_f.name,\
-                                       Program.from_source_file(fn_from),\
-                                       Program.from_source_file(fn_to))
+                                       before,\
+                                       after)
 
     @staticmethod
     def from_file(fn, before, after):
@@ -200,6 +210,7 @@ class AnnotatedDiff(object):
 
     @staticmethod
     def from_json(jsn, before, after):
+        print("running from_json")
         mappings = Mappings.from_json(jsn['matches'])
         actions = \
             [Action.from_json_with_mappings(a, mappings) for a in jsn['actions']]
