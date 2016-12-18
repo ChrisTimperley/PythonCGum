@@ -30,6 +30,18 @@ class OtherDirective(Node):
     def to_s(self):
         return self.directive()
 
+class Define(Node):
+    CODE = "400100"
+    LABEL = "Define"
+
+class DefineFunc(Node):
+    CODE = "410100"
+    LABEL = "DefineFunc"
+
+class DefineExpr(Nide):
+    CODE = "420100"
+    LABEL = "DefineExpr"
+
 class IfDefTop(Node):
     CODE = "450400"
     LABEL = "IfdefTop"
