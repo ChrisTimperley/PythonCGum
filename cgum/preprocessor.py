@@ -42,6 +42,10 @@ class DefineExpr(Node):
     CODE = "420100"
     LABEL = "DefineExpr"
 
+class DefineVar(Node):
+    CODE = "410001"
+    LABEL = "DefineVar"
+
 class IfDefTop(Node):
     CODE = "450400"
     LABEL = "IfdefTop"
