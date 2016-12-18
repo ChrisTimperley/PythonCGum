@@ -46,6 +46,15 @@ class DefineVar(Node):
     CODE = "410001"
     LABEL = "DefineVar"
 
+class DefineEmpty(Node):
+    CODE = "420001"
+    LABEL = "DefineEmpty"
+
+    def __init__(self, pos, length, label, children):
+        assert label is None
+        assert children == []
+        super().__init__(pos, length, label, children)
+
 class IfDefTop(Node):
     CODE = "450400"
     LABEL = "IfdefTop"
