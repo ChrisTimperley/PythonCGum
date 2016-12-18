@@ -38,7 +38,7 @@ class DefineFunc(Node):
     CODE = "410100"
     LABEL = "DefineFunc"
 
-class DefineExpr(Nide):
+class DefineExpr(Node):
     CODE = "420100"
     LABEL = "DefineExpr"
 
