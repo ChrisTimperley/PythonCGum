@@ -178,9 +178,8 @@ class For(Statement, Node):
         assert label is None, "for statement should have no label"
         if len(children) != 4:
             print("UNEXPECTED NUMBER OF CHILDREN IN FOR: %d" % len(children))
+            print(pos)
             print(children)
-            print(children[0].to_s())
-            print(children[1].to_s())
 
         assert len(children) == 4, "for statement should have 4 children"
 
