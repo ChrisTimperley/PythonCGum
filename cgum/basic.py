@@ -1,3 +1,5 @@
+import pprint
+
 # This look-up table, initialised upon the first call to `from_json`, maps CGum
 # AST types to their representative Python classes, using the type ID.
 __CODE_CLASS_LOOKUP = {}
@@ -25,7 +27,7 @@ class Node(object):
     @staticmethod
     def from_json(jsn):
         print("Parsing: %s" % jsn['typeLabel'])
-        print(jsn)
+        pprint.pp(jsn)
         assert 'type' in jsn, "expected 'type' property in AST node"
         typid = jsn['type']
         try:
