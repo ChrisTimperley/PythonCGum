@@ -176,17 +176,7 @@ class For(Statement, Node):
 
     def __init__(self, pos, length, label, children):
         assert label is None, "for statement should have no label"
-        if len(children) != 4:
-            print("UNEXPECTED NUMBER OF CHILDREN IN FOR: %d" % len(children))
-            print(pos)
-            print(children)
-
-        assert len(children) == 4, "for statement should have 4 children"
-
-        #assert isinstance(children[0], ExprStatement)
-        #assert isinstance(children[1], ExprStatement)
-        #assert isinstance(children[2], ExprStatement)
-        #assert isinstance(children[3], Block)
+        assert len(children) in [3,4], "for statement should have between 3 and 4 children (inclusive)"
         super().__init__(pos, length, label, children)
 
     def initialisation(self):
@@ -194,9 +184,13 @@ class For(Statement, Node):
     def condition(self):
         return self.child(1)
     def after(self):
-        return self.child(2)
+        children = self.children()
+        if len(children) == 3:
+            return None
+        else:
+            return self.child(2)
     def block(self):
-        return self.child(3)
+        return self.children()[-1]
 
 class ReturnExpr(Statement, Node):
     CODE = "280200"
