@@ -179,6 +179,8 @@ class For(Statement, Node):
         if len(children) != 4:
             print("UNEXPECTED NUMBER OF CHILDREN IN FOR: %d" % len(children))
             print(children)
+            print(children[0].to_s())
+            print(children[1].to_s())
 
         assert len(children) == 4, "for statement should have 4 children"
 
@@ -245,3 +247,4 @@ class Block(Node):
 
     def contents(self):
         return self.children()
+
