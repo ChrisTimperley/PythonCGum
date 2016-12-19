@@ -175,8 +175,13 @@ class For(Statement, Node):
     LABEL = "For"
 
     def __init__(self, pos, length, label, children):
-        assert label is None
-        assert len(children) == 4
+        assert label is None, "for statement should have no label"
+        if len(children) != 4:
+            print("UNEXPECTED NUMBER OF CHILDREN IN FOR: %d" % len(children))
+            print(children)
+
+        assert len(children) == 4, "for statement should have 4 children"
+
         #assert isinstance(children[0], ExprStatement)
         #assert isinstance(children[1], ExprStatement)
         #assert isinstance(children[2], ExprStatement)
