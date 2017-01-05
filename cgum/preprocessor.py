@@ -34,6 +34,10 @@ class Define(Node):
     CODE = "400100"
     LABEL = "Define"
 
+class DefineStmt(Node):
+    CODE = "420200"
+    LABEL = "DefineStmt"
+
 class DefineFunc(Node):
     CODE = "410100"
     LABEL = "DefineFunc"
