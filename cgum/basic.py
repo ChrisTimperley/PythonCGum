@@ -26,8 +26,6 @@ class Node(object):
     # Constructs an AST node from a given JSON definition
     @staticmethod
     def from_json(jsn):
-        print("Parsing: %s" % jsn['typeLabel'])
-        pprint.pprint(jsn)
         assert 'type' in jsn, "expected 'type' property in AST node"
         typid = jsn['type']
         try:
