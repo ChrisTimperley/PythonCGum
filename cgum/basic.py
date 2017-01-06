@@ -142,6 +142,11 @@ class Node(object):
                                  0, len(self.__children) - 1)
         return self.__children[ind].find(num) if ind >= 0 else None
 
+    def find_all(self, predicate):
+        res = [self] if predicate(self) else []
+        return reduce(lambda r, c: r + self.find_all(predicate, c),\
+                      self.__children, res)
+
     # Returns the node of the function that this node belongs to, or None if it
     # doesn't belong to a function (i.e. it's a top-level statement).
 
