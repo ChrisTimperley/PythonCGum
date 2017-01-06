@@ -1,4 +1,5 @@
 import pprint
+import functools
 
 # This look-up table, initialised upon the first call to `from_json`, maps CGum
 # AST types to their representative Python classes, using the type ID.
@@ -144,8 +145,8 @@ class Node(object):
 
     def find_all(self, predicate):
         res = [self] if predicate(self) else []
-        return reduce(lambda r, c: r + self.find_all(predicate, c),\
-                      self.__children, res)
+        return functools.reduce(lambda r, c: r + self.find_all(predicate, c),\
+                                self.__children, res)
 
     # Returns the node of the function that this node belongs to, or None if it
     # doesn't belong to a function (i.e. it's a top-level statement).
