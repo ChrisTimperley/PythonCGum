@@ -34,6 +34,10 @@ class Undef(Node):
     CODE = "410002"
     LABEL = "Undef"
 
+class ActMisc(Node):
+    CODE = "30100"
+    LABEL = "ActMisc"
+
 class Define(Node):
     CODE = "400100"
     LABEL = "Define"
@@ -41,6 +45,10 @@ class Define(Node):
 class DefineMulti(Node):
     CODE = "420700"
     LABEL = "DefineMulti"
+
+class DefineType(Node):
+    CODE = "420300"
+    LABEL = "DefineType"
 
 class DefineStmt(Node):
     CODE = "420200"
