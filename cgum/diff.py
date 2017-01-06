@@ -258,11 +258,13 @@ class AnnotatedDiff(object):
     # Given a node in P, return the matching node in P', or None if no such
     # match exists.
     def was_is(self, node):
+        assert not node is None, "was_is: provided node must not be null"
         return self.__after.find(self.__mappings.after(node.number()))
 
     # Given a node in P', return the matching node in P, or None if no such
     # match exists.
     def is_was(self, node):
+        assert not node is None, "is_was: provided node must not be null"
         return self.__before.find(self.__mappings.before(node.number()))
 
     def __str__(self):
