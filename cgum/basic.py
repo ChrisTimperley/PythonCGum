@@ -145,7 +145,7 @@ class Node(object):
 
     def find_all(self, predicate):
         res = [self] if predicate(self) else []
-        return functools.reduce(lambda r, c: r + self.find_all(c, predicate),\
+        return functools.reduce(lambda r, c: r + c.find_all(predicate),\
                                 self.__children, res)
 
     # Returns the node of the function that this node belongs to, or None if it
