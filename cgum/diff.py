@@ -263,7 +263,11 @@ class AnnotatedDiff(object):
         was_num = node.number()
         is_num = self.__mappings.after(was_num)
         print("Node ID in P: %d" % was_num)
-        print("Node ID in P': %d" % is_num)
+
+        if is_num is None:
+            print("Node not present in P'")
+        else:
+            print("Node ID in P': %d" % is_num)
 
         return self.__after.find(is_num)
 
@@ -275,7 +279,11 @@ class AnnotatedDiff(object):
         is_num = node.number()
         was_num = self.__mappings.before(is_num)
         print("Node ID in P': %d" % is_num)
-        print("Node ID in P: %d" % was_num)
+
+        if was_num is None:
+            print("Node not present in P'")
+        else:
+            print("Node ID in P: %d" % was_num)
 
         return self.__before.find(was_num)
 
