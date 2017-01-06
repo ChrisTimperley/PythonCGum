@@ -132,8 +132,9 @@ class Node(object):
         else:
             return pivot
 
-    # Finds a node with a given number within the sub-tree rooted at this node
+    # Finds a node with a given number within the sub-tree rooted at this node.
     def find(self, num):
+        assert not num is None, "find: num must not be None"
         if self.__number == num:
             return self
         ind = self.__find_helper(num,\
