@@ -8,6 +8,9 @@ class Statement(object):
     def nearestStmt(self):
         return self
 
+class Loop(object):
+    pass
+
 # TODO: Understand this better
 class StatementExpression(Statement, expression.Expression, Node):
     CODE = "241800"
@@ -142,7 +145,7 @@ class ExprStatement(Statement, Node):
     def expr(self):
         return self.child(0)
 
-class DoWhile(Statement, Node):
+class DoWhile(Loop, Statement, Node):
     CODE = "310200"
     LABEL = "DoWhile"
 
@@ -156,7 +159,7 @@ class DoWhile(Statement, Node):
     def do(self):
         return self.child(0)
 
-class While(Statement, Node):
+class While(Loop, Statement, Node):
     CODE = "310100"
     LABEL = "While"
 
@@ -170,7 +173,7 @@ class While(Statement, Node):
     def do(self):
         return self.child(1)
 
-class For(Statement, Node):
+class For(Loop, Statement, Node):
     CODE = "310300"
     LABEL = "For"
 
