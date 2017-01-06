@@ -266,10 +266,10 @@ class AnnotatedDiff(object):
 
         if is_num is None:
             print("Node not present in P'")
+            return None
         else:
             print("Node ID in P': %d" % is_num)
-
-        return self.__after.find(is_num)
+            return self.__after.find(is_num)
 
     # Given a node in P', return the matching node in P, or None if no such
     # match exists.
@@ -282,10 +282,10 @@ class AnnotatedDiff(object):
 
         if was_num is None:
             print("Node not present in P'")
+            return None
         else:
             print("Node ID in P: %d" % was_num)
-
-        return self.__before.find(was_num)
+            return self.__before.find(was_num)
 
     def __str__(self):
         return '\n'.join(map(str, self.__actions))
