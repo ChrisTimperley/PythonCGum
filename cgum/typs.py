@@ -71,6 +71,10 @@ class CDouble(Token):
     CODE = "110002"
     LABEL = "CDouble"
 
+class CLong(Token):
+    CODE = "100004"
+    LABEL = "CLong"
+
 class CLongLong(Token):
     CODE = "100005"
     LABEL = "CLongLong"

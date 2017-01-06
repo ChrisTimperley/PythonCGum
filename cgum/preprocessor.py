@@ -30,9 +30,17 @@ class OtherDirective(Node):
     def to_s(self):
         return self.directive()
 
+class Undef(Node):
+    CODE = "410002"
+    LABEL = "Undef"
+
 class Define(Node):
     CODE = "400100"
     LABEL = "Define"
+
+class DefineMulti(Node):
+    CODE = "420700"
+    LABEL = "DefineMulti"
 
 class DefineStmt(Node):
     CODE = "420200"
