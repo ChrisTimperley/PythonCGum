@@ -68,11 +68,10 @@ class Node(object):
 
     # Collects all nodes within the sub-tree rooted at this node which satisfy a
     # given predicate (in the form of a lambda expression)
-    def collect(self, pred, found=[]):
-        if pred(self):
-            found.append(self)
+    def collect(self, pred):
+        found = [self] if pred(self) else []
         for c in self.__children:
-            c.collect(pred, found)
+            found += c.collect(pred)
         return found
 
     def parent(self):
