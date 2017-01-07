@@ -156,7 +156,7 @@ class DoWhile(Loop, Statement, Node):
 
     def condition(self):
         return self.child(1)
-    def do(self):
+    def body(self):
         return self.child(0)
 
 class While(Loop, Statement, Node):
@@ -170,7 +170,7 @@ class While(Loop, Statement, Node):
 
     def condition(self):
         return self.child(0)
-    def do(self):
+    def body(self):
         return self.child(1)
 
 class For(Loop, Statement, Node):
@@ -192,7 +192,7 @@ class For(Loop, Statement, Node):
             return None
         else:
             return self.child(2)
-    def block(self):
+    def body(self):
         return self.children()[-1]
 
 class ReturnExpr(Statement, Node):
