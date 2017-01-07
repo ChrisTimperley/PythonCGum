@@ -233,9 +233,7 @@ class IfElse(Statement, Node):
     def condition(self):
         return self.child(1)
     def then(self):
-        t = self.child(2)
-        t = t.contents() if isinstance(t, Block) else t
-        return t
+        return self.child(2)
     def els(self):
         return self.child(3) if len(self.children()) == 4 else None
 
@@ -245,4 +243,3 @@ class Block(Node):
 
     def contents(self):
         return self.children()
-
