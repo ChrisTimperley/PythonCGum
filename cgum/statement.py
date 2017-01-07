@@ -30,10 +30,16 @@ class DeclarationList(Statement, Node):
 
     def __init__(self, pos, length, label, children):
         assert label is None
-        super().__init__(pos, length, label, children)
+        assert len(children) > 0, "DeclarationList must not be empty"
+        assert len(children) % 2 == 0, "DeclarationList must contain an even number of children"
 
-    def declarations(self):
-        return self.children()
+        for i in range(len(children) / 2):
+            lhs = children[i * 2]
+            rhs = children[i * 2 + 1]
+            assert isinstance(lhs, GenericString), "First element of each pair in DeclarationList must be a GenericString"
+            assert isinstance(rhs, expression.InitExpr), "Second element of each pair in DeclarationList must be an InitExpr"
+
+        super().__init__(pos, length, label, children)
 
 # A declaration isn't quite a statement, but this is the best place for it,
 # for now.
