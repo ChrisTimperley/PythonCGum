@@ -192,13 +192,8 @@ class AnnotatedDiff(object):
         try:
             before = Program.from_source_file(fn_from)
         except Exception as e:
-            print(type(e))
-            print("cool jelly?")
             raise
-        print("loaded before")
         after = Program.from_source_file(fn_to)
-        print("loaded after")
-        print("ran jsondiff")
         return AnnotatedDiff.from_file(tmp_f.name,\
                                        before,\
                                        after)
@@ -210,7 +205,6 @@ class AnnotatedDiff(object):
 
     @staticmethod
     def from_json(jsn, before, after):
-        print("running from_json")
         mappings = Mappings.from_json(jsn['matches'])
         actions = \
             [Action.from_json_with_mappings(a, mappings) for a in jsn['actions']]
