@@ -189,7 +189,7 @@ class GenericList(Node):
     LABEL = "GenericList"
 
     def contents(self):
-        return self.__children
+        return self.children()
     def __len__(self):
         return len(self.children())
 
