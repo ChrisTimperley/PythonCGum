@@ -98,7 +98,7 @@ class Node(object):
     # Returns a list of all the descendants of this node, in order from nearest
     # to furthest.
     def descendants(self):
-        return reduce(lambda d, c: d + [c] + c.descendants,\
+        return functools.reduce(lambda d, c: d + [c] + c.descendants,\
                       self.__children,\
                       [])
 
