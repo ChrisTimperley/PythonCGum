@@ -238,7 +238,7 @@ class InitExpr(Node, Expression):
     def __init__(self, pos, length, label, children):
         assert label is None
         assert len(children) == 1, "InitExpr must have only one child"
-        assert isinstance(children[0], cgum.expression.Binary), "InitExpr's only child must be a Binary"
+        assert isinstance(children[0], Binary), "InitExpr's only child must be a Binary"
         super().__init__(pos, length, label, children)
 
     def lhs(self):
