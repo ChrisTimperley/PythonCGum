@@ -191,7 +191,7 @@ class GenericList(Node):
     def contents(self):
         return self.__children
     def __len__(self):
-        return len(self.__children)
+        return len(self.children())
 
 class GenericString(Node):
     CODE = "480000"
