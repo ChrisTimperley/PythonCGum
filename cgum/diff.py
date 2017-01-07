@@ -249,6 +249,14 @@ class AnnotatedDiff(object):
     def mappings(self):
         return self.__mappings
 
+    # checks whether a given node in P' was moved to that location
+    def was_moved_to(self, to):
+        return any([to == move.moved_to() in self.moves()])
+
+    # checks whether a given node in P was moved to another location
+    def was_moved_from(self, frm):
+        return any([frm == move.moved_from() in self.moves()])
+
     # Given a node in P, return the matching node in P', or None if no such
     # match exists.
     def was_is(self, node):
