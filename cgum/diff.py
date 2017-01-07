@@ -263,15 +263,11 @@ class AnnotatedDiff(object):
         assert not node is None, "was_is: provided node must not be null"
 
         was_num = node.number()
-
-        print("Node (%s) has number: %d" % (node, was_num))
         is_num = self.__mappings.after(was_num)
 
         if is_num is None:
-            print("Node (%s) with number %d maps to: nothing!" % (node, was_num))
             return None
         else:
-            print("Node (%s) with number %d maps to: %d" % (node, was_num, is_num))
             return self.__after.find(is_num)
 
     # Given a node in P', return the matching node in P, or None if no such
