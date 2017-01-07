@@ -41,6 +41,11 @@ class DeclarationList(Statement, Node):
 
         super().__init__(pos, length, label, children)
 
+    def declarations(self):
+        children = self.children()
+        for i in range(0, len(children), 2):
+            yield children[i:i+2]
+
 # A declaration isn't quite a statement, but this is the best place for it,
 # for now.
 class Declaration(Node):
