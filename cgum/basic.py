@@ -54,6 +54,7 @@ class Node(object):
         self.__size = None
         self.__numberStart = None
         self.__parent = None
+        self.__hash = None
 
     # Determines whether this node is equivalent to a given node.
     def equivalent(self, other):
@@ -73,6 +74,19 @@ class Node(object):
         for c in self.__children:
             found += c.collect(pred)
         return found
+
+    # Generates a hash for this node, based on its type, label, and the hashes
+    # of its children. Used for cheap equivalency checking.
+    def __hash__(self):
+        if self.__hash is None:
+            h_a = hash(tuple(hash(c) for c in self.__children))
+            h_b = hash(self.__class__.__name__)
+            if self.__label is None:
+                h = (h_a, h_b)
+            else:
+                h = (h_a, h_b, self.__label)
+            self.__hash = hash(h)
+        return self.__hash
 
     def parent(self):
         return self.__parent
