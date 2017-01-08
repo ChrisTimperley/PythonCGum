@@ -155,6 +155,6 @@ class Program(Node):
         super().__init__(pos, length, label, children)
 
     @staticmethod
-    def parse_to_json_file(src_fn, jsn_fn):
+    def parse_to_json_file(src_fn, jsn_f):
         assert Popen(("gumtree parse \"%s\"" % src_fn), shell=True, \
-                     stdin=FNULL, stdout=jsn_fn).wait() == 0
+                     stdin=FNULL, stdout=jsn_f).wait() == 0
