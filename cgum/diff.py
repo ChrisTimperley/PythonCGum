@@ -187,16 +187,17 @@ class AnnotatedDiff(object):
     @staticmethod
     def from_source_files(fn_from, fn_to):
         tmp_f = tempfile.NamedTemporaryFile()
-        assert Popen(("gumtree jsondiff \"%s\" \"%s\"" % (fn_from, fn_to)), \
-                     shell=True, stdin=FNULL, stdout=tmp_f).wait() == 0
-        try:
-            before = Program.from_source_file(fn_from)
-        except Exception as e:
-            raise
+        AnnotatedDiff.parse_to_json_file(fn_frm, fn_to, tmp_f)
+        before = Program.from_source_file(fn_from)
         after = Program.from_source_file(fn_to)
         return AnnotatedDiff.from_file(tmp_f.name,\
                                        before,\
                                        after)
+
+    @staticmethod
+    def parse_to_json_file(fn_from, fn_to, jsn_fn):
+        assert Popen(("gumtree jsondiff \"%s\" \"%s\"" % (fn_from, fn_to)), \
+                     shell=True, stdin=FNULL, stdout=jsn_fn).wait() == 0
 
     @staticmethod
     def from_file(fn, before, after):
