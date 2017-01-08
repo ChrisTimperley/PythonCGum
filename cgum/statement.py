@@ -30,7 +30,7 @@ class DeclarationList(Statement, Node):
 
     def __init__(self, pos, length, label, children):
         assert label is None
-        assert len(children) > 0, "DeclarationList must not be empty"
+        #assert len(children) > 0, "DeclarationList must not be empty"
         #assert len(children) % 2 == 0, "DeclarationList must contain an even number of children"
 
         #for i in range(len(children) // 2):
