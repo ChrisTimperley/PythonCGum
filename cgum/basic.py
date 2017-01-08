@@ -95,6 +95,16 @@ class Node(object):
     def child(self, i):
         return self.__children[i]
 
+    # Returns the index of a given child of this node.
+    # If the given node is not a child of this node, returns None.
+    # Throws an assertion error if the child is None.
+    def index_of_child(self, child):
+        assert not child is None, "indexOfChild: child must not be None"
+        for (i, c) in enumerate(self.children()):
+            if c == child:
+                return i
+        return None
+
     # Returns a list of all the descendants of this node, in order from nearest
     # to furthest.
     def descendants(self):
