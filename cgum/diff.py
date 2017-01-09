@@ -187,7 +187,7 @@ class AnnotatedDiff(object):
     @staticmethod
     def from_source_files(fn_from, fn_to):
         tmp_f = tempfile.NamedTemporaryFile()
-        AnnotatedDiff.parse_to_json_file(fn_frm, fn_to, tmp_f)
+        AnnotatedDiff.parse_to_json_file(fn_from, fn_to, tmp_f)
         before = Program.from_source_file(fn_from)
         after = Program.from_source_file(fn_to)
         return AnnotatedDiff.from_file(tmp_f.name,\
