@@ -139,11 +139,11 @@ class Program(Node):
     # equivalent, Python representation
     @staticmethod
     def from_json_file(fn):
-        print("Attempting to read CGum AST from a JSON file: %s" % fn)
+        #print("Attempting to read CGum AST from a JSON file: %s" % fn)
         assert os.path.isfile(fn), "file not found"
         with open(fn, 'r') as f:
             program = Node.from_json(json.load(f)['root'])
-        print("Finished converting CGum AST from JSON into Python")
+        #print("Finished converting CGum AST from JSON into Python")
         program.renumber()
         return program
 
