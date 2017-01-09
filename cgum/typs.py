@@ -49,7 +49,7 @@ class Si(Node):
 
     def __init__(self, pos, length, label, children):
         assert label is None
-        assert len(children) == 1
+        #assert len(children) == 1
         super().__init__(pos, length, label, children)
 
     def typ(self):
