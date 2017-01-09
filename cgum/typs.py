@@ -55,11 +55,11 @@ class Si(Node):
     def typ(self):
         return self.__children[0]
 
-class EnumName(Token):
+class EnumName(Node):
     CODE = "60800"
     LABEL = "EnumName"
 
-class UnSigned(Token):
+class UnSigned(Node):
     CODE = "90002"
     LABEL ="UnSigned"
 
