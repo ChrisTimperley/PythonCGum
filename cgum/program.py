@@ -5,7 +5,7 @@ import cgum.expression as expression
 import cgum.preprocessor as preprocessor
 import cgum.typs as typs
 
-from subprocess import Popen
+from subprocess import Popen, CalledProcessError
 import os.path
 import json
 import tempfile
@@ -156,5 +156,18 @@ class Program(Node):
 
     @staticmethod
     def parse_to_json_file(src_fn, jsn_f):
-        assert Popen(("gumtree parse \"%s\"" % src_fn), shell=True, \
-                     stdin=FNULL, stdout=jsn_f).wait() == 0
+        with tempfile.TemporaryFile() as f_err:
+            cmd = "gumtree parse \"%s\"" % src_fn
+            p = Popen(cmd, shell=True, stdin=FNULL, stdout=jsn_f, stderr=f_err)
+
+            # read the contents of the standard error
+            f_err.seek(0)
+            err = f_err.read()
+
+            # ensure the exit status was zero
+            if p.wait() == 0:
+                raise Exception("ERROR [PyCGum/parse_to_json_file]: unexpected exit code - %s" % error)
+            # run-time exceptions can occur whilst still returning an exit status
+            # of zero
+            elif err.startswith("java.lang.RuntimeException:"):
+                raise Exception("ERROR [PyCGum/parse_to_json_file]: %s" % err)
