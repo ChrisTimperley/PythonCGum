@@ -159,15 +159,14 @@ class Program(Node):
         with tempfile.TemporaryFile() as f_err:
             cmd = "gumtree parse \"%s\"" % src_fn
             p = Popen(cmd, shell=True, stdin=FNULL, stdout=jsn_f, stderr=f_err)
+            code = p.wait()
 
             # read the contents of the standard error
             f_err.seek(0)
-            err = str(f_err.read())
-
-            print(err)
+            err = str(f_err.read())[2:-1]
 
             # ensure the exit status was zero
-            if p.wait() != 0:
+            if code != 0:
                 raise Exception("ERROR [PyCGum/parse_to_json_file]: unexpected exit code - %s" % error)
             # run-time exceptions can occur whilst still returning an exit status
             # of zero
