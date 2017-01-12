@@ -23,6 +23,10 @@ class MacroStmt(Node):
     CODE = "260001"
     LABEL = "MacroStmt"
 
+class EmptyDef(Node):
+    CODE = "450600"
+    LABEL = "EmptyDef"
+
 class OtherDirective(Node):
     CODE = "400400"
     LABEL = "OtherDirective"
