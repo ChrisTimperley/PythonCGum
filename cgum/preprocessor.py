@@ -19,6 +19,10 @@ class MacroDecl(Node):
     CODE = "350200"
     LABEL = "MacroDecl"
 
+class MacroStmt(Node):
+    CODE = "260001"
+    LABEL = "MacroStmt"
+
 class OtherDirective(Node):
     CODE = "400400"
     LABEL = "OtherDirective"
