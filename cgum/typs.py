@@ -75,6 +75,10 @@ class CInt(Token):
     CODE = "100003"
     LABEL = "CInt"
 
+class CFloat(Token):
+    CODE = "110001"
+    LABEL = "CFloat"
+
 class CDouble(Token):
     CODE = "110002"
     LABEL = "CDouble"
