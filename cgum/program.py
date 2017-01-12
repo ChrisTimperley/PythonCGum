@@ -162,7 +162,9 @@ class Program(Node):
 
             # read the contents of the standard error
             f_err.seek(0)
-            err = f_err.read()
+            err = str(f_err.read())
+
+            print(err)
 
             # ensure the exit status was zero
             if p.wait() != 0:
