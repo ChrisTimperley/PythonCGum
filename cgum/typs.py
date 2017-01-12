@@ -4,6 +4,10 @@ class DotsParameter(Token):
     CODE = "210000"
     LABEL = "DotsParameter"
 
+class StructUnion(Node):
+    CODE = "60700"
+    LABEL = "StructUnion"
+
 class StructUnionName(Node):
     CODE = "60900"
     LABEL = "StructUnionName"
