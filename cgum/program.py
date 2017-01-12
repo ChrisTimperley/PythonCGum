@@ -165,7 +165,7 @@ class Program(Node):
             err = f_err.read()
 
             # ensure the exit status was zero
-            if p.wait() == 0:
+            if p.wait() != 0:
                 raise Exception("ERROR [PyCGum/parse_to_json_file]: unexpected exit code - %s" % error)
             # run-time exceptions can occur whilst still returning an exit status
             # of zero
