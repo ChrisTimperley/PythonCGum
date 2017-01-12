@@ -23,6 +23,10 @@ class MacroStmt(Node):
     CODE = "260001"
     LABEL = "MacroStmt"
 
+class MacroIteration(Node):
+    CODE = "310400"
+    LABEL = "MacroIteration"
+
 class EmptyDef(Node):
     CODE = "450600"
     LABEL = "EmptyDef"
