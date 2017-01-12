@@ -15,6 +15,10 @@ class PreprocessorStatement(Node):
     def to_s(self):
         return self.statement().to_s()
 
+class MacroDecl(Node):
+    CODE = "350200"
+    LABEL = "MacroDecl"
+
 class OtherDirective(Node):
     CODE = "400400"
     LABEL = "OtherDirective"
