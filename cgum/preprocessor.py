@@ -55,6 +55,10 @@ class OtherDirective(Node):
     def to_s(self):
         return self.directive()
 
+class DefineInit(Node):
+    CODE = "420600"
+    LABEL = "DefineInit"
+
 # TODO: wtf is this?
 class DefineDoWhileZero(Node):
     CODE = "420400"

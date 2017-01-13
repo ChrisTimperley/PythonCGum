@@ -8,6 +8,10 @@ class Union(Node):
     CODE = "120002"
     LABEL = "Union"
 
+class StructType(Node):
+    CODE = "130000"
+    LABEL = "StructType"
+
 class StructUnion(Node):
     CODE = "60700"
     LABEL = "StructUnion"
