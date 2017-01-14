@@ -88,6 +88,13 @@ class Node(object):
             self.__hash = hash(h)
         return self.__hash
 
+    # Returns a copy of the AST sub-tree rooted at this node with its variable
+    # labels replaced by placeholders
+    def strip_labels(self):
+        cp = self.copy()
+        cp.__children = [child.strip_labels() for child in cp.children()]
+        return cp
+
     def parent(self):
         return self.__parent
     def label(self):
