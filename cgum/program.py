@@ -9,6 +9,7 @@ from subprocess import Popen, CalledProcessError
 import os.path
 import json
 import tempfile
+import codecs
 
 # TODO: Probe
 class Asm(Node):
@@ -141,7 +142,7 @@ class Program(Node):
     def from_json_file(fn):
         #print("Attempting to read CGum AST from a JSON file: %s" % fn)
         assert os.path.isfile(fn), "file not found"
-        with open(fn, 'r') as f:
+        with codecs.open(fn, 'r', 'utf-8') as f:
             program = Node.from_json(json.load(f)['root'])
         #print("Finished converting CGum AST from JSON into Python")
         program.renumber()

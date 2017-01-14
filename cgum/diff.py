@@ -1,6 +1,7 @@
 #!/usr/bin/env
 from cgum.utility import *
 from cgum.program import Program
+import codecs
 import json
 import tempfile
 from subprocess import Popen
@@ -201,7 +202,7 @@ class AnnotatedDiff(object):
 
     @staticmethod
     def from_file(fn, before, after):
-        with open(fn, 'r') as f:
+        with codecs.open(fn, 'r', 'utf-8') as f:
             return AnnotatedDiff.from_json(json.load(f), before, after)
 
     @staticmethod
