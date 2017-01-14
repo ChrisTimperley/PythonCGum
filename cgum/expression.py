@@ -190,6 +190,15 @@ class InitList(Node, Expression):
     def contents(self):
         return self.__children
 
+# TODO: what is a designator?
+class DesignatorRange(Node, Expression):
+    CODE = "370300"
+    LABEL = "DesignatorRange"
+
+class DesignatorIndex(Node, Expression):
+    CODE = "370200"
+    LABEL = "DesignatorIndex"
+
 class DesignatorField(Node, Expression):
     CODE = "370100"
     LABEL = "DesignatorField"
@@ -211,7 +220,8 @@ class InitDesignators(Node, Expression):
     def __init__(self, pos, length, label, children):
         assert label is None
         assert len(children) == 2
-        assert isinstance(children[0], DesignatorField)
+        assert  isinstance(children[0], DesignatorField) or \
+                isinstance(children[0], DesignatorIndex)
         super().__init__(pos, length, label, children)
 
     def field(self):

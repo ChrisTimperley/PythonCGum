@@ -15,15 +15,6 @@ class PreprocessorStatement(Node):
     def to_s(self):
         return self.statement().to_s()
 
-# TODO: what is a designator?
-class DesignatorRange(Node):
-    CODE = "370300"
-    LABEL = "DesignatorRange"
-
-class DesignatorIndex(Node):
-    CODE = "370200"
-    LABEL = "DesignatorIndex"
-
 class MacroDecl(Node):
     CODE = "350200"
     LABEL = "MacroDecl"
