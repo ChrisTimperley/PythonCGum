@@ -1,4 +1,5 @@
 import pprint
+import copy
 import functools
 
 # This look-up table, initialised upon the first call to `from_json`, maps CGum
@@ -91,7 +92,7 @@ class Node(object):
     # Returns a copy of the AST sub-tree rooted at this node with its variable
     # names replaced by placeholders
     def strip_variable_names(self):
-        cp = self.copy()
+        cp = copy.copy(self)
         cp.__children = [child.strip_variable_names() for child in cp.children()]
         return cp
 
