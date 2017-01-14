@@ -67,6 +67,8 @@ class Assignment(Expression, Node):
 
     def lhs(self):
         return self.child(0)
+    def op(self):
+        return self.child(1)
     def rhs(self):
         return self.child(2)
 
