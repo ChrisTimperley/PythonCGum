@@ -89,10 +89,10 @@ class Node(object):
         return self.__hash
 
     # Returns a copy of the AST sub-tree rooted at this node with its variable
-    # labels replaced by placeholders
-    def strip_labels(self):
+    # names replaced by placeholders
+    def strip_variable_names(self):
         cp = self.copy()
-        cp.__children = [child.strip_labels() for child in cp.children()]
+        cp.__children = [child.strip_variable_names() for child in cp.children()]
         return cp
 
     def parent(self):
@@ -115,6 +115,9 @@ class Node(object):
         return self.__depth
     def child(self, i):
         return self.__children[i]
+
+    def set_label(self, label):
+        self.__label = label
 
     # Returns the index of a given child of this node.
     # If the given node is not a child of this node, returns None.
