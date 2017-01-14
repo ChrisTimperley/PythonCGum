@@ -169,13 +169,8 @@ class Cast(Node, Expression):
 
     def __init__(self, pos, length, label, children):
         assert label is None
-        assert len(children) == 1
+#        assert len(children) == 1
         super().__init__(pos, length, label, children)
-
-    def expr(self):
-        return self.__children[0]
-    def to_s(self):
-        return "(UNKNOWN_TYPE) %s" % self.expr().to_s()
 
 class InitList(Node, Expression):
     CODE = "360200"
