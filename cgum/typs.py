@@ -83,6 +83,10 @@ class CChar(Token):
     CODE = "80001"
     LABEL = "CChar"
 
+class CShort(Token):
+    CODE = "100002"
+    LABEL = "CShort"
+
 class CInt(Token):
     CODE = "100003"
     LABEL = "CInt"
