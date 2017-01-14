@@ -178,7 +178,7 @@ class InitList(Node, Expression):
 
     def __init__(self, pos, length, label, children):
         assert label is None
-        assert len(children) > 0
+        #assert len(children) > 0
         #assert all(isinstance(c, InitExpr) for c in children)
         super().__init__(pos, length, label, children)
 
