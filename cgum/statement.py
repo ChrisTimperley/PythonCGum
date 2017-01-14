@@ -55,12 +55,7 @@ class Declaration(Node):
 
     def __init__(self, pos, length, label, children):
         assert label is None
-        assert len(children) == 1
-        assert isinstance(children[0], DeclarationList)
         super().__init__(pos, length, label, children)
-
-    def declarations(self):
-        return self.child(0)
 
 # Generic definition class
 class Definition(Statement, Node):
