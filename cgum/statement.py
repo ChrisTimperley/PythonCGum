@@ -9,7 +9,8 @@ class Statement(object):
         return self
 
 class Loop(object):
-    pass
+    def condition(self):
+        raise NotImplementedError
 
 # TODO: Understand this better
 class StatementExpression(Statement, expression.Expression, Node):
