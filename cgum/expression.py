@@ -135,7 +135,7 @@ class Identity(Node, Expression):
     def strip_variable_names(self):
         cp = super().strip_variable_names()
         cp.child(0).set_label("x")
-        return child
+        return cp
 
 class SizeOfExpr(Node, Expression):
     CODE = "241500"
