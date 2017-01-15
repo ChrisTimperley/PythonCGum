@@ -1,4 +1,5 @@
 from cgum.basic import *
+from pprint import pprint
 
 class Expression(object):
     def is_expression(self):
@@ -257,6 +258,10 @@ class Ternary(Node, Expression):
     LABEL = "CondExpr"
 
     def __init__(self, pos, length, label, children):
+        if len(children) != 3:
+            print("UNEXPECTED TERNARY!")
+            pprint(children)
+
         assert label is None
         assert len(children) == 3
         super().__init__(pos, length, label, children)
