@@ -258,12 +258,8 @@ class Ternary(Node, Expression):
     LABEL = "CondExpr"
 
     def __init__(self, pos, length, label, children):
-        if len(children) != 3:
-            print("UNEXPECTED TERNARY!")
-            pprint(children)
-
         assert label is None
-        assert len(children) == 3
+        assert len(children) in [2, 3]
         super().__init__(pos, length, label, children)
 
     def condition(self):
@@ -271,7 +267,11 @@ class Ternary(Node, Expression):
     def then(self):
         return self.__children[1]
     def els(self):
-        return self.__children[2]
+        children = self.children()
+        if len(children) == 3:
+            return self.__children[2]
+        else:
+            return None
 
 class FunctionCall(Expression, Node):
     CODE = "240400"
