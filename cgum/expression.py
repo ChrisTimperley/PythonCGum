@@ -216,21 +216,13 @@ class InitDesignators(Node, Expression):
     LABEL = "InitDesignators"
 
     def __init__(self, pos, length, label, children):
-
-        if len(children) != 2:
-            print("UNEXPECTED: InitDesignators")
-            pprint(children)
-
         assert label is None
-        assert len(children) == 2
-        assert  isinstance(children[0], DesignatorField) or \
-                isinstance(children[0], DesignatorIndex)
         super().__init__(pos, length, label, children)
 
-    def field(self):
-        return self.__children[0].to_s()
-    def expr(self):
-        return self.__children[1]
+    #def field(self):
+    #    return self.__children[0].to_s()
+    #def expr(self):
+    #    return self.__children[1]
 
 class InitFieldOld(Node, Expression):
     CODE = "360400"
