@@ -78,9 +78,9 @@ class Node(object):
 
     # Generates a hash for this node, based on its type, label, and the hashes
     # of its children. Used for cheap equivalency checking.
-    def __hash__(self):
+    def hash(self):
         if self.__hash is None:
-            h_a = hash(tuple(hash(c) for c in self.__children))
+            h_a = hash(tuple(c.hash() for c in self.__children))
             h_b = hash(self.__class__.__name__)
             if self.__label is None:
                 h = (h_a, h_b)
