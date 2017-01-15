@@ -216,6 +216,11 @@ class InitDesignators(Node, Expression):
     LABEL = "InitDesignators"
 
     def __init__(self, pos, length, label, children):
+
+        if len(children) != 2:
+            print("UNEXPECTED: InitDesignators")
+            pprint(children)
+
         assert label is None
         assert len(children) == 2
         assert  isinstance(children[0], DesignatorField) or \
