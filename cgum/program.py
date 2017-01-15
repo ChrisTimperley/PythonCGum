@@ -26,19 +26,18 @@ class Label(Node):
     LABEL = "Label"
 
     def __init__(self, pos, length, label, children):
-        if len(children) != 2:
-            print("UNEXPECTED: Label")
-            pprint(children)
-
         assert label is None
-        assert len(children) == 2
+        assert len(children) in [1, 2]
         assert isinstance(children[0], GenericString)
         super().__init__(pos, length, label, children)
 
     def name(self):
         return self.__children[0].to_s()
     def statement(self):
-        return self.__children[1]
+        children = self.children()
+        if len(children) == 2:
+            return children[1]
+        return None
 
 class FunctionParameter(Node):
     CODE = "220100"
