@@ -1,5 +1,6 @@
 from cgum.basic import *
 from cgum.utility import FNULL
+from pprint import pprint
 import cgum.statement as statement
 import cgum.expression as expression
 import cgum.preprocessor as preprocessor
@@ -25,6 +26,10 @@ class Label(Node):
     LABEL = "Label"
 
     def __init__(self, pos, length, label, children):
+        if len(children) != 2:
+            print("UNEXPECTED: Label")
+            pprint(children)
+
         assert label is None
         assert len(children) == 2
         assert isinstance(children[0], GenericString)
