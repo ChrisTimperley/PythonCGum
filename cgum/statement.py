@@ -24,28 +24,23 @@ class StatementExpression(Statement, expression.Expression, Node):
     def expr(self):
         return self.child(0)
 
-# For now, declarations are statements
 class DeclarationList(Statement, Node):
+    CODE = "390000"
+    LABEL = "DeclarationList"
+
+# For now, declarations are statements
+class DeclList(Statement, Node):
     CODE = "350100"
     LABEL = "DeclList"
 
     def __init__(self, pos, length, label, children):
         assert label is None
-        #assert len(children) > 0, "DeclarationList must not be empty"
-        #assert len(children) % 2 == 0, "DeclarationList must contain an even number of children"
-
-        #for i in range(len(children) // 2):
-        #    lhs = children[i * 2]
-        #    rhs = children[i * 2 + 1]
-        #    assert isinstance(lhs, GenericString), "First element of each pair in DeclarationList must be a GenericString"
-        #    assert isinstance(rhs, expression.InitExpr), "Second element of each pair in DeclarationList must be an InitExpr"
-
         super().__init__(pos, length, label, children)
 
-    def declarations(self):
-        children = self.children()
-        for i in range(0, len(children), 2):
-            yield children[i:i+2]
+#    def declarations(self):
+#        children = self.children()
+#        for i in range(0, len(children), 2):
+#            yield children[i:i+2]
 
 # A declaration isn't quite a statement, but this is the best place for it,
 # for now.

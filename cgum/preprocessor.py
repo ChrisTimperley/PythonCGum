@@ -87,6 +87,10 @@ class DefineFunc(Node):
     CODE = "410100"
     LABEL = "DefineFunc"
 
+class DefineFunction(Node):
+    CODE = "420500"
+    LABEL = "DefineFunction"
+
 class DefineExpr(Node):
     CODE = "420100"
     LABEL = "DefineExpr"
