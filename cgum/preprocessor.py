@@ -15,6 +15,10 @@ class PreprocessorStatement(Node):
     def to_s(self):
         return self.statement().to_s()
 
+class MacroDeclInit(Node):
+    CODE = "350300"
+    LABEL = "MacroDeclInit"
+
 class MacroDecl(Node):
     CODE = "350200"
     LABEL = "MacroDecl"
