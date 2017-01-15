@@ -106,6 +106,10 @@ class Default(Statement, Node):
         assert len(children) == 1
         super().__init__(pos, length, label, children)
 
+class CaseRange(Statement, Node):
+    CODE = "270300"
+    LABEL = "CaseRange"
+
 class Case(Statement, Node):
     CODE = "270200"
     LABEL = "Case"
