@@ -85,7 +85,7 @@ class Node(object):
             h_a = ';'.join([c.hash() for c in self.__children])
             h_b = self.__class__.__name__
             h_c = "" if self.__label is None else self.__label
-            h.update(h_a + h_b + h_c)
+            h.update((h_a + h_b + h_c).encode("utf-8"))
             self.__hash = h.hexdigest()
         return self.__hash
 
