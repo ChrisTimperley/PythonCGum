@@ -1,3 +1,4 @@
+from hashlib import sha256
 import pprint
 import copy
 import functools
@@ -80,15 +81,13 @@ class Node(object):
     # of its children. Used for cheap equivalency checking.
     def hash(self):
         if self.__hash is None:
-            #h_a = hash(tuple(c.hash() for c in self.__children))
-            h_b = hash(self.__class__.__name__)
-            #if self.__label is None:
-            #    h = (h_a, h_b)
-            #else:
-            #    h = (h_a, h_b, self.__label)
-            #h = (h_a, h_b)
-            h = h_b
-            self.__hash = hash(h)
+            h_a = sha256(tuple(c.hash() for c in self.__children)).hexdigest()
+            h_b = sha256(self.__class__.__name__).hexdigest()
+            if self.__label is None:
+                h = (h_a, h_b)
+            else:
+                h = (h_a, h_b, self.__label)
+            self.__hash = sha256(h).hexdigest()
         return self.__hash
 
     # Returns a copy of the AST sub-tree rooted at this node with its variable
