@@ -81,13 +81,12 @@ class Node(object):
     # of its children. Used for cheap equivalency checking.
     def hash(self):
         if self.__hash is None:
-            h_a = sha256(';'.join([c.hash() for c in self.__children])).hexdigest()
-            h_b = sha256(self.__class__.__name__).hexdigest()
-            if self.__label is None:
-                h = "%s;%s" % (h_a, h_b)
-            else:
-                h = "%s;%s;%s" % (h_a, h_b, self.__label)
-            self.__hash = sha256(h).hexdigest().encode('utf8')
+            h = sha256()
+            h_a = ';'.join([c.hash() for c in self.__children])
+            h_b = self.__class__.__name__
+            h_c = "" if self.__label is None else self.__label
+            h.update(h_a + h_b + h_c)
+            self.__hash = h.hexdigest()
         return self.__hash
 
     # Returns a copy of the AST sub-tree rooted at this node with its variable
