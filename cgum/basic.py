@@ -87,7 +87,7 @@ class Node(object):
                 h = "%s;%s" % (h_a, h_b)
             else:
                 h = "%s;%s;%s" % (h_a, h_b, self.__label)
-            self.__hash = sha256(h).hexdigest()
+            self.__hash = sha256(h).hexdigest().encode('utf8')
         return self.__hash
 
     # Returns a copy of the AST sub-tree rooted at this node with its variable
