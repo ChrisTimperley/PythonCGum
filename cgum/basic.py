@@ -93,6 +93,7 @@ class Node(object):
     # names replaced by placeholders
     def strip_variable_names(self):
         cp = copy.copy(self)
+        cp.__hash = None # don't forget to remove the hash!
         cp.__children = [child.strip_variable_names() for child in cp.children()]
         return cp
 
