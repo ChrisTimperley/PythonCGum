@@ -80,13 +80,14 @@ class Node(object):
     # of its children. Used for cheap equivalency checking.
     def hash(self):
         if self.__hash is None:
-            h_a = hash(tuple(c.hash() for c in self.__children))
+            #h_a = hash(tuple(c.hash() for c in self.__children))
             h_b = hash(self.__class__.__name__)
             #if self.__label is None:
             #    h = (h_a, h_b)
             #else:
             #    h = (h_a, h_b, self.__label)
-            h = (h_a, h_b)
+            #h = (h_a, h_b)
+            h = h_b
             self.__hash = hash(h)
         return self.__hash
 
