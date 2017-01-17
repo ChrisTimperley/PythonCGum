@@ -187,7 +187,7 @@ class Node(object):
 
     # Pretty-prints the tree rooted at this node; useful for debugging
     def pp(self, depth=0):
-        print("%s%s - %d (%d)" % ((" " * depth), self.__class__.__name__, self.__number, self.hash()))
+        print("%s%s - %d (%s)" % ((" " * depth), self.__class__.__name__, self.__number, self.hash()))
         depth += 2
         for c in self.__children:
             c.pp(depth=depth)
