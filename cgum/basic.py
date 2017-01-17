@@ -81,12 +81,12 @@ class Node(object):
     # of its children. Used for cheap equivalency checking.
     def hash(self):
         if self.__hash is None:
-            h_a = sha256(tuple(c.hash() for c in self.__children)).hexdigest()
+            h_a = sha256(';'.join([c.hash() for c in self.__children])).hexdigest()
             h_b = sha256(self.__class__.__name__).hexdigest()
             if self.__label is None:
-                h = (h_a, h_b)
+                h = "%s;%s" % (h_a, h_b)
             else:
-                h = (h_a, h_b, self.__label)
+                h = "%s;%s;%s" % (h_a, h_b, self.__label)
             self.__hash = sha256(h).hexdigest()
         return self.__hash
 
