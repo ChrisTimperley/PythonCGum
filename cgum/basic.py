@@ -82,10 +82,11 @@ class Node(object):
         if self.__hash is None:
             h_a = hash(tuple(c.hash() for c in self.__children))
             h_b = hash(self.__class__.__name__)
-            if self.__label is None:
-                h = (h_a, h_b)
-            else:
-                h = (h_a, h_b, self.__label)
+            #if self.__label is None:
+            #    h = (h_a, h_b)
+            #else:
+            #    h = (h_a, h_b, self.__label)
+            h = (h_a, h_b)
             self.__hash = hash(h)
         return self.__hash
 
